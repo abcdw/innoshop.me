@@ -3,7 +3,9 @@ from django.db import models
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    parent = models.ForeignKey('self', null=True)
+    parent = models.ForeignKey('self', null=True, blank=True)
+    def __unicode__(self):
+        return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
