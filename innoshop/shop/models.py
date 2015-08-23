@@ -9,3 +9,5 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     SKU = models.CharField(max_length=100, unique=True)
     categories = models.ManyToManyField('Category')
+    cost = models.IntegerField(default=10000000)
+    img_url = models.CharField(max_length=255, blank=True)
