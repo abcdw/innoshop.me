@@ -1,6 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Category
 
-# Create your views here.
-def index(requset):
-    return HttpResponse('hello catalog world')
+
+def index(request):
+    catalog = Category.objects.all()
+    context = {
+        'catalog': catalog
+    }
+    return render(request, 'shop/index.html', context)
