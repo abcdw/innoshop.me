@@ -1,2 +1,3 @@
 *.pyc
 db.sqlite3
+/tools/asyncparser/node_modules/
