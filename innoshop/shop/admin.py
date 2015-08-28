@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Category
-from .models import Product
+from .models import Category, Product, Order
 
 
 @admin.register(Category)
@@ -14,3 +13,8 @@ class Product(admin.ModelAdmin):
         return ", ".join([p.name for p in obj.categories.all()])
 
     list_display = ('name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
+
+
+@admin.register(Order)
+class Category(admin.ModelAdmin):
+    list_display = ('owner', 'contact')
