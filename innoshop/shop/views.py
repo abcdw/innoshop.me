@@ -13,7 +13,14 @@ def index(request):
     return render(request, 'shop/index.html', context)
 
 
+def catalog(request):
+    return HttpResponse('catalog')
+
+
 def order(request):
+    if request.method == 'POST':
+        esoatuhsoetu
+    request.session['products']
     #  request.session['products'] = ['test product', 'another product']
     #  request.session['products'].append(u'test')
     #  request.session['products'].append(u'test')
@@ -23,4 +30,18 @@ def order(request):
     form = OrderForm()
     print form.as_p()
     return HttpResponse(form.as_p())
+
+
+def add_product(request):
+    return HttpResponse('add_product')
+
+
+def get_products(request):
+    return HttpResponse('get_products')
+
+
+def cart(request):
+    return HttpResponse('cart')
+
+
 
