@@ -1,0 +1,3803 @@
+[{"fields": {"model": "logentry", "app_label": "admin"}, "model": "contenttypes.contenttype", "pk": 1},
+    {"fields": {"model": "permission", "app_label": "auth"}, "model": "contenttypes.contenttype", "pk": 2},
+    {"fields": {"model": "group", "app_label": "auth"}, "model": "contenttypes.contenttype", "pk": 3},
+    {"fields": {"model": "user", "app_label": "auth"}, "model": "contenttypes.contenttype", "pk": 4},
+    {"fields": {"model": "contenttype", "app_label": "contenttypes"}, "model": "contenttypes.contenttype", "pk": 5},
+    {"fields": {"model": "session", "app_label": "sessions"}, "model": "contenttypes.contenttype", "pk": 6},
+    {"fields": {"model": "category", "app_label": "shop"}, "model": "contenttypes.contenttype", "pk": 7},
+    {"fields": {"model": "product", "app_label": "shop"}, "model": "contenttypes.contenttype", "pk": 8},
+    {"fields": {"expire_date": "2015-09-06T14:55:35.710Z", "session_data": "ZjQ4MmE5NTE2NDk1YmQyNWU2NDgzMjc3M2JmYjU5NDE4MTc3OWVlZDp7Il9hdXRoX3VzZXJfaGFzaCI6ImMyZTA5OTMxNzMyNjY0ZjJjZjNiYTQyZjlkODQ5YjZlNGYzNDZjNzciLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0="}, "model": "sessions.session", "pk": "3b5ll5hzk0ec83oz6kciwpal93k5l33c"},
+    {"fields": {"codename": "add_logentry", "name": "Can add log entry", "content_type": 1}, "model": "auth.permission", "pk": 1},
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Продукты",
+            "parent": null
+        },
+        "pk": 17
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Алкогольная продукция",
+            "parent": 17
+        },
+        "pk": 18
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вермуты и аперитивы",
+            "parent": 18
+        },
+        "pk": 19
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вино",
+            "parent": 18
+        },
+        "pk": 20
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Шампанское и игристые вина",
+            "parent": 18
+        },
+        "pk": 21
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Водка",
+            "parent": 18
+        },
+        "pk": 22
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Виски",
+            "parent": 18
+        },
+        "pk": 23
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Джин, граппа, кальвадос, абсент",
+            "parent": 18
+        },
+        "pk": 24
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Коньяк, арманьяк, бренди",
+            "parent": 18
+        },
+        "pk": 25
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ликеры",
+            "parent": 18
+        },
+        "pk": 26
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Настойки, бальзамы, наливки",
+            "parent": 18
+        },
+        "pk": 27
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пиво",
+            "parent": 18
+        },
+        "pk": 28
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ром",
+            "parent": 18
+        },
+        "pk": 29
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Текила",
+            "parent": 18
+        },
+        "pk": 30
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бакалея",
+            "parent": 17
+        },
+        "pk": 31
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Крупы",
+            "parent": 31
+        },
+        "pk": 32
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Макаронные изделия",
+            "parent": 31
+        },
+        "pk": 33
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мука, все для выпечки",
+            "parent": 31
+        },
+        "pk": 34
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Растительное масло",
+            "parent": 31
+        },
+        "pk": 35
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сахар, соль",
+            "parent": 31
+        },
+        "pk": 36
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Продукты быстрого приготовления",
+            "parent": 31
+        },
+        "pk": 37
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Орехи, сухофрукты, семечки",
+            "parent": 31
+        },
+        "pk": 38
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Чипсы, сухари, снеки",
+            "parent": 31
+        },
+        "pk": 39
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Жевательная резинка",
+            "parent": 31
+        },
+        "pk": 40
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мед, джемы",
+            "parent": 31
+        },
+        "pk": 41
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Азиатская кухня",
+            "parent": 31
+        },
+        "pk": 42
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сиропы, топпинги",
+            "parent": 31
+        },
+        "pk": 43
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сухие завтраки",
+            "parent": 31
+        },
+        "pk": 44
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Фрукты, ягоды",
+            "parent": 17
+        },
+        "pk": 45
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Свежие",
+            "parent": 45
+        },
+        "pk": 46
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Замороженные",
+            "parent": 45
+        },
+        "pk": 47
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Консервированные",
+            "parent": 45
+        },
+        "pk": 48
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Экзотические",
+            "parent": 45
+        },
+        "pk": 49
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вода, напитки",
+            "parent": 17
+        },
+        "pk": 50
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Питьевая вода, кулеры",
+            "parent": 50
+        },
+        "pk": 51
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Минеральная вода",
+            "parent": 50
+        },
+        "pk": 52
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Напитки",
+            "parent": 50
+        },
+        "pk": 53
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Соки, морсы, нектары",
+            "parent": 50
+        },
+        "pk": 54
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Энергетики",
+            "parent": 50
+        },
+        "pk": 55
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Диетическое питание",
+            "parent": 17
+        },
+        "pk": 56
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хлебцы",
+            "parent": 56
+        },
+        "pk": 57
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кондитерские изделия",
+            "parent": 56
+        },
+        "pk": 58
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кондитерские изделия",
+            "parent": 17
+        },
+        "pk": 59
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Шоколад, батончики",
+            "parent": 59
+        },
+        "pk": 60
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Конфеты",
+            "parent": 59
+        },
+        "pk": 61
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Торты, пироги, пирожные",
+            "parent": 59
+        },
+        "pk": 62
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Печенье, пряники",
+            "parent": 59
+        },
+        "pk": 63
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кексы, рулеты",
+            "parent": 59
+        },
+        "pk": 64
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вафли",
+            "parent": 59
+        },
+        "pk": 65
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Выпечка",
+            "parent": 59
+        },
+        "pk": 66
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Восточные сладости",
+            "parent": 59
+        },
+        "pk": 67
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мармелад, зефир",
+            "parent": 59
+        },
+        "pk": 68
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Подарочные наборы",
+            "parent": 59
+        },
+        "pk": 69
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Молочные продукты",
+            "parent": 17
+        },
+        "pk": 70
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Молоко",
+            "parent": 70
+        },
+        "pk": 71
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кисломолочные напитки",
+            "parent": 70
+        },
+        "pk": 72
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сметана",
+            "parent": 70
+        },
+        "pk": 73
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Творог",
+            "parent": 70
+        },
+        "pk": 74
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Йогурты",
+            "parent": 70
+        },
+        "pk": 75
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Молочные коктейли и напитки",
+            "parent": 70
+        },
+        "pk": 76
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сгущенное молоко, какао",
+            "parent": 70
+        },
+        "pk": 77
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сливки",
+            "parent": 70
+        },
+        "pk": 78
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сырки глазированные, творожная масса",
+            "parent": 70
+        },
+        "pk": 79
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Десерты",
+            "parent": 70
+        },
+        "pk": 80
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мороженое",
+            "parent": 70
+        },
+        "pk": 81
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мясная продукция",
+            "parent": 17
+        },
+        "pk": 82
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Замороженное мясо",
+            "parent": 82
+        },
+        "pk": 83
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Охлажденное мясо",
+            "parent": 82
+        },
+        "pk": 84
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Деликатесы",
+            "parent": 82
+        },
+        "pk": 85
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Колбаса",
+            "parent": 82
+        },
+        "pk": 86
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мясные консервы",
+            "parent": 82
+        },
+        "pk": 87
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сосиски, сардельки",
+            "parent": 82
+        },
+        "pk": 88
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Копчености, шпик, сало",
+            "parent": 82
+        },
+        "pk": 89
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Полуфабрикаты",
+            "parent": 82
+        },
+        "pk": 90
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Субпродукты",
+            "parent": 82
+        },
+        "pk": 91
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Овощи, грибы",
+            "parent": 17
+        },
+        "pk": 92
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Свежие",
+            "parent": 92
+        },
+        "pk": 93
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Замороженные",
+            "parent": 92
+        },
+        "pk": 94
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Консервированные",
+            "parent": 92
+        },
+        "pk": 95
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Экзотические",
+            "parent": 92
+        },
+        "pk": 96
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Рыба, морепродукты",
+            "parent": 17
+        },
+        "pk": 97
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Живая рыба",
+            "parent": 97
+        },
+        "pk": 98
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Замороженная рыба",
+            "parent": 97
+        },
+        "pk": 99
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Охлажденная рыба",
+            "parent": 97
+        },
+        "pk": 100
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Икра",
+            "parent": 97
+        },
+        "pk": 101
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Морепродукты",
+            "parent": 97
+        },
+        "pk": 102
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Соленые, слабосоленые продукты",
+            "parent": 97
+        },
+        "pk": 103
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вяленые, сушеные",
+            "parent": 97
+        },
+        "pk": 104
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Копченые продукты",
+            "parent": 97
+        },
+        "pk": 105
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Полуфабрикаты и пресервы",
+            "parent": 97
+        },
+        "pk": 106
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Консервы",
+            "parent": 97
+        },
+        "pk": 107
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Соусы и приправы",
+            "parent": 17
+        },
+        "pk": 108
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кетчупы, соусы",
+            "parent": 108
+        },
+        "pk": 109
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Майонез",
+            "parent": 108
+        },
+        "pk": 110
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Специи, приправы",
+            "parent": 108
+        },
+        "pk": 111
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уксус, маринады",
+            "parent": 108
+        },
+        "pk": 112
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аджика, горчица, хрен",
+            "parent": 108
+        },
+        "pk": 113
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сыр, масло, яйца",
+            "parent": 17
+        },
+        "pk": 114
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Твердые сыры",
+            "parent": 114
+        },
+        "pk": 115
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Полутвердые сыры",
+            "parent": 114
+        },
+        "pk": 116
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сыры с плесенью",
+            "parent": 114
+        },
+        "pk": 117
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мягкие сыры",
+            "parent": 114
+        },
+        "pk": 118
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Плавленые сыры",
+            "parent": 114
+        },
+        "pk": 119
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Рассольные сыры, брынза",
+            "parent": 114
+        },
+        "pk": 120
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Творожные сыры",
+            "parent": 114
+        },
+        "pk": 121
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Козий и овечий сыры",
+            "parent": 114
+        },
+        "pk": 122
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Нарезанные сыры и сырные тарелки",
+            "parent": 114
+        },
+        "pk": 123
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сливочное масло",
+            "parent": 114
+        },
+        "pk": 124
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Маргарин",
+            "parent": 114
+        },
+        "pk": 125
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Спреды",
+            "parent": 114
+        },
+        "pk": 126
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Яйца куриные",
+            "parent": 114
+        },
+        "pk": 127
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Яйца перепелиные",
+            "parent": 114
+        },
+        "pk": 128
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Табачная продукция",
+            "parent": 17
+        },
+        "pk": 129
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сигареты",
+            "parent": 129
+        },
+        "pk": 130
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сигариллы, сигары",
+            "parent": 129
+        },
+        "pk": 131
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Зажигалки, спички",
+            "parent": 129
+        },
+        "pk": 132
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хлеб, хлебобулочные изделия",
+            "parent": 17
+        },
+        "pk": 133
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хлеб, батон, лаваш",
+            "parent": 133
+        },
+        "pk": 134
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Булочки, сдоба",
+            "parent": 133
+        },
+        "pk": 135
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Баранки, сухари",
+            "parent": 133
+        },
+        "pk": 136
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Замороженное тесто и выпечка",
+            "parent": 133
+        },
+        "pk": 137
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Чай, кофе, какао, цикорий",
+            "parent": 17
+        },
+        "pk": 138
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Зерновой кофе",
+            "parent": 138
+        },
+        "pk": 139
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Молотый кофе",
+            "parent": 138
+        },
+        "pk": 140
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Растворимый кофе",
+            "parent": 138
+        },
+        "pk": 141
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Капсулы",
+            "parent": 138
+        },
+        "pk": 142
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пакетированный (3 в 1) кофе",
+            "parent": 138
+        },
+        "pk": 143
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Какао",
+            "parent": 138
+        },
+        "pk": 144
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Листовой чай",
+            "parent": 138
+        },
+        "pk": 145
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пакетированный чай",
+            "parent": 138
+        },
+        "pk": 146
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кофезаменители",
+            "parent": 138
+        },
+        "pk": 147
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Цикорий",
+            "parent": 138
+        },
+        "pk": 148
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Детское питание",
+            "parent": 17
+        },
+        "pk": 149
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Заменители молока, смеси",
+            "parent": 149
+        },
+        "pk": 150
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Каши",
+            "parent": 149
+        },
+        "pk": 151
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Напитки",
+            "parent": 149
+        },
+        "pk": 152
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пюре",
+            "parent": 149
+        },
+        "pk": 153
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сухие завтраки",
+            "parent": 149
+        },
+        "pk": 154
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Десерты",
+            "parent": 149
+        },
+        "pk": 155
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бытовая техника и электроника",
+            "parent": null
+        },
+        "pk": 156
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Телевизоры",
+            "parent": 156
+        },
+        "pk": 157
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "ЖК-телевизоры",
+            "parent": 157
+        },
+        "pk": 158
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "3D телевизоры",
+            "parent": 157
+        },
+        "pk": 159
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Домашние кинотеатры",
+            "parent": 157
+        },
+        "pk": 160
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "DVD-плееры",
+            "parent": 157
+        },
+        "pk": 161
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Антенны, удлинители",
+            "parent": 157
+        },
+        "pk": 162
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Крупная бытовая техника",
+            "parent": 156
+        },
+        "pk": 163
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Холодильники",
+            "parent": 163
+        },
+        "pk": 164
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Стиральные машины",
+            "parent": 163
+        },
+        "pk": 165
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пылесосы и приборы для уборки",
+            "parent": 163
+        },
+        "pk": 166
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Газовые и электрические плиты",
+            "parent": 163
+        },
+        "pk": 167
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мелкая бытовая техника",
+            "parent": 156
+        },
+        "pk": 168
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "СВЧ-печи",
+            "parent": 168
+        },
+        "pk": 169
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мультиварки, пароварки",
+            "parent": 168
+        },
+        "pk": 170
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кофеварки, кофемашины",
+            "parent": 168
+        },
+        "pk": 171
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Электрочайники",
+            "parent": 168
+        },
+        "pk": 172
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кухонные комбайны, измельчители",
+            "parent": 168
+        },
+        "pk": 173
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Утюги",
+            "parent": 168
+        },
+        "pk": 174
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Швейные машины",
+            "parent": 168
+        },
+        "pk": 175
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Фильтры для воды",
+            "parent": 168
+        },
+        "pk": 176
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Весы",
+            "parent": 168
+        },
+        "pk": 177
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Соковыжималки",
+            "parent": 168
+        },
+        "pk": 178
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вафельницы",
+            "parent": 168
+        },
+        "pk": 179
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Йогуртницы, мороженницы",
+            "parent": 168
+        },
+        "pk": 180
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Тостеры",
+            "parent": 168
+        },
+        "pk": 181
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хлебопечи",
+            "parent": 168
+        },
+        "pk": 182
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 168
+        },
+        "pk": 183
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Компьютеры и ноутбуки",
+            "parent": 156
+        },
+        "pk": 184
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Компьютеры, ноутбуки, планшеты",
+            "parent": 184
+        },
+        "pk": 185
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мониторы",
+            "parent": 184
+        },
+        "pk": 186
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Компьютерные аксессуары",
+            "parent": 184
+        },
+        "pk": 187
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Периферийные устройства",
+            "parent": 184
+        },
+        "pk": 188
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Носители информации",
+            "parent": 184
+        },
+        "pk": 189
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Программное обеспечение",
+            "parent": 184
+        },
+        "pk": 190
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Софт и игры",
+            "parent": 184
+        },
+        "pk": 191
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Фото и видео",
+            "parent": 156
+        },
+        "pk": 192
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Фотоаппараты",
+            "parent": 192
+        },
+        "pk": 193
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Видеокамеры",
+            "parent": 192
+        },
+        "pk": 194
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Фотоаксессуары",
+            "parent": 192
+        },
+        "pk": 195
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "CD и DVD- диски с записью",
+            "parent": 192
+        },
+        "pk": 196
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Карты памяти",
+            "parent": 192
+        },
+        "pk": 197
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Фотоальбомы, фоторамки",
+            "parent": 192
+        },
+        "pk": 198
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Климатическая техника",
+            "parent": 156
+        },
+        "pk": 199
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кондиционеры, сплит-системы",
+            "parent": 199
+        },
+        "pk": 200
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вентиляторы",
+            "parent": 199
+        },
+        "pk": 201
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Обогреватели",
+            "parent": 199
+        },
+        "pk": 202
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Газовые и водонагреватели",
+            "parent": 199
+        },
+        "pk": 203
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Увлажнители воздуха",
+            "parent": 199
+        },
+        "pk": 204
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аудиотехника",
+            "parent": 156
+        },
+        "pk": 205
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Магнитолы, аудиоцентры, CD-проигрыватели",
+            "parent": 205
+        },
+        "pk": 206
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Радиоприемники",
+            "parent": 205
+        },
+        "pk": 207
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Микрофоны, наушники",
+            "parent": 205
+        },
+        "pk": 208
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Компоненты hi-fi",
+            "parent": 205
+        },
+        "pk": 209
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Батарейки",
+            "parent": 205
+        },
+        "pk": 210
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Красота и здоровье",
+            "parent": 156
+        },
+        "pk": 211
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Приборы по уходу за волосами",
+            "parent": 211
+        },
+        "pk": 212
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Приборы по уходу за лицом и телом",
+            "parent": 211
+        },
+        "pk": 213
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Музыкальные инструменты",
+            "parent": 156
+        },
+        "pk": 214
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Телефоны",
+            "parent": 156
+        },
+        "pk": 215
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сотовые телефоны, смартфоны",
+            "parent": 215
+        },
+        "pk": 216
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Домашние и офисные телефоны",
+            "parent": 215
+        },
+        "pk": 217
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Радиостанции",
+            "parent": 215
+        },
+        "pk": 218
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автотовары",
+            "parent": null
+        },
+        "pk": 219
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автомобильная электроника",
+            "parent": 219
+        },
+        "pk": 220
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автоакустика",
+            "parent": 220
+        },
+        "pk": 221
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Видеорегистраторы",
+            "parent": 220
+        },
+        "pk": 222
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Радары",
+            "parent": 220
+        },
+        "pk": 223
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автоинструмент",
+            "parent": 219
+        },
+        "pk": 224
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автозапчасти",
+            "parent": 219
+        },
+        "pk": 225
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автокосметика и аксессуары",
+            "parent": 219
+        },
+        "pk": 226
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Моторные масла и технические жидкости",
+            "parent": 219
+        },
+        "pk": 227
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства безопасности",
+            "parent": 219
+        },
+        "pk": 228
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автокресла",
+            "parent": 228
+        },
+        "pk": 229
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аварийные наборы",
+            "parent": 228
+        },
+        "pk": 230
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Шины, диски",
+            "parent": 219
+        },
+        "pk": 231
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бумага и бумажная продукция",
+            "parent": null
+        },
+        "pk": 232
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисная бумага",
+            "parent": 232
+        },
+        "pk": 233
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Тетради и ежедневники",
+            "parent": 232
+        },
+        "pk": 234
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бланки, конверты",
+            "parent": 232
+        },
+        "pk": 235
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бумага для заметок",
+            "parent": 232
+        },
+        "pk": 236
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Все для ремонта",
+            "parent": null
+        },
+        "pk": 237
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Инструменты",
+            "parent": 237
+        },
+        "pk": 238
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аппараты высокого давления",
+            "parent": 238
+        },
+        "pk": 239
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Электроинструменты",
+            "parent": 238
+        },
+        "pk": 240
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ручные инструменты",
+            "parent": 238
+        },
+        "pk": 241
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Системы безопасности",
+            "parent": 238
+        },
+        "pk": 242
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства индивидуальной защиты",
+            "parent": 238
+        },
+        "pk": 243
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Тепловое оборудование",
+            "parent": 238
+        },
+        "pk": 244
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Оснастка и расходные материалы",
+            "parent": 238
+        },
+        "pk": 245
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ящики для инструментов",
+            "parent": 238
+        },
+        "pk": 246
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Технологическое оборудование",
+            "parent": 237
+        },
+        "pk": 247
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бетоносмесители",
+            "parent": 247
+        },
+        "pk": 248
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Генераторы",
+            "parent": 247
+        },
+        "pk": 249
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сварочное оборудование",
+            "parent": 247
+        },
+        "pk": 250
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 247
+        },
+        "pk": 251
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сантехника",
+            "parent": 237
+        },
+        "pk": 252
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Смесители",
+            "parent": 252
+        },
+        "pk": 253
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аксессуары для ванн и саун",
+            "parent": 252
+        },
+        "pk": 254
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Измерительные приборы",
+            "parent": 252
+        },
+        "pk": 255
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Строительные материалы",
+            "parent": 237
+        },
+        "pk": 256
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Лакокрасочные материалы",
+            "parent": 256
+        },
+        "pk": 257
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Клей",
+            "parent": 256
+        },
+        "pk": 258
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пены и герметики",
+            "parent": 256
+        },
+        "pk": 259
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ленты",
+            "parent": 256
+        },
+        "pk": 260
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Стеллажи и тележки",
+            "parent": 256
+        },
+        "pk": 261
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Табуреты и стремянки",
+            "parent": 256
+        },
+        "pk": 262
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Антигололедные средства",
+            "parent": 256
+        },
+        "pk": 263
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Освещение",
+            "parent": 256
+        },
+        "pk": 264
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушки",
+            "parent": null
+        },
+        "pk": 265
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушки для мальчиков",
+            "parent": 265
+        },
+        "pk": 266
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушечное оружие",
+            "parent": 266
+        },
+        "pk": 267
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Машины и железные дороги",
+            "parent": 266
+        },
+        "pk": 268
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Радиоуправляемые модели",
+            "parent": 266
+        },
+        "pk": 269
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игровые наборы",
+            "parent": 266
+        },
+        "pk": 270
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушки для девочек",
+            "parent": 265
+        },
+        "pk": 271
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Куклы",
+            "parent": 271
+        },
+        "pk": 272
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игровые наборы",
+            "parent": 271
+        },
+        "pk": 273
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушки для Role play",
+            "parent": 271
+        },
+        "pk": 274
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мягкие игрушки",
+            "parent": 265
+        },
+        "pk": 275
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Развивающие игры",
+            "parent": 265
+        },
+        "pk": 276
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Настольные игры",
+            "parent": 276
+        },
+        "pk": 277
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пазлы",
+            "parent": 276
+        },
+        "pk": 278
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Конструкторы",
+            "parent": 276
+        },
+        "pk": 279
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игры для самых маленьких",
+            "parent": 276
+        },
+        "pk": 280
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Интерактивные игрушки и игры",
+            "parent": 265
+        },
+        "pk": 281
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Товары для игры на улице",
+            "parent": 265
+        },
+        "pk": 282
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Велосипеды и самокаты",
+            "parent": 282
+        },
+        "pk": 283
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мячи и шарики",
+            "parent": 282
+        },
+        "pk": 284
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушки для песочницы",
+            "parent": 282
+        },
+        "pk": 285
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игры на воде",
+            "parent": 282
+        },
+        "pk": 286
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Машины и электромобили",
+            "parent": 282
+        },
+        "pk": 287
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Спортивные игры",
+            "parent": 282
+        },
+        "pk": 288
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Канцтовары",
+            "parent": null
+        },
+        "pk": 289
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Школьные товары",
+            "parent": 289
+        },
+        "pk": 290
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисные принадлежности",
+            "parent": 289
+        },
+        "pk": 291
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Письменные принадлежности",
+            "parent": 289
+        },
+        "pk": 292
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Папки и системы архивации",
+            "parent": 289
+        },
+        "pk": 293
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Косметика и бытовая химия",
+            "parent": null
+        },
+        "pk": 294
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гигиенические принадлежности",
+            "parent": 294
+        },
+        "pk": 295
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бумажные и ватные изделия",
+            "parent": 295
+        },
+        "pk": 296
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Медицинские товары",
+            "parent": 295
+        },
+        "pk": 297
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства женской гигиены",
+            "parent": 295
+        },
+        "pk": 298
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 295
+        },
+        "pk": 299
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уход за волосами",
+            "parent": 294
+        },
+        "pk": 300
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Шампуни, бальзамы, маски",
+            "parent": 300
+        },
+        "pk": 301
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для укладки",
+            "parent": 300
+        },
+        "pk": 302
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Краски",
+            "parent": 300
+        },
+        "pk": 303
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уход за кожей лица и тела",
+            "parent": 294
+        },
+        "pk": 304
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кремы",
+            "parent": 304
+        },
+        "pk": 305
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гели, скрабы, лосьоны",
+            "parent": 304
+        },
+        "pk": 306
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мыло",
+            "parent": 304
+        },
+        "pk": 307
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Антиперспиранты, дезодоранты",
+            "parent": 304
+        },
+        "pk": 308
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для бритья и депиляции",
+            "parent": 304
+        },
+        "pk": 309
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для загара",
+            "parent": 304
+        },
+        "pk": 310
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аксессуары",
+            "parent": 304
+        },
+        "pk": 311
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 304
+        },
+        "pk": 312
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уход за зубами и полостью рта",
+            "parent": 294
+        },
+        "pk": 313
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пасты, ополаскиватели",
+            "parent": 313
+        },
+        "pk": 314
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Щетки",
+            "parent": 313
+        },
+        "pk": 315
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 313
+        },
+        "pk": 316
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Товары для мужчин",
+            "parent": 294
+        },
+        "pk": 317
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для бритья",
+            "parent": 317
+        },
+        "pk": 318
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гели для душа",
+            "parent": 317
+        },
+        "pk": 319
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Шампуни",
+            "parent": 317
+        },
+        "pk": 320
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Дезодоранты",
+            "parent": 317
+        },
+        "pk": 321
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 317
+        },
+        "pk": 322
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уход за детьми",
+            "parent": 294
+        },
+        "pk": 323
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Подгузники и пеленки",
+            "parent": 323
+        },
+        "pk": 324
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для купания",
+            "parent": 323
+        },
+        "pk": 325
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Детские кремы",
+            "parent": 323
+        },
+        "pk": 326
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 323
+        },
+        "pk": 327
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уборка и чистота",
+            "parent": 294
+        },
+        "pk": 328
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Профессиональные средства",
+            "parent": 328
+        },
+        "pk": 329
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Чистящие средства",
+            "parent": 328
+        },
+        "pk": 330
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для стирки",
+            "parent": 328
+        },
+        "pk": 331
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для мытья посуды",
+            "parent": 328
+        },
+        "pk": 332
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Освежители воздуха",
+            "parent": 328
+        },
+        "pk": 333
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисный интерьер",
+            "parent": null
+        },
+        "pk": 334
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисные столы",
+            "parent": 334
+        },
+        "pk": 335
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисные кресла",
+            "parent": 334
+        },
+        "pk": 336
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кресла для руководителей",
+            "parent": 334
+        },
+        "pk": 337
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Стулья",
+            "parent": 334
+        },
+        "pk": 338
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Демонстрационное оборудование",
+            "parent": 334
+        },
+        "pk": 339
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сейфы",
+            "parent": 334
+        },
+        "pk": 340
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Посуда и принадлежности",
+            "parent": null
+        },
+        "pk": 341
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сервировка стола",
+            "parent": 341
+        },
+        "pk": 342
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Столовая посуда",
+            "parent": 342
+        },
+        "pk": 343
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Столовые приборы",
+            "parent": 342
+        },
+        "pk": 344
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Питьевое стекло",
+            "parent": 342
+        },
+        "pk": 345
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Предметы сервировки",
+            "parent": 342
+        },
+        "pk": 346
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Одноразовые принадлежности",
+            "parent": 342
+        },
+        "pk": 347
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Профессиональная посуда",
+            "parent": 342
+        },
+        "pk": 348
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Приготовление пищи",
+            "parent": 341
+        },
+        "pk": 349
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Наборы посуды",
+            "parent": 349
+        },
+        "pk": 350
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кастрюли",
+            "parent": 349
+        },
+        "pk": 351
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Посуда для выпечки и жаропрочная посуда",
+            "parent": 349
+        },
+        "pk": 352
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сковороды, воки, жаровни",
+            "parent": 349
+        },
+        "pk": 353
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Чайники, турки",
+            "parent": 349
+        },
+        "pk": 354
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кухонные принадлежности",
+            "parent": 341
+        },
+        "pk": 355
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ножи и разделочные доски",
+            "parent": 355
+        },
+        "pk": 356
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аксессуары для кухни",
+            "parent": 355
+        },
+        "pk": 357
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кухонная утварь",
+            "parent": 355
+        },
+        "pk": 358
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хранение продуктов",
+            "parent": 341
+        },
+        "pk": 359
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Банки для сухих продуктов",
+            "parent": 359
+        },
+        "pk": 360
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Контейнеры",
+            "parent": 359
+        },
+        "pk": 361
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хлебницы",
+            "parent": 359
+        },
+        "pk": 362
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Масленки",
+            "parent": 359
+        },
+        "pk": 363
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Профессиональное оборудование",
+            "parent": null
+        },
+        "pk": 364
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Холодильное оборудование",
+            "parent": 364
+        },
+        "pk": 365
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Тепловое оборудование",
+            "parent": 364
+        },
+        "pk": 366
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Посудомоечное оборудование",
+            "parent": 364
+        },
+        "pk": 367
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Электромеханическое оборудование",
+            "parent": 364
+        },
+        "pk": 368
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Барное оборудование",
+            "parent": 364
+        },
+        "pk": 369
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Торговое оборудование",
+            "parent": 364
+        },
+        "pk": 370
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Стеллажи, шкафы",
+            "parent": 370
+        },
+        "pk": 371
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кассовое оборудование",
+            "parent": 370
+        },
+        "pk": 372
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пломбираторы, пломбы",
+            "parent": 370
+        },
+        "pk": 373
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Счетчики для денег, детекторы валют",
+            "parent": 370
+        },
+        "pk": 374
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Товары для работы с деньгами",
+            "parent": 370
+        },
+        "pk": 375
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Упаковочные материалы",
+            "parent": 370
+        },
+        "pk": 376
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ящики для денег",
+            "parent": 370
+        },
+        "pk": 377
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Другое",
+            "parent": 370
+        },
+        "pk": 378
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мебель для ресторанов и баров",
+            "parent": 364
+        },
+        "pk": 379
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мебель для кейтеринга",
+            "parent": 364
+        },
+        "pk": 380
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Презентационное оборудование",
+            "parent": 364
+        },
+        "pk": 381
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сад и дача",
+            "parent": null
+        },
+        "pk": 382
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Садовая и уличная мебель",
+            "parent": 382
+        },
+        "pk": 383
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гарнитуры",
+            "parent": 383
+        },
+        "pk": 384
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Стулья и скамейки",
+            "parent": 383
+        },
+        "pk": 385
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Столы",
+            "parent": 383
+        },
+        "pk": 386
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Садовая техника и инструменты",
+            "parent": 382
+        },
+        "pk": 387
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Триммеры",
+            "parent": 387
+        },
+        "pk": 388
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Газонокосилки",
+            "parent": 387
+        },
+        "pk": 389
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пилы",
+            "parent": 387
+        },
+        "pk": 390
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аксессуары для техники",
+            "parent": 387
+        },
+        "pk": 391
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Снегоуборочная техника",
+            "parent": 387
+        },
+        "pk": 392
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Инструменты",
+            "parent": 387
+        },
+        "pk": 393
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Декор сада",
+            "parent": 382
+        },
+        "pk": 394
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Декоративные фигуры",
+            "parent": 394
+        },
+        "pk": 395
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ограды, декоративные заборы",
+            "parent": 394
+        },
+        "pk": 396
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Уход за растениями",
+            "parent": 382
+        },
+        "pk": 397
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Системы полива",
+            "parent": 397
+        },
+        "pk": 398
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кашпо и горшки",
+            "parent": 397
+        },
+        "pk": 399
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Семена и растения",
+            "parent": 397
+        },
+        "pk": 400
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Спорт и отдых",
+            "parent": null
+        },
+        "pk": 401
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Тренажеры",
+            "parent": 401
+        },
+        "pk": 402
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гантели, утяжелители",
+            "parent": 402
+        },
+        "pk": 403
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Оборудование и аксессуары для фитнеса",
+            "parent": 402
+        },
+        "pk": 404
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Спортивный инвентарь",
+            "parent": 401
+        },
+        "pk": 405
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Велосипеды",
+            "parent": 405
+        },
+        "pk": 406
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Самокаты",
+            "parent": 405
+        },
+        "pk": 407
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Коньки",
+            "parent": 405
+        },
+        "pk": 408
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Баскетбол, волейбол",
+            "parent": 405
+        },
+        "pk": 409
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Плавание",
+            "parent": 405
+        },
+        "pk": 410
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Санки, ледянки",
+            "parent": 405
+        },
+        "pk": 411
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Теннис, бадминтон",
+            "parent": 405
+        },
+        "pk": 412
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хоккей",
+            "parent": 405
+        },
+        "pk": 413
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Туристические принадлежности и отдых на природе",
+            "parent": 401
+        },
+        "pk": 414
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Складная мебель",
+            "parent": 414
+        },
+        "pk": 415
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бассейны",
+            "parent": 414
+        },
+        "pk": 416
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Биотуалеты",
+            "parent": 414
+        },
+        "pk": 417
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Все для рыбалки",
+            "parent": 414
+        },
+        "pk": 418
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гамаки",
+            "parent": 414
+        },
+        "pk": 419
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Грили и барбекю",
+            "parent": 414
+        },
+        "pk": 420
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Зонты",
+            "parent": 414
+        },
+        "pk": 421
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Качели",
+            "parent": 414
+        },
+        "pk": 422
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Павильоны и шатры",
+            "parent": 414
+        },
+        "pk": 423
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Палатки, спальники, коврики",
+            "parent": 414
+        },
+        "pk": 424
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства от насекомых",
+            "parent": 414
+        },
+        "pk": 425
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Термосы и сумки-холодильники",
+            "parent": 414
+        },
+        "pk": 426
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Чемоданы",
+            "parent": 414
+        },
+        "pk": 427
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Товары для дома",
+            "parent": null
+        },
+        "pk": 428
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мебель",
+            "parent": 428
+        },
+        "pk": 429
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Стулья",
+            "parent": 429
+        },
+        "pk": 430
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Столы",
+            "parent": 429
+        },
+        "pk": 431
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Табуреты, скамьи",
+            "parent": 429
+        },
+        "pk": 432
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Кресла и пуфы",
+            "parent": 429
+        },
+        "pk": 433
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Комплекты мебели",
+            "parent": 429
+        },
+        "pk": 434
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Домашний текстиль",
+            "parent": 428
+        },
+        "pk": 435
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Комплекты постельного белья",
+            "parent": 435
+        },
+        "pk": 436
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Пледы, покрывала",
+            "parent": 435
+        },
+        "pk": 437
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Одеяла",
+            "parent": 435
+        },
+        "pk": 438
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Подушки",
+            "parent": 435
+        },
+        "pk": 439
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Матрацы",
+            "parent": 435
+        },
+        "pk": 440
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Полотенца",
+            "parent": 435
+        },
+        "pk": 441
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Скатерти",
+            "parent": 435
+        },
+        "pk": 442
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Халаты",
+            "parent": 435
+        },
+        "pk": 443
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ковры и коврики",
+            "parent": 435
+        },
+        "pk": 444
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хозяйственные товары",
+            "parent": 428
+        },
+        "pk": 445
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Гладильные доски и чехлы",
+            "parent": 445
+        },
+        "pk": 446
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сушилки для белья",
+            "parent": 445
+        },
+        "pk": 447
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Диспенсеры",
+            "parent": 445
+        },
+        "pk": 448
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Мусорные баки",
+            "parent": 445
+        },
+        "pk": 449
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Корзины для белья",
+            "parent": 445
+        },
+        "pk": 450
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства для уборки",
+            "parent": 445
+        },
+        "pk": 451
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Средства по уходу за одеждой и обувью",
+            "parent": 445
+        },
+        "pk": 452
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Тазы и ведра",
+            "parent": 445
+        },
+        "pk": 453
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Декор интерьера",
+            "parent": 428
+        },
+        "pk": 454
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Часы, будильники",
+            "parent": 454
+        },
+        "pk": 455
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Светильники, свечи",
+            "parent": 454
+        },
+        "pk": 456
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Картины, вазы, кальяны",
+            "parent": 454
+        },
+        "pk": 457
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Праздничные украшения",
+            "parent": 454
+        },
+        "pk": 458
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Хранение вещей",
+            "parent": 428
+        },
+        "pk": 459
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Ящики для хранения",
+            "parent": 459
+        },
+        "pk": 460
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Вешалки",
+            "parent": 459
+        },
+        "pk": 461
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Чехлы для одежды и обуви",
+            "parent": 459
+        },
+        "pk": 462
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сумки-тележки",
+            "parent": 459
+        },
+        "pk": 463
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Комоды",
+            "parent": 459
+        },
+        "pk": 464
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бизнес-подарки",
+            "parent": null
+        },
+        "pk": 465
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Подарочные наборы",
+            "parent": 465
+        },
+        "pk": 466
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Портфель, деловые папки",
+            "parent": 465
+        },
+        "pk": 467
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Визитницы",
+            "parent": 465
+        },
+        "pk": 468
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Зоотовары",
+            "parent": null
+        },
+        "pk": 469
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Корма и консервы",
+            "parent": 469
+        },
+        "pk": 470
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Аксессуары для питомцев",
+            "parent": 469
+        },
+        "pk": 471
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Рестораны, кафе, столовые",
+            "parent": null
+        },
+        "pk": 472
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Продуктовые магазины",
+            "parent": null
+        },
+        "pk": 473
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисы",
+            "parent": null
+        },
+        "pk": 474
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Продукты",
+            "parent": null
+        },
+        "pk": 475
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бытовая техника и электроника",
+            "parent": null
+        },
+        "pk": 476
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Автотовары",
+            "parent": null
+        },
+        "pk": 477
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бумага и бумажная продукция",
+            "parent": null
+        },
+        "pk": 478
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Все для ремонта",
+            "parent": null
+        },
+        "pk": 479
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Игрушки",
+            "parent": null
+        },
+        "pk": 480
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Канцтовары",
+            "parent": null
+        },
+        "pk": 481
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Косметика и бытовая химия",
+            "parent": null
+        },
+        "pk": 482
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Офисный интерьер",
+            "parent": null
+        },
+        "pk": 483
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Посуда и принадлежности",
+            "parent": null
+        },
+        "pk": 484
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Профессиональное оборудование",
+            "parent": null
+        },
+        "pk": 485
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Сад и дача",
+            "parent": null
+        },
+        "pk": 486
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Спорт и отдых",
+            "parent": null
+        },
+        "pk": 487
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Товары для дома",
+            "parent": null
+        },
+        "pk": 488
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Бизнес-подарки",
+            "parent": null
+        },
+        "pk": 489
+    },
+    {
+        "model": "shop.category",
+        "fields": {
+            "name": "Зоотовары",
+            "parent": null
+        },
+        "pk": 490
+    }
+]

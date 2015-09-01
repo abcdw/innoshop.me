@@ -1,0 +1,10 @@
+[    {"fields": {"name": "Root", "parent": null}, "model": "shop.category", "pk": 1},
+    {"fields": {"name": "Child", "parent": 1}, "model": "shop.category", "pk": 2},
+    {"fields": {"name": "GrandChild", "parent": 2}, "model": "shop.category", "pk": 4},
+    {"fields": {"SKU": "12edsaas", "actual_price": 10000000, "name": "Gold", "source_link": "", "price": 10000000, "is_stock_empty": true, "min_count": 1, "img_url": "", "categories": [1], "description": ""}, "model": "shop.product", "pk": 1},
+    {"fields": {"SKU": "akfddaklf", "actual_price": 10000000, "name": "ROot", "source_link": "adsfd/df/ads/fd", "price": 10000000, "is_stock_empty": true, "min_count": 1, "img_url": "d.afaf;/ds/s", "categories": [2], "description": "ROOT"}, "model": "shop.product", "pk": 2},
+    {"fields": {"SKU": "dflajfk", "actual_price": 10000000, "name": "CHILD", "source_link": "sdf", "price": 10000000, "is_stock_empty": true, "min_count": 1, "img_url": "dsvf", "categories": [2], "description": "dafsasfc"}, "model": "shop.product", "pk": 3},
+    {"fields": {"SKU": "adsf", "actual_price": 10000000, "name": "GrandChild", "source_link": "sadfg", "price": 10000000, "is_stock_empty": true, "min_count": 1, "img_url": "sadfg", "categories": [4], "description": "GRANDCHILD"}, "model": "shop.product", "pk": 4},
+    {"fields": {"SKU": "LOL", "actual_price": 10000000, "name": "GrandChild", "source_link": "LOL", "price": 10000000, "is_stock_empty": true, "min_count": 1, "img_url": "LOL", "categories": [4], "description": "GRANDCHILD"}, "model": "shop.product", "pk": 5}
+ ]
+
