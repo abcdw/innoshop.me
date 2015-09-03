@@ -7,3 +7,8 @@ pip install -r requirements.txt
 ./manage.py runserver
 ```
 
+
+For loading fixtures of db
+```
+./manage.py loaddata [fixture file]
+```
