@@ -1,2 +1,2 @@
 # InnoShop
-* [wiki](/wiki)
+* [wiki](https://bitbucket.org/abcdw/innoshop/wiki/)
