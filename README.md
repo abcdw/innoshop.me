@@ -1,2 +1,2 @@
 # InnoShop
-* [wiki](wiki)
+* [wiki](/wiki)
