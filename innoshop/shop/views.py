@@ -66,6 +66,12 @@ def get_products(request):
 
 
 def order(request):
+    if request.method == 'POST':
+
+        order_form = OrderForm(request.POST)
+        if order_form.is_valid():
+            order_form.create_order()
+
     form = OrderForm()
     context = {
         'form': form,
