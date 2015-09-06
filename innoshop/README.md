@@ -10,5 +10,5 @@ pip install -r requirements.txt
 
 For loading fixtures of db
 ```
-./manage.py loaddata [fixture file]
+./manage.py loaddata 
 ```

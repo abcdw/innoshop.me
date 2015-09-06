@@ -102,6 +102,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR,'fixtures/'),
+
+   )
+
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
