@@ -1,0 +1,10 @@
+{% extends "shop/layout/base.html" %}
+{% block content %}
+catalog:
+<ul>
+  {% for category in catalog %}
+    <li>{{ category.name }}</li>
+  {% endfor %}
+</ul>
+<pre>{{ catalog }}</pre>
+{% endblock %}
