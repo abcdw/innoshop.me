@@ -29,10 +29,19 @@ class Product(models.Model):
 class Order(models.Model):
     owner = models.ForeignKey(User, null=True, blank=True)
     name = models.CharField(max_length=255, blank=True)
-    create_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(auto_now_add=True, null=True)
     contact = models.CharField(max_length=255)
-    products = models.ManyToManyField(Product)
+    #  products = models.ManyToManyField(Product)
     comment = models.TextField(blank=True)
     moderator_comment = models.TextField(blank=True)
+
+    def get_items(self):
+        return self.productitem_set
+
+
+class ProductItem(models.Model):
+    order = models.ForeignKey(Order)
+    product = models.ForeignKey(Product)
+    count = models.IntegerField(default=1)
 
 

@@ -33,7 +33,32 @@ def order(request):
 
 
 def add_product(request):
-    return HttpResponse('add_product')
+    if request.method == 'GET':
+        try:
+            id = request.GET.get('id', None)
+            count = int(request.GET.get('count', 0))
+            if id:
+                if not request.session.has_key('products'):
+                    request.session['products'] = {}
+
+                if not type(request.session['products']) is dict:
+                    request.session['products'] = {}
+                s = request.session['products']
+
+                if s.has_key(id):
+                    s[id] += count
+                else:
+                    s[id] = count
+
+                if s[id] < 0:
+                    s[id] = 0
+
+                request.session.modified = True
+            return HttpResponse('added {} items of product {}, current count: {}'.format(count, id, s[id]))
+        except Exception, e:
+            return HttpResponse('provide int id and count in GET')
+
+    return HttpResponse('provide int id and count in GET')
 
 
 def get_products(request):
