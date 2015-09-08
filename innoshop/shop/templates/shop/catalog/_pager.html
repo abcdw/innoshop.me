@@ -1,3 +1,4 @@
+{% if products.has_previous or products.has_next %}
 <nav class="row">
     <ul class="pager col-md-4 col-sm-12">
         {% if products.has_previous %}
@@ -17,3 +18,4 @@
         {% endif %}
     </ul>
 </nav>
+{% endif %}

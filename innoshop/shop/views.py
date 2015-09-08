@@ -28,7 +28,7 @@ def index(request):
     context = {
         'catalog': catalog,
         'products': products,
-        'q': q
+        'q': q or ''
     }
     # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)
