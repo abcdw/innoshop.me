@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-static-top">
-  <div class="container-fluid">
+  <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-menu" aria-expanded="false">
@@ -26,7 +26,7 @@
         </div>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/order">Корзина</a></li>
+        <li ><a href="{% url 'order' %}"><span class="label label-success"><i class="fa fa-shopping-cart"></i> Корзина <span class="basket__price">42 <i class="fa fa-ruble"></i></span></span></a></li>
       </ul>
     </div>
     <!-- /.navbar-collapse -->

@@ -1,0 +1,9 @@
+.good__add {
+    margin-top: 5px;
+}
+.good__price {
+    font-weight: bold;
+}
+.good .panel-heading {
+    min-height: 88px;
+}
