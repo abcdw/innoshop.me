@@ -8,9 +8,13 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def index(request):
     catalog = Category.objects.all()
-    products = Product.objects.all()
-    paginator = Paginator(products, 25)
+    products = Product.objects.get_sallable()
 
+    q = request.GET.get('q')
+    if q != '':
+        products = products.filter( name__icontains = q )
+
+    paginator = Paginator(products, 25)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
@@ -24,6 +28,7 @@ def index(request):
     context = {
         'catalog': catalog,
         'products': products,
+        'q': q
     }
     # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)

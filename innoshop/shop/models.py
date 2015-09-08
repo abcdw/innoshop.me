@@ -9,6 +9,9 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+class ProductManager(models.Manager):
+    def get_sallable(self):
+        return self.filter( price__gt = 0 )
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -21,6 +24,8 @@ class Product(models.Model):
     img_url = models.CharField(max_length=255, blank=True)
     is_stock_empty = models.BooleanField(default=True)
     source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
+
+    objects = ProductManager()
 
     def __unicode__(self):
         return self.name

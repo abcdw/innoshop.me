@@ -1,21 +1,28 @@
 {% extends "shop/layout/base.html" %}
+
 {% block content %}
 <div class="container">
-  <div class="row">
-    {% for product in products %}
-      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div>{{ product.name }}</div>
-            <img src="{{ product.img_url }}" alt="..." class="img-thumbnail">
-            <div class="text-right">
-              {{ product.price }}
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
+    {% include 'shop/catalog/_pager.html' %}
+    <div class="row">
+        <div class="block-grid-lg-4 block-grid-md-3 block-grid-sm-2">
+            {% for product in products %}
+            <div class="block-grid-item">
+                <div class="panel panel-default ">
+                    <div class="panel-body">
+                        <div>{{ product.name }}</div>
+                        <img src="{{ product.img_url }}" alt="{{ product.name }}" class="img-thumbnail">
 
+                        <div class="text-right">
+                            {{ product.price }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% include 'shop/catalog/_pager.html' %}
+</div>
 {% endblock %}
+
