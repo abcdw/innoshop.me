@@ -2,10 +2,14 @@ gulp = require 'gulp'
 less = require 'gulp-less'
 concat = require 'gulp-concat'
 uglify = require 'gulp-uglify'
+concat = require 'gulp-concat'
+minifyCSS = require 'gulp-minify-css'
 
 gulp.task 'less', ->
-  gulp.src 'node_modules/bootstrap/less/bootstrap.less'
+  gulp.src ['node_modules/bootstrap/less/bootstrap.less', 'custom.less']
     .pipe less compress: true
+    .pipe concat 'bootstrap.css'
+    .pipe minifyCSS()
     .pipe gulp.dest '../../innoshop/shop/static/css/'
 
 gulp.task 'js', ->
