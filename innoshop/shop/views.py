@@ -11,7 +11,7 @@ def index(request):
     products = Product.objects.get_sallable()
 
     q = request.GET.get('q')
-    if q != '':
+    if q:
         products = products.filter( name__icontains = q )
 
     paginator = Paginator(products, 25)
