@@ -20,8 +20,7 @@
   <form action="/order" id="orderForm" method="POST">
   {% csrf_token %}
     <div class="form-group">
-      <label for="contact">Контакт для связи</label>
-      <input type="text" id="contact" name="contact" class="form-control" placeholder="@telegram">
+      <input type="text" id="contact" name="contact" class="form-control" placeholder="@telegram или номер телефона">
     </div>
     <div class="form-group">
       <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Комментарий" class="form-control" onkeypress="handleCtrlEnter(this)"></textarea>
