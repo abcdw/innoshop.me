@@ -44,3 +44,6 @@ class ProductItem(models.Model):
     count = models.IntegerField(default=1)
 
 
+class Feedback(models.Model):
+    contact = models.CharField(max_length=255,blank=True)
+    feedback = models.TextField(blank=True)
