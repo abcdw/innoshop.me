@@ -3,11 +3,24 @@ from .models import Category
 from .models import Product
 from django.http import HttpResponse
 from .forms import OrderForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def index(request):
     catalog = Category.objects.all()
     products = Product.objects.all()
+    paginator = Paginator(products, 25)
+
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        products = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        products = paginator.page(paginator.num_pages)
+
     context = {
         'catalog': catalog,
         'products': products,
