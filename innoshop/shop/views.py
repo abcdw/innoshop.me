@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from .models import Category
+from .models import Product
 from django.http import HttpResponse
 from .forms import OrderForm
 
 
 def index(request):
     catalog = Category.objects.all()
+    products = Product.objects.all()
     context = {
         'catalog': catalog,
+        'products': products,
     }
     # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)
