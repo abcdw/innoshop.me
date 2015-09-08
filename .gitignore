@@ -2,3 +2,4 @@
 db.sqlite3
 /tools/asyncparser/node_modules/
 /utils/bootstrap-builder/node_modules/
+innoshop/innoshop/static
