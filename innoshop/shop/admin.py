@@ -15,7 +15,7 @@ class Product(admin.ModelAdmin):
     list_display = ('name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
 
 
-@admin.register(Order)
+@admin.register(Category)
 class Category(admin.ModelAdmin):
     list_display = ('owner', 'contact')
 
