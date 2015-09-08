@@ -4,16 +4,16 @@
         {% if products.has_previous %}
         <li class="previous {% if not products.has_previous %}disabled{% endif %}">
             <a href="{% if products.has_previous %}?q={{q}}&page={{ products.previous_page_number }}{% else %}#{% endif %}"><span
-                    aria-hidden="true">&larr;</span> prev</a>
+                    aria-hidden="true"><i class="fa fa-arrow-left"></i></span> prev</a>
         </li>
         {% endif %}
-        <li class="label label-default">
+        <li class="small">
             Page {{ products.number }} of {{ products.paginator.num_pages }}
         </li>
         {% if products.has_next %}
         <li class="next {% if not products.has_next %}disabled{% endif %}">
             <a href="{% if products.has_next %}?q={{q}}&page={{ products.next_page_number }}{% else %}#{% endif %}">next
-                <span aria-hidden="true">&rarr;</span></a>
+                <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span></a>
         </li>
         {% endif %}
     </ul>

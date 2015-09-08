@@ -7,3 +7,6 @@
 .good .panel-heading {
     min-height: 88px;
 }
+.basket {
+    text-transform: uppercase;
+}
