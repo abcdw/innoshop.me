@@ -1,21 +1,47 @@
 {% extends "shop/layout/base.html" %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+    <script src="https://cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
+    <script src="/static/js/shop/build/shop.js"></script>
+    <script> $(document).ready(function(){
+        var products = {};
+        {% for product in products %}
+            products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }} };
+        {% endfor %}
+        ProductStore.setInitialState(products);
+        BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
+
+        for( i in products ) {
+            React.render(React.createElement(Price, { price: products[i].price, id: i, count: BasketStore.getProductCount(i) }), document.getElementById('product-'+i));
+        }
+        React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
+        React.render(React.createElement(BasketList, { }), document.getElementById('basket-list'));
+    });
+    </script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
-  <div class="row">
-    {% for product in products %}
-      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div>{{ product.name }}</div>
-            <img src="{{ product.src }}" alt="..." class="img-thumbnail">
-            <div class="text-right">
-              {{ product.price }}
+    {% include 'shop/catalog/_basket.html' %}
+    {% include 'shop/catalog/_pager.html' %}
+    <div class="block-grid-lg-4 block-grid-md-3 block-grid-sm-2">
+        {% for product in products %}
+        <div class="block-grid-item">
+            <div class="panel panel-info product">
+                <div class="panel-heading">
+                    <div>{{ product.name }}</div>
+                    <div id="product-{{ product.id }}"></div>
+                </div>
+                <div class="panel-body text-center">
+                    <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+        {% endfor %}
+    </div>
+    {% include 'shop/catalog/_pager.html' %}
 </div>
-
 {% endblock %}
+
