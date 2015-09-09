@@ -1,10 +1,10 @@
-.good__add {
+.product__add {
     margin-top: 5px;
 }
-.good__price {
+.product__price {
     font-weight: bold;
 }
-.good .panel-heading {
+.product .panel-heading {
     min-height: 88px;
 }
 .basket {
