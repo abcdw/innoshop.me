@@ -94,6 +94,7 @@ def order(request):
             order_form.create_order( request.session.setdefault('products', {}) )
             del request.session['products']
             request.session.modified = True
+            return render(request, 'shop/thanks.html')
 
     form = OrderForm()
     context = {
