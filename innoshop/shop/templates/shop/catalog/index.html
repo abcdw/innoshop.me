@@ -24,8 +24,8 @@
 
 {% block content %}
 <div class="container">
-    {% include 'shop/catalog/_pager.html' %}
     {% include 'shop/catalog/_basket.html' %}
+    {% include 'shop/catalog/_pager.html' %}
     <div class="block-grid-lg-4 block-grid-md-3 block-grid-sm-2">
         {% for product in products %}
         <div class="block-grid-item">
@@ -33,9 +33,6 @@
                 <div class="panel-heading">
                     <div>{{ product.name }}</div>
                     <div id="product-{{ product.id }}"></div>
-                    <!--<div class="btn btn-default btn-xs product__add">-->
-                        <!--<span class="product__price"><i class="fa fa-cart-plus"></i> {{ product.price }}</span> <i class="fa fa-ruble"></i>-->
-                    <!--</div>-->
                 </div>
                 <div class="panel-body text-center">
                     <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
