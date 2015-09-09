@@ -4,8 +4,8 @@ from .models import Category
 from .models import Product
 from django.http import HttpResponse
 from .forms import OrderForm
+from .forms import OrderForm,FeedbackForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
 
 def index(request):
     catalog = Category.objects.all()
@@ -113,6 +113,17 @@ def order(request):
     return render(request, 'shop/order.html', context)
     # return HttpResponse('cart')
 
+def feedback(request):
+    if request.method == 'POST':
+        feedback_form = FeedbackForm(request.POST)
+        if feedback_form.is_valid():
+            feedback_form.create_feedback()
+    form = FeedbackForm()
+    context = {
+        'form': form,
+        'title': 'feedback form',
+    }
+    return render(request, 'shop/feedback.html', context)
 
 def safe_cast(val, to_type, default=None):
     try:
