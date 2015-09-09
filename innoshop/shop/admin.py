@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Order, Feedback
+from .models import Category, Product, Order, Feedback, ProductItem
 
 
 @admin.register(Category)
@@ -14,9 +14,15 @@ class Product(admin.ModelAdmin):
 
     list_display = ('name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
 
+class ProductItemInline(admin.TabularInline):
+    model = ProductItem
+    raw_id_fields = ('product', )
 
 @admin.register(Order)
 class Order(admin.ModelAdmin):
+    inlines = [
+        ProductItemInline,
+    ]
     list_display = ('owner', 'contact')
 
 @admin.register(Feedback)

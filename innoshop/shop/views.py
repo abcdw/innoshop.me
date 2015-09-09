@@ -91,7 +91,9 @@ def order(request):
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order_form.create_order()
+            order_form.create_order( request.session.setdefault('products', {}) )
+            del request.session['products']
+            request.session.modified = True
 
     form = OrderForm()
     context = {
