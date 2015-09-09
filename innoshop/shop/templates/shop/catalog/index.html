@@ -2,10 +2,9 @@
 
 {% block javascript %}
     {{ block.super }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-    <script src="https://cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
     <script src="/static/js/shop/build/shop.js"></script>
-    <script> $(document).ready(function(){
+    <script>
+    $(document).ready(function(){
         var products = {};
         {% for product in products %}
             products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }} };
