@@ -154,35 +154,42 @@ var BasketLine = React.createClass({
     render: function render() {
         var sum = this.props.product.price * this.props.count;
         return React.createElement(
-            'div',
-            { key: this.props.product.id, className: 'basket-list__line' },
+            'tr',
+            { className: 'basket-list__line' },
             React.createElement(
-                'div',
-                { className: 'btn btn-xs btn-default', onClick: this.add },
-                React.createElement('i', { className: 'fa fa-plus' })
+                'td',
+                null,
+                React.createElement(
+                    'div',
+                    { className: 'btn btn-xs btn-default', onClick: this.add },
+                    React.createElement('i', { className: 'fa fa-plus' })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'btn btn-xs btn-default', onClick: this.dec },
+                    React.createElement('i', { className: 'fa fa-minus' })
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'btn btn-xs btn-default', onClick: this.remove },
+                    React.createElement('i', { className: 'fa fa-remove' })
+                ),
+                ' ',
+                React.createElement(
+                    'span',
+                    { className: 'badge' },
+                    this.props.product.price,
+                    ' * ',
+                    this.props.count,
+                    ' = ',
+                    sum,
+                    React.createElement('i', { className: 'fa fa-ruble' })
+                )
             ),
             React.createElement(
-                'div',
-                { className: 'btn btn-xs btn-default', onClick: this.dec },
-                React.createElement('i', { className: 'fa fa-minus' })
-            ),
-            React.createElement(
-                'div',
-                { className: 'btn btn-xs btn-default', onClick: this.remove },
-                React.createElement('i', { className: 'fa fa-remove' })
-            ),
-            ' ',
-            React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
-            ' ',
-            React.createElement(
-                'span',
-                { className: 'badge' },
-                this.props.product.price,
-                ' * ',
-                this.props.count,
-                ' = ',
-                sum,
-                React.createElement('i', { className: 'fa fa-ruble' })
+                'td',
+                null,
+                React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } })
             )
         );
     }
@@ -199,8 +206,24 @@ var BasketList = React.createClass({
         var self = this;
         var items = this.props.items;
         var list = items ? items.map(function (item) {
-            return React.createElement(BasketLine, item);
+            item.key = item.product.id;return React.createElement(BasketLine, item);
         }) : '';
+        var btn = this.props.link ? React.createElement(
+            'a',
+            { className: 'btn btn-info', href: this.props.link, alt: 'Перейти в корзину' },
+            React.createElement('i', { className: 'fa fa-shopping-cart' }),
+            ' ',
+            this.props.total,
+            ' ',
+            React.createElement('i', { className: 'fa fa-ruble' })
+        ) : React.createElement(
+            'div',
+            null,
+            'Итого: ',
+            this.props.total,
+            ' ',
+            React.createElement('i', { className: 'fa fa-ruble' })
+        );
         return this.props.total > 0 ? React.createElement(
             'div',
             { className: 'basket-list' },
@@ -210,15 +233,20 @@ var BasketList = React.createClass({
                 React.createElement(
                     'div',
                     { className: 'panel-heading' },
-                    'Итого: ',
-                    this.props.total,
-                    ' ',
-                    React.createElement('i', { className: 'fa fa-ruble' })
+                    btn
                 ),
                 React.createElement(
                     'div',
                     { className: 'panel-body' },
-                    list
+                    React.createElement(
+                        'table',
+                        null,
+                        React.createElement(
+                            'tbody',
+                            null,
+                            list
+                        )
+                    )
                 )
             )
         ) : React.createElement('div', null);

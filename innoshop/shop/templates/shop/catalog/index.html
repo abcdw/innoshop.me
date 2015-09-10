@@ -16,7 +16,7 @@
             React.render(React.createElement(Price, { price: products[i].price, id: i, count: BasketStore.getProductCount(i) }), document.getElementById('product-'+i));
         }
         React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
-        React.render(React.createElement(BasketList, { }), document.getElementById('basket-list'));
+        React.render(React.createElement(BasketList, { link: '{% url 'order' %}' }), document.getElementById('basket-list'));
     });
     </script>
 {% endblock %}

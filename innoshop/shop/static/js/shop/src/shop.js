@@ -133,15 +133,18 @@ var BasketLine = React.createClass({
     },
     render: function() {
         var sum = this.props.product.price * this.props.count;
-        return (<div key={this.props.product.id} className="basket-list__line">
-                <div className="btn btn-xs btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
-                <div className="btn btn-xs btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
-                <div className="btn btn-xs btn-default" onClick={this.remove}><i className="fa fa-remove"></i></div>
-                &nbsp;
-                <span dangerouslySetInnerHTML={{__html: this.props.product.name}} />
-                &nbsp;
-                <span className="badge">{this.props.product.price} * {this.props.count} = {sum}<i className="fa fa-ruble" /></span>
-                </div>
+        return (<tr className="basket-list__line">
+                    <td>
+                        <div className="btn btn-xs btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
+                        <div className="btn btn-xs btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
+                        <div className="btn btn-xs btn-default" onClick={this.remove}><i className="fa fa-remove"></i></div>
+                        &nbsp;
+                        <span className="badge">{this.props.product.price} * {this.props.count} = {sum}<i className="fa fa-ruble" /></span>
+                    </td>
+                    <td>
+                        <span dangerouslySetInnerHTML={{__html: this.props.product.name}} />
+                    </td>
+                </tr>
             )
     }
 });
@@ -155,14 +158,19 @@ var BasketList = React.createClass({
         var self = this;
         var items = this.props.items;
         var list = items ?
-            items.map( function( item ){ return (<BasketLine {...item} />); })
+            items.map( function( item ){ item.key = item.product.id; return (<BasketLine {...item} />); })
             : '';
+        var btn = this.props.link ?
+                    (<a className="btn btn-info" href={this.props.link} alt="Перейти в корзину">
+                        <i className="fa fa-shopping-cart" /> { this.props.total } <i className="fa fa-ruble" />
+                    </a>)
+                    : (<div>Итого: { this.props.total } <i className="fa fa-ruble"></i></div>);
         return this.props.total > 0 ? (
            <div className="basket-list">
                 <div className="panel panel-default">
-                  <div className="panel-heading">Итого: { this.props.total } <i className="fa fa-ruble"></i></div>
+                  <div className="panel-heading">{ btn }</div>
                   <div className="panel-body">
-                    {list}
+                    <table><tbody>{list}</tbody></table>
                   </div>
                 </div>
            </div>

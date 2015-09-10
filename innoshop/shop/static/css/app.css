@@ -10,3 +10,16 @@
 .basket {
     text-transform: uppercase;
 }
+.basket-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.basket-list tr {
+    border-top: 1px dotted #aaa;
+}
+.basket-list tr:first-child {
+    border: none;
+}
+.basket-list td {
+    padding: 5px;
+}
