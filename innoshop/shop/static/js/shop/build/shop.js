@@ -87,7 +87,7 @@ var Price = React.createClass({
         actions.addToBasket(this.props.id);
     },
     render: function render() {
-        var button_class = "btn btn-xs product__add ";
+        var button_class = "btn product__add ";
         button_class += this.props.count > 0 ? "btn-info" : "btn-default";
         var cnt = this.props.count > 0 ? ' [' + this.props.count + ']' : '';
         return React.createElement(
@@ -96,12 +96,9 @@ var Price = React.createClass({
             React.createElement(
                 'span',
                 { className: 'product__price' },
-                React.createElement('i', { className: 'fa fa-cart-plus' }),
-                ' ',
-                this.props.price
+                React.createElement('i', { style: { lineHeight: '8px' }, className: 'fa fa-plus' }),
+                '  в карму'
             ),
-            ' ',
-            React.createElement('i', { className: 'fa fa-ruble' }),
             cnt
         );
     }
@@ -113,6 +110,10 @@ var Basket = React.createClass({
     mixins: [Reflux.listenTo(BasketStore, "onBasketChange")],
     onBasketChange: function onBasketChange(total) {
         this.setProps({ price: total });
+    },
+    onClick: function onClick(event) {
+        event.preventDefault();
+        $('#basket-list').slideToggle();
     },
     render: function render() {
         var has_price = this.props.price > 0;
@@ -127,12 +128,12 @@ var Basket = React.createClass({
         ) : '';
         return React.createElement(
             'a',
-            { href: this.props.url, className: 'basket' },
+            { href: this.props.url, onClick: this.onClick, className: 'basket' },
             React.createElement(
                 'span',
                 { className: basket_class },
                 React.createElement('i', { className: 'fa fa-shopping-cart' }),
-                ' Корзина',
+                ' Карма',
                 price
             )
         );
@@ -161,18 +162,22 @@ var BasketLine = React.createClass({
                 null,
                 React.createElement(
                     'div',
-                    { className: 'btn btn-xs btn-default', onClick: this.add },
-                    React.createElement('i', { className: 'fa fa-plus' })
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'btn btn-xs btn-default', onClick: this.dec },
-                    React.createElement('i', { className: 'fa fa-minus' })
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'btn btn-xs btn-default', onClick: this.remove },
-                    React.createElement('i', { className: 'fa fa-remove' })
+                    { className: 'btn-group' },
+                    React.createElement(
+                        'div',
+                        { className: 'btn btn-xs btn-default', onClick: this.add },
+                        React.createElement('i', { className: 'fa fa-plus' })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'btn btn-xs btn-default', onClick: this.dec },
+                        React.createElement('i', { className: 'fa fa-minus' })
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'btn btn-xs btn-default', onClick: this.remove },
+                        React.createElement('i', { className: 'fa fa-remove' })
+                    )
                 ),
                 ' ',
                 React.createElement(
@@ -209,46 +214,73 @@ var BasketList = React.createClass({
             item.key = item.product.id;return React.createElement(BasketLine, item);
         }) : '';
         var btn = this.props.link ? React.createElement(
-            'a',
-            { className: 'btn btn-info', href: this.props.link, alt: 'Перейти в корзину' },
+            'button',
+            { type: 'submit', target: 'orderForm', className: 'btn btn-info', href: this.props.link, alt: 'Потратить карму' },
             React.createElement('i', { className: 'fa fa-shopping-cart' }),
-            ' ',
-            this.props.total,
-            ' ',
-            React.createElement('i', { className: 'fa fa-ruble' })
-        ) : React.createElement(
+            '  Потратить'
+        ) : '';
+
+        var form = this.props.link ? React.createElement(
             'div',
             null,
-            'Итого: ',
-            this.props.total,
-            ' ',
-            React.createElement('i', { className: 'fa fa-ruble' })
-        );
-        return this.props.total > 0 ? React.createElement(
+            React.createElement('br', null),
+            React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement('input', { type: 'text', id: 'contact', name: 'contact', className: 'form-control',
+                    placeholder: '@telegram или номер телефона' })
+            ),
+            React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement('textarea', { name: 'comment', id: 'comment', cols: '30', rows: '3', placeholder: 'Комментарий',
+                    className: 'form-control' })
+            )
+        ) : '';
+        var csrf = this.props.csrf_token ? React.createElement('input', { type: 'hidden', name: 'csrfmiddlewaretoken', value: this.props.csrf_token }) : '';
+        return items || this.props.link ? React.createElement(
             'div',
             { className: 'basket-list' },
             React.createElement(
-                'div',
-                { className: 'panel panel-default' },
+                'form',
+                { action: this.props.link, id: 'orderForm', method: 'POST' },
+                csrf,
                 React.createElement(
                     'div',
-                    { className: 'panel-heading' },
-                    btn
-                ),
-                React.createElement(
-                    'div',
-                    { className: 'panel-body' },
+                    { className: 'panel panel-default' },
                     React.createElement(
-                        'table',
-                        null,
+                        'div',
+                        { className: 'panel-body' },
                         React.createElement(
-                            'tbody',
+                            'table',
                             null,
-                            list
+                            React.createElement(
+                                'tbody',
+                                null,
+                                list
+                            )
+                        ),
+                        form
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'panel-footer clearfix' },
+                        React.createElement(
+                            'span',
+                            { className: 'h3' },
+                            'Ваша карма ',
+                            this.props.total,
+                            ' ',
+                            React.createElement('i', { className: 'fa fa-ruble' })
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'pull-right product__add' },
+                            btn
                         )
                     )
                 )
             )
-        ) : React.createElement('div', null);
+        ) : '';
     }
 });

@@ -88,13 +88,13 @@ var Price = React.createClass({
         actions.addToBasket(this.props.id);
     },
     render: function() {
-        var button_class = "btn btn-xs product__add ";
+        var button_class = "btn product__add ";
         button_class += this.props.count > 0 ? "btn-info" : "btn-default";
         var cnt = this.props.count > 0 ? ' [' + this.props.count + ']'  : '';
         return (
             <div className={button_class} onClick={this.onClick}>
                 <span className="product__price">
-                    <i className="fa fa-cart-plus"></i> { this.props.price }</span> <i className="fa fa-ruble"></i>
+                    <i style={ { lineHeight: '8px' } } className="fa fa-plus"></i>&nbsp;&nbsp;в карму</span>
                     {cnt}
             </div>
         );
@@ -106,14 +106,18 @@ var Basket = React.createClass({
     onBasketChange: function(total) {
         this.setProps({ price: total });
     },
+    onClick: function(event) {
+        event.preventDefault();
+        $('#basket-list').slideToggle();
+    },
     render: function() {
         var has_price = this.props.price > 0;
         var basket_class = "label label" + (has_price ? '-success' : '-default');
         var price = has_price ? <span className="basket__price"> {this.props.price} <i className="fa fa-ruble"></i></span> : '';
         return (
-                <a href={this.props.url} className="basket">
+                <a href={this.props.url} onClick={this.onClick} className="basket">
                     <span className={basket_class}>
-                        <i className="fa fa-shopping-cart"></i> Корзина
+                        <i className="fa fa-shopping-cart"></i> Карма
                         { price }
                     </span>
                 </a>
@@ -135,9 +139,11 @@ var BasketLine = React.createClass({
         var sum = this.props.product.price * this.props.count;
         return (<tr className="basket-list__line">
                     <td>
-                        <div className="btn btn-xs btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
-                        <div className="btn btn-xs btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
-                        <div className="btn btn-xs btn-default" onClick={this.remove}><i className="fa fa-remove"></i></div>
+                        <div className="btn-group">
+                            <div className="btn btn-xs btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
+                            <div className="btn btn-xs btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
+                            <div className="btn btn-xs btn-default" onClick={this.remove}><i className="fa fa-remove"></i></div>
+                        </div>
                         &nbsp;
                         <span className="badge">{this.props.product.price} * {this.props.count} = {sum}<i className="fa fa-ruble" /></span>
                     </td>
@@ -161,19 +167,40 @@ var BasketList = React.createClass({
             items.map( function( item ){ item.key = item.product.id; return (<BasketLine {...item} />); })
             : '';
         var btn = this.props.link ?
-                    (<a className="btn btn-info" href={this.props.link} alt="Перейти в корзину">
-                        <i className="fa fa-shopping-cart" /> { this.props.total } <i className="fa fa-ruble" />
-                    </a>)
-                    : (<div>Итого: { this.props.total } <i className="fa fa-ruble"></i></div>);
-        return this.props.total > 0 ? (
-           <div className="basket-list">
-                <div className="panel panel-default">
-                  <div className="panel-heading">{ btn }</div>
-                  <div className="panel-body">
-                    <table><tbody>{list}</tbody></table>
-                  </div>
+                    (<button type="submit" target="orderForm" className="btn btn-info" href={this.props.link} alt="Потратить карму">
+                        <i className="fa fa-shopping-cart" />&nbsp;&nbsp;Потратить
+                    </button>)
+                    : '';
+
+        var form = this.props.link ? (
+            <div><br></br>
+                <div className="form-group">
+                    <input type="text" id="contact" name="contact" className="form-control"
+                           placeholder="@telegram или номер телефона"></input>
                 </div>
+                <div className="form-group">
+                    <textarea name="comment" id="comment" cols="30" rows="3" placeholder="Комментарий"
+                              className="form-control" ></textarea>
+                </div>
+            </div>
+        ) :'';
+        var csrf = this.props.csrf_token ? (<input type="hidden" name="csrfmiddlewaretoken" value={this.props.csrf_token}></input>) : '';
+        return (items || this.props.link) ? (
+           <div className="basket-list">
+                <form action={this.props.link} id="orderForm" method="POST">
+                    {csrf}
+                    <div className="panel panel-default">
+                      <div className="panel-body">
+                        <table><tbody>{list}</tbody></table>
+                        {form}
+                      </div>
+                      <div className="panel-footer clearfix">
+                        <span className="h3">Ваша карма {this.props.total} <i className="fa fa-ruble"></i></span>
+                        <div className="pull-right product__add">{ btn }</div>
+                      </div>
+                    </div>
+                </form>
            </div>
-        ) : (<div />);
+        ) : '';
     }
 });

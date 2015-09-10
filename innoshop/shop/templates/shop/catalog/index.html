@@ -16,25 +16,28 @@
             React.render(React.createElement(Price, { price: products[i].price, id: i, count: BasketStore.getProductCount(i) }), document.getElementById('product-'+i));
         }
         React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
-        React.render(React.createElement(BasketList, { link: '{% url 'order' %}' }), document.getElementById('basket-list'));
+        React.render(React.createElement(BasketList, { link: '{% url 'order' %}', csrf_token: '{{ csrf_token }}' }), document.getElementById('basket-list'));
     });
     </script>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    {% include 'shop/catalog/_basket.html' %}
+    {% include 'shop/catalog/_basket.html' with style='display: none' %}
     {% include 'shop/catalog/_pager.html' %}
     <div class="block-grid-lg-4 block-grid-md-3 block-grid-sm-2">
         {% for product in products %}
         <div class="block-grid-item">
             <div class="panel panel-info product">
                 <div class="panel-heading">
-                    <div>{{ product.name }}</div>
-                    <div id="product-{{ product.id }}"></div>
+                    <div title="{{ product.name }}">{{ product.name | truncatechars:52 }}</div>
                 </div>
                 <div class="panel-body text-center">
                     <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
+                </div>
+                <div class="panel-footer clearfix">
+                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i></span>
+                    <div class="pull-right" id="product-{{ product.id }}"></div>
                 </div>
             </div>
         </div>

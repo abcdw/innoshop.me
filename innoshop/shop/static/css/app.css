@@ -1,11 +1,12 @@
 .product__add {
-    margin-top: 5px;
+    margin: -3px -6px;
 }
 .product__price {
     font-weight: bold;
 }
 .product .panel-heading {
-    min-height: 88px;
+    height: 60px;
+    text-overflow: ellipses;
 }
 .basket {
     text-transform: uppercase;
