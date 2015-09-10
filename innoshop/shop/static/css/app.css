@@ -36,4 +36,5 @@
 .ffffu {
     margin: 0 -15px;
 }
-body { padding-top: 50px; }
+body { padding-top: 70px; }
+.pager { margin-top: 0; }

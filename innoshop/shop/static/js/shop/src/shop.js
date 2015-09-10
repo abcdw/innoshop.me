@@ -138,10 +138,10 @@ var BasketLine = React.createClass({
     render: function() {
         var sum = this.props.product.price * this.props.count;
         return (<tr>
-                    <td>
+                    <td width="1%">
                         <div className="btn  btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
                     </td>
-                    <td>
+                    <td width="1%">
                         <div className="btn  btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
                     </td>
                     <td>

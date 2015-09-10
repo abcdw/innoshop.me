@@ -159,7 +159,7 @@ var BasketLine = React.createClass({
             null,
             React.createElement(
                 'td',
-                null,
+                { width: '1%' },
                 React.createElement(
                     'div',
                     { className: 'btn  btn-default', onClick: this.add },
@@ -168,7 +168,7 @@ var BasketLine = React.createClass({
             ),
             React.createElement(
                 'td',
-                null,
+                { width: '1%' },
                 React.createElement(
                     'div',
                     { className: 'btn  btn-default', onClick: this.dec },
