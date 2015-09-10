@@ -1,33 +1,31 @@
 {% extends "shop/layout/base.html" %}
 
 {% block javascript %}
-{{ block.super }}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-<script src="https://cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
-<script src="/static/js/shop/build/shop.js"></script>
-<script> $(document).ready(function(){
+    {{ block.super }}
+    <script src="/static/js/shop/build/shop.js"></script>
+    <script>
+    $(document).ready(function(){
         BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
         React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
         React.render(React.createElement(BasketList, { }), document.getElementById('basket-list'));
     });
-</script>
-<script>
-    var handleCtrlEnter = function (e) {
-      var charCode;
+    </script>
+    <script>
+        var handleCtrlEnter = function (e) {
+          var charCode;
 
-      if (e && e.which) {
-        charCode = e.which;
-      } else if (window.event) {
-        e = window.event;
-        charCode = e.keyCode;
-      }
+          if (e && e.which) {
+            charCode = e.which;
+          } else if (window.event) {
+            e = window.event;
+            charCode = e.keyCode;
+          }
 
-      if (((charCode == 13)&&(e.ctrlKey))||(charCode==10)) {
-        document.getElementById('orderForm').submit();
-      }
-    }
-
-</script>
+          if (((charCode == 13)&&(e.ctrlKey))||(charCode==10)) {
+            document.getElementById('orderForm').submit();
+          }
+        }
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -35,7 +33,7 @@
     {% include 'shop/catalog/_basket.html' %}
     <div class="row">
         <div class="col-sm-12">
-            <form action="/order" id="orderForm" method="POST">
+            <form action="{% url 'order' %}" id="orderForm" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                     <input type="text" id="contact" name="contact" class="form-control"

@@ -33,22 +33,24 @@ var BasketStore = Reflux.createStore({
             res = JSON.parse(res);
             for (var i in res) {
                 ProductStore.add(res[i].product);
-                self.data[i] = res[i];
+                self.data[res[i].product.id] = res[i];
             }
             self.trigger(self.totalSum());
         });
     },
-    onDecFromBasket: function onDecFromBasket(id, n) {
-        var cnt = n || -1;
+    onDecFromBasket: function onDecFromBasket(id, remove) {
         if (this.data[id]) {
-            this.data[id].count = this.data[id].count + cnt;
+            var cnt = remove ? this.data[id].count : 1;
+            this.data[id].count = this.data[id].count - cnt;
             if (this.data[id].count <= 0) delete this.data[id];
-            $.get(this.url + '?id=' + id + '&count=' + cnt, function (res) {});
+            $.get(this.url + '?id=' + id + '&count=-' + cnt, function (res) {});
             this.trigger(this.totalSum());
         }
     },
     onAddToBasket: function onAddToBasket(id) {
-        if (this.data[id]) this.data[id].count = this.data[id].count + 1;else {
+        if (this.data[id]) {
+            this.data[id].count = this.data[id].count + 1;
+        } else {
             var product = ProductStore.getProduct(id);
             if (product) this.data[id] = { count: 1, product: product };
         }
@@ -147,7 +149,7 @@ var BasketLine = React.createClass({
         actions.decFromBasket(this.props.product.id);
     },
     remove: function remove() {
-        actions.decFromBasket(this.props.product.id, -10000);
+        actions.decFromBasket(this.props.product.id, true);
     },
     render: function render() {
         var sum = this.props.product.price * this.props.count;

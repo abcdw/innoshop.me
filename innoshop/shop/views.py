@@ -4,8 +4,9 @@ from .models import Category
 from .models import Product
 from django.http import HttpResponse
 from .forms import OrderForm
-from .forms import OrderForm,FeedbackForm
+from .forms import OrderForm, FeedbackForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 def index(request):
     catalog = Category.objects.all()
@@ -13,7 +14,7 @@ def index(request):
 
     q = request.GET.get('q')
     if q:
-        products = products.filter( name__icontains = q )
+        products = products.filter(name__icontains=q)
 
     paginator = Paginator(products, 25)
     page = request.GET.get('page')
@@ -55,47 +56,34 @@ def catalog(request):
 
 
 def add_product(request):
+    def get_int(name, default=None):
+        try:
+            return int(request.GET.get(name))
+        except ValueError:
+            return default
+
+    result = {'status': 'error', 'result': 'use GET method'}
     if request.method == 'GET':
         try:
-            id = safe_cast(request.GET.get('id'), int, None)
-            count = int(request.GET.get('count', 0))
-            if id >= 0:
+            id = get_int('id')
+            count = get_int('count', 0)
+            if id >= 0 and count:
                 id = str(id)
-                if not request.session.has_key('products'):
-                    request.session['products'] = {}
-
-                if not type(request.session['products']) is dict:
-                    request.session['products'] = {}
-                s = request.session['products']
-
-                if s.has_key(id):
-                    s[id] += count
-                else:
-                    s[id] = count
-
+                s = request.session.setdefault('products', {})
+                s[id] = s.get(id, 0) + count
                 if s[id] <= 0:
                     del s[id]
-
-                if s.has_key(id):
-                    cur_count = s[id]
-                else:
-                    cur_count = 0
                 request.session.modified = True
-                return HttpResponse('added {} items of product {}, current count: {}'.format(count, id, cur_count ))
+                result.update({'status': 'ok', 'result': s.get(id)})
         except Exception, e:
-            return HttpResponse('provide int id and count in GET')
-
-    return HttpResponse('provide int id and count in GET')
+            result.update({'result': 'invalid id or count'})
+    return HttpResponse(json.dumps(result))
 
 
 def get_products(request):
-    counts = {}
-    if request.session.has_key('products'):
-        counts = request.session['products']
+    counts = request.session.get('products', {})
     objs = Product.objects.filter(id__in=counts.keys()).values('id', 'name', 'price')
-    products = {}
-    for p in objs:
-        products[str(p['id'])] = { 'count': counts[str(p['id'])], 'product': p }
+    products = map(lambda x: {'count': counts[str(x['id'])], 'product': x}, objs)
     return HttpResponse(json.dumps((products)))
 
 
@@ -103,7 +91,10 @@ def order(request):
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order_form.create_order()
+            order_form.create_order( request.session.setdefault('products', {}) )
+            del request.session['products']
+            request.session.modified = True
+            return render(request, 'shop/thanks.html')
 
     form = OrderForm()
     context = {
@@ -112,6 +103,7 @@ def order(request):
     }
     return render(request, 'shop/order.html', context)
     # return HttpResponse('cart')
+
 
 def feedback(request):
     if request.method == 'POST':
@@ -124,9 +116,3 @@ def feedback(request):
         'title': 'feedback form',
     }
     return render(request, 'shop/feedback.html', context)
-
-def safe_cast(val, to_type, default=None):
-    try:
-        return to_type(val)
-    except ValueError:
-        return default

@@ -17,7 +17,7 @@
       }
     }
   </script>
-  <form action="/feedback" id="feedbackForm" method="POST">
+  <form action="{% url 'feedback' %}" id="feedbackForm" method="POST">
   {% csrf_token %}
     <div class="form-group">
       <input type="text" id="contact" name="contact" class="form-control" placeholder="@telegram или номер телефона">

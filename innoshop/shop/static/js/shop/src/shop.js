@@ -33,24 +33,25 @@ var BasketStore = Reflux.createStore({
             res = JSON.parse(res);
             for(var i in res) {
                 ProductStore.add(res[i].product);
-                self.data[i] = res[i];
+                self.data[res[i].product.id] = res[i];
             }
             self.trigger( self.totalSum() );
         })
     },
-    onDecFromBasket: function(id, n){
-        var cnt = n || -1;
+    onDecFromBasket: function(id, remove){
         if( this.data[id] ) {
-            this.data[id].count = this.data[id].count + cnt;
+            var cnt = remove ? this.data[id].count : 1;
+            this.data[id].count = this.data[id].count - cnt;
             if( this.data[id].count <= 0 )
                 delete this.data[id];
-            $.get( this.url + '?id=' + id + '&count='+cnt, function(res){  } );
+            $.get( this.url + '?id=' + id + '&count=-' + cnt, function(res){  } );
             this.trigger( this.totalSum() );
         }
     },
     onAddToBasket: function(id) {
-        if( this.data[id] )
+        if( this.data[id] ) {
             this.data[id].count = this.data[id].count + 1;
+        }
         else {
             var product = ProductStore.getProduct(id);
             if( product ) this.data[id] = { count: 1, product: product};
@@ -128,10 +129,10 @@ var BasketLine = React.createClass({
         actions.decFromBasket(this.props.product.id);
     },
     remove: function() {
-        actions.decFromBasket(this.props.product.id, -10000);
+        actions.decFromBasket(this.props.product.id, true);
     },
     render: function() {
-        var sum = this.props.product.price*this.props.count;
+        var sum = this.props.product.price * this.props.count;
         return (<div key={this.props.product.id} className="basket-list__line">
                 <div className="btn btn-xs btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
                 <div className="btn btn-xs btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>

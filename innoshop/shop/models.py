@@ -9,9 +9,11 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class ProductManager(models.Manager):
     def get_sallable(self):
-        return self.filter( price__gt = 0 )
+        return self.filter(price__gt=0)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -44,11 +46,14 @@ class Order(models.Model):
 
 
 class ProductItem(models.Model):
-    order = models.ForeignKey(Order)
-    product = models.ForeignKey(Product)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
     count = models.IntegerField(default=1)
+
+    def __unicode__(self):
+        return self.product.name
 
 
 class Feedback(models.Model):
-    contact = models.CharField(max_length=255,blank=True)
+    contact = models.CharField(max_length=255, blank=True)
     feedback = models.TextField(blank=True)
