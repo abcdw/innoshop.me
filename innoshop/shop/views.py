@@ -16,7 +16,7 @@ def index(request):
     if q:
         products = products.filter(name__icontains=q)
 
-    paginator = Paginator(products, 25)
+    paginator = Paginator(products, 12)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
