@@ -137,18 +137,22 @@ var BasketLine = React.createClass({
     },
     render: function() {
         var sum = this.props.product.price * this.props.count;
-        return (<tr className="basket-list__line">
+        return (<tr>
                     <td>
-                        <div className="btn-group">
-                            <div className="btn btn-xs btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
-                            <div className="btn btn-xs btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
-                            <div className="btn btn-xs btn-default" onClick={this.remove}><i className="fa fa-remove"></i></div>
-                        </div>
-                        &nbsp;
-                        <span className="badge">{this.props.product.price} * {this.props.count} = {sum}<i className="fa fa-ruble" /></span>
+                        <div className="btn  btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
+                    </td>
+                    <td>
+                        <div className="btn  btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
+                    </td>
+                    <td>
+                        <span className="h4">{this.props.count}</span>
                     </td>
                     <td>
                         <span dangerouslySetInnerHTML={{__html: this.props.product.name}} />
+                        <sup className="text-danger" style={ { whiteSpace: 'nowrap' } }> {this.props.product.price} <i className="fa fa-ruble"></i></sup>
+                    </td>
+                    <td className="h4 text-right">
+                        {sum}&nbsp;<i className="fa fa-ruble" />
                     </td>
                 </tr>
             )

@@ -156,45 +156,53 @@ var BasketLine = React.createClass({
         var sum = this.props.product.price * this.props.count;
         return React.createElement(
             'tr',
-            { className: 'basket-list__line' },
+            null,
             React.createElement(
                 'td',
                 null,
                 React.createElement(
                     'div',
-                    { className: 'btn-group' },
-                    React.createElement(
-                        'div',
-                        { className: 'btn btn-xs btn-default', onClick: this.add },
-                        React.createElement('i', { className: 'fa fa-plus' })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'btn btn-xs btn-default', onClick: this.dec },
-                        React.createElement('i', { className: 'fa fa-minus' })
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'btn btn-xs btn-default', onClick: this.remove },
-                        React.createElement('i', { className: 'fa fa-remove' })
-                    )
-                ),
-                ' ',
-                React.createElement(
-                    'span',
-                    { className: 'badge' },
-                    this.props.product.price,
-                    ' * ',
-                    this.props.count,
-                    ' = ',
-                    sum,
-                    React.createElement('i', { className: 'fa fa-ruble' })
+                    { className: 'btn  btn-default', onClick: this.add },
+                    React.createElement('i', { className: 'fa fa-plus' })
                 )
             ),
             React.createElement(
                 'td',
                 null,
-                React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } })
+                React.createElement(
+                    'div',
+                    { className: 'btn  btn-default', onClick: this.dec },
+                    React.createElement('i', { className: 'fa fa-minus' })
+                )
+            ),
+            React.createElement(
+                'td',
+                null,
+                React.createElement(
+                    'span',
+                    { className: 'h4' },
+                    this.props.count
+                )
+            ),
+            React.createElement(
+                'td',
+                null,
+                React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
+                React.createElement(
+                    'sup',
+                    { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
+                    ' ',
+                    this.props.product.price,
+                    ' ',
+                    React.createElement('i', { className: 'fa fa-ruble' })
+                )
+            ),
+            React.createElement(
+                'td',
+                { className: 'h4 text-right' },
+                sum,
+                ' ',
+                React.createElement('i', { className: 'fa fa-ruble' })
             )
         );
     }
