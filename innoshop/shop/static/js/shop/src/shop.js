@@ -112,7 +112,7 @@ var Basket = React.createClass({
     },
     render: function() {
         var has_price = this.props.price > 0;
-        var basket_class = "label label" + (has_price ? '-success' : '-default');
+        var basket_class = "btn btn" + (has_price ? '-success' : '-default');
         var price = has_price ? <span className="basket__price"> {this.props.price} <i className="fa fa-ruble"></i></span> : '';
         return (
                 <a href={this.props.url} onClick={this.onClick} className="basket">

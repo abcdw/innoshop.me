@@ -117,7 +117,7 @@ var Basket = React.createClass({
     },
     render: function render() {
         var has_price = this.props.price > 0;
-        var basket_class = "label label" + (has_price ? '-success' : '-default');
+        var basket_class = "btn btn" + (has_price ? '-success' : '-default');
         var price = has_price ? React.createElement(
             'span',
             { className: 'basket__price' },

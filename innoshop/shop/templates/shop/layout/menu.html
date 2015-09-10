@@ -1,34 +1,45 @@
 <nav class="navbar navbar-default navbar-static-top">
-  <div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-menu" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">Innoshop.me</a>
-    </div>
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-menu" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand hidden-xs" href="/" >Innoshop.me</a>
+            <form class="navbar-form navbar-left" role="search" action="{% url 'catalog' %}" method="get">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input name="q" type="text" class="form-control" placeholder="Поиск" value="{{ q }}">
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="nav-menu">
-      <form class="navbar-form navbar-left" role="search" action="{% url 'catalog' %}" method="get">
-        <div class="form-group">
-          <div class="input-group">
-            <input name="q" type="text" class="form-control" placeholder="Поиск" value="{{ q }}">
-            <div class="input-group-btn">
-              <button class="btn btn-default">
-                <i class="glyphicon glyphicon-search"></i>
-              </button>
-            </div>
-          </div>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li id="basket"></li>
-      </ul>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="nav-menu">
+            <ul class="nav navbar-nav">
+                <li><a href="#">Link</a></li>
+            </ul>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li id="basket"></li>
+        </ul>
+
+
+
+        {% include 'shop/catalog/_basket.html' with style='display:none' %}
+
+        <!-- /.navbar-collapse -->
     </div>
-    <!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 </nav>
