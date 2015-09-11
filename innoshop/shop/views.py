@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import Http404
 
 
 def index(request):
@@ -96,13 +97,13 @@ def order(request):
             request.session.modified = True
             return render(request, 'shop/thanks.html')
 
+    raise Http404
     form = OrderForm()
     context = {
         'form': form,
         'title': 'order form',
     }
     return render(request, 'shop/order.html', context)
-    # return HttpResponse('cart')
 
 
 def feedback(request):
