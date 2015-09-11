@@ -1,6 +1,6 @@
 {% if products.has_previous or products.has_next %}
-<nav class="row">
-    <ul class="pager col-md-4 col-sm-12">
+<nav >
+    <ul class="pager">
         {% if products.has_previous %}
         <li class="previous {% if not products.has_previous %}disabled{% endif %}">
             <a href="{% if products.has_previous %}?q={{q}}&page={{ products.previous_page_number }}{% else %}#{% endif %}"><span
