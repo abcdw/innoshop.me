@@ -17,6 +17,7 @@
       }
     }
   </script>
+
   <form action="{% url 'feedback' %}" id="feedbackForm" method="POST">
   {% csrf_token %}
     <div class="form-group">
@@ -26,7 +27,7 @@
       <textarea name="feedback" id="feedback" cols="30" rows="10" placeholder="Отзыв" class="form-control" onkeypress="handleCtrlEnter(this)"></textarea>
     </div>
     <div class="form-group">
-      <input type="submit" value="Отослать отзыв" class="btn btn-success btn-block">
+      <input type="submit" value="Отправить отзыв" class="btn btn-success btn-block">
     </div>
   </form>
 </div>
