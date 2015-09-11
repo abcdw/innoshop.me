@@ -26,6 +26,7 @@ class Product(models.Model):
     img_url = models.CharField(max_length=255, blank=True)
     is_stock_empty = models.BooleanField(default=True)
     source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
+    rating = models.IntegerField(default=0)
 
     objects = ProductManager()
 
