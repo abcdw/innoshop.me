@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-from .models import Category
+from .models import Category, Faq
 from .models import Product
 from django.http import HttpResponse
 from .forms import OrderForm
@@ -112,8 +112,13 @@ def feedback(request):
         if feedback_form.is_valid():
             feedback_form.create_feedback()
     form = FeedbackForm()
+    try:
+        faq = Faq.objects.get(name='FAQ')
+    except Exception, e:
+        faq = False
     context = {
         'form': form,
         'title': 'feedback form',
+        'faq': faq
     }
     return render(request, 'shop/feedback.html', context)
