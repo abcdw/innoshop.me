@@ -40,8 +40,9 @@ var BasketStore = Reflux.createStore({
         });
     },
     onClearFromBasket: function onClearFromBasket() {
+        var self = this;
         for (var i in this.data) {
-            $.get(this.url + '?id=' + i + '&count=-' + this.data[i].count, function (res) {});
+            this.onDecFromBasket(this.data[i].product.id, true);
         }
         this.data = [];
         this.trigger(0);
@@ -245,6 +246,16 @@ var BasketList = React.createClass({
     clearBusket: function clearBusket() {
         actions.clearBusket();
     },
+    onSubmit: function onSubmit(event) {
+        var $login = $(this.refs.telegram.getDOMNode()),
+            $group = $login.parents('.form-group');
+        $group.removeClass("has-error");
+        if ($login.val().trim() == '') {
+            event.preventDefault();
+            $group.addClass("has-error");
+            $login.focus();
+        }
+    },
     render: function render() {
         var self = this;
         var items = this.props.items;
@@ -253,7 +264,7 @@ var BasketList = React.createClass({
         }) : '';
         var btn = this.props.link ? React.createElement(
             'button',
-            { type: 'submit', target: 'orderForm', className: 'btn btn-success', href: this.props.link, alt: 'Потратить карму' },
+            { onClick: this.onSubmit, type: 'submit', target: 'orderForm', className: 'btn btn-success', href: this.props.link, alt: 'Потратить карму' },
             React.createElement('i', { className: 'fa fa-shopping-cart' }),
             '  Потратить'
         ) : '';
@@ -270,7 +281,7 @@ var BasketList = React.createClass({
             React.createElement(
                 'div',
                 { className: 'form-group' },
-                React.createElement('input', { type: 'text', id: 'contact', name: 'contact', className: 'form-control',
+                React.createElement('input', { ref: 'telegram', type: 'text', id: 'contact', name: 'contact', className: 'form-control',
                     placeholder: '@telegram или номер телефона' })
             ),
             React.createElement(
@@ -280,6 +291,13 @@ var BasketList = React.createClass({
                     className: 'form-control' })
             )
         ) : '';
+        var karma = this.props.total > 0 ? React.createElement(
+            'span',
+            null,
+            this.props.total,
+            ' ',
+            React.createElement('i', { className: 'fa fa-ruble' })
+        ) : 'чиста';
         var csrf = this.props.csrf_token ? React.createElement('input', { type: 'hidden', name: 'csrfmiddlewaretoken', value: this.props.csrf_token }) : '';
         return items || this.props.link ? React.createElement(
             'div',
@@ -311,9 +329,7 @@ var BasketList = React.createClass({
                                 'span',
                                 { className: 'h3 col-xs-12 col-sm-8 col-md-8 col-lg-8' },
                                 'Ваша карма ',
-                                this.props.total,
-                                ' ',
-                                React.createElement('i', { className: 'fa fa-ruble' })
+                                karma
                             ),
                             React.createElement(
                                 'div',

@@ -49,9 +49,11 @@
         {% if not products %}
             <div class="jumbotron">
                 <h1>Отличная попытка!</h1>
-                <p>Но, к сожалению, товаров, похожих на <strong>"{{ q }}"</strong> у нас в базе пока нет.</p>
-                <p>Однако не надо отчаиваться – любой товар можно заказать, нажав на кнопку <span id="basket2">КАРМА</span></p>
-                <p>Удачной охоты <i class="h3 text-muted fa fa-binoculars"></i></p>
+                <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
+                <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
+                    <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i class="text-muted fa fa-tripadvisor"></i> продолжить охоту</a>
+                </p>
+
             </div>
         {% endif %}
     </div>

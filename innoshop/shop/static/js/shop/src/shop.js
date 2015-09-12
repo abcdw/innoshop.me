@@ -40,8 +40,9 @@ var BasketStore = Reflux.createStore({
         })
     },
     onClearFromBasket: function() {
+        var self = this;
         for(var i in this.data ) {
-            $.get( this.url + '?id=' + i + '&count=-' + this.data[i].count, function(res){  } );
+            this.onDecFromBasket(this.data[i].product.id, true);
         }
         this.data = [];
         this.trigger( 0 );
@@ -183,6 +184,16 @@ var BasketList = React.createClass({
     clearBusket: function(){
         actions.clearBusket();
     },
+    onSubmit: function(event) {
+        var $login = $(this.refs.telegram.getDOMNode()),
+            $group = $login.parents('.form-group');
+        $group.removeClass("has-error");
+        if( $login.val().trim() == '' ) {
+            event.preventDefault();
+            $group.addClass("has-error");
+            $login.focus();
+        }
+    },
     render: function() {
         var self = this;
         var items = this.props.items;
@@ -190,7 +201,7 @@ var BasketList = React.createClass({
             items.map( function( item ){ item.key = item.product.id; return (<BasketLine {...item} />); })
             : '';
         var btn = this.props.link ?
-                    (<button type="submit" target="orderForm" className="btn btn-success" href={this.props.link} alt="Потратить карму">
+                    (<button onClick={ this.onSubmit } type="submit" target="orderForm" className="btn btn-success" href={this.props.link} alt="Потратить карму">
                         <i className="fa fa-shopping-cart" />&nbsp;&nbsp;Потратить
                     </button>)
                     : '';
@@ -198,7 +209,7 @@ var BasketList = React.createClass({
         var form = this.props.link ? (
             <div><br></br>
                 <div className="form-group">
-                    <input type="text" id="contact" name="contact" className="form-control"
+                    <input ref="telegram" type="text" id="contact" name="contact" className="form-control"
                            placeholder="@telegram или номер телефона"></input>
                 </div>
                 <div className="form-group">
@@ -207,6 +218,7 @@ var BasketList = React.createClass({
                 </div>
             </div>
         ) :'';
+        var karma = this.props.total > 0 ? (<span>{this.props.total} <i className="fa fa-ruble"></i></span>) : 'чиста';
         var csrf = this.props.csrf_token ? (<input type="hidden" name="csrfmiddlewaretoken" value={this.props.csrf_token}></input>) : '';
         return (items || this.props.link) ? (
            <div className="basket-list">
@@ -219,7 +231,7 @@ var BasketList = React.createClass({
                       </div>
                       <div className="panel-footer">
                           <div className="row">
-                            <span className="h3 col-xs-12 col-sm-8 col-md-8 col-lg-8">Ваша карма {this.props.total} <i className="fa fa-ruble"></i></span>
+                            <span className="h3 col-xs-12 col-sm-8 col-md-8 col-lg-8">Ваша карма { karma }</span>
                             <div className="h3 col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                 <div className="btn-group pull-right">{ btn } { btn_cear }
                                     <div onClick={this.onClose} className="btn btn-default"><i className="fa fa-close"></i>&nbsp;&nbsp;Закрыть</div></div>
