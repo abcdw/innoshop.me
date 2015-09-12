@@ -329,32 +329,43 @@ var BasketList = React.createClass({
                         <i className="fa fa-shopping-cart" />&nbsp;&nbsp;Потратить
                     </button>)
                     : '';
-        var btn_cear = this.props.items && this.props.items.length > 0 ? (<div onClick={this.clearBusket} className="btn btn-danger"><i className="fa fa-trash-o"></i>&nbsp;&nbsp;Очистить</div>) : '';
+        var btn_cear = this.props.items && this.props.items.length > 0 ?
+            (<div onClick={this.clearBusket} className="btn btn-danger">
+                <i className="fa fa-trash-o"></i>
+            </div>) : '';
         var form = this.props.link ? ( <BasketForm ref="form" /> ) : '';
         var karma = this.props.total > 0 ? (<span>{this.props.total} <i className="fa fa-ruble"></i></span>) : 'чиста';
         var csrf = this.props.csrf_token ? (<input type="hidden" name="csrfmiddlewaretoken" value={this.props.csrf_token}></input>) : '';
+        var header = (<div className="row">
+                <span className="h3 col-xs-12 col-sm-8 col-md-9 col-lg-9">Ваша карма { karma }</span>
+                <div className="h3 col-xs-12 col-sm-4 col-md-3 col-lg-3 ">
+                    <div className="btn-group">
+                        { btn }
+                        { btn_cear }
+                        <div onClick={this.onClose} className="btn btn-default">
+                            <i className="fa fa-close"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>);
         return (items || this.props.link) ? (
-           <div className="basket-list">
+            <div className="basket-list">
                 <form action={this.props.link} id="orderForm" method="POST">
                     {csrf}
                     <div className="panel panel-default">
-                      <div className="panel-body">
-                        <div className="container-fluid">{list}</div>
-                        {form}
-                      </div>
-                      <div className="panel-footer">
-                          <div className="row">
-                            <span className="h3 col-xs-12 col-sm-6 col-md-7 col-lg-8">Ваша карма { karma }</span>
-                            <div className="h3 col-xs-12 col-sm-6 col-md-5 col-lg-4">
-                                <div className="btn-group">{ btn } { btn_cear }
-                                    <div onClick={this.onClose} className="btn btn-default">
-                                        <i className="fa fa-close"></i>&nbsp;&nbsp;Закрыть</div></div>
-                                </div>
-                          </div>
-                      </div>
+                        <div className="panel-heading">
+                            { header }
+                        </div>
+                        <div className="panel-body">
+                            {form}
+                            <div className="container-fluid">{list}</div>
+                        </div>
+                        <div className="panel-footer">
+                            { header }
+                        </div>
                     </div>
                 </form>
-           </div>
+            </div>
         ) : (<div></div>);
     }
 });

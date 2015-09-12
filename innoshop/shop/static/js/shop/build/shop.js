@@ -400,8 +400,7 @@ var BasketList = React.createClass({
         var btn_cear = this.props.items && this.props.items.length > 0 ? React.createElement(
             'div',
             { onClick: this.clearBusket, className: 'btn btn-danger' },
-            React.createElement('i', { className: 'fa fa-trash-o' }),
-            '  Очистить'
+            React.createElement('i', { className: 'fa fa-trash-o' })
         ) : '';
         var form = this.props.link ? React.createElement(BasketForm, { ref: 'form' }) : '';
         var karma = this.props.total > 0 ? React.createElement(
@@ -412,6 +411,31 @@ var BasketList = React.createClass({
             React.createElement('i', { className: 'fa fa-ruble' })
         ) : 'чиста';
         var csrf = this.props.csrf_token ? React.createElement('input', { type: 'hidden', name: 'csrfmiddlewaretoken', value: this.props.csrf_token }) : '';
+        var header = React.createElement(
+            'div',
+            { className: 'row' },
+            React.createElement(
+                'span',
+                { className: 'h3 col-xs-12 col-sm-8 col-md-9 col-lg-9' },
+                'Ваша карма ',
+                karma
+            ),
+            React.createElement(
+                'div',
+                { className: 'h3 col-xs-12 col-sm-4 col-md-3 col-lg-3 ' },
+                React.createElement(
+                    'div',
+                    { className: 'btn-group' },
+                    btn,
+                    btn_cear,
+                    React.createElement(
+                        'div',
+                        { onClick: this.onClose, className: 'btn btn-default' },
+                        React.createElement('i', { className: 'fa fa-close' })
+                    )
+                )
+            )
+        );
         return items || this.props.link ? React.createElement(
             'div',
             { className: 'basket-list' },
@@ -424,44 +448,23 @@ var BasketList = React.createClass({
                     { className: 'panel panel-default' },
                     React.createElement(
                         'div',
+                        { className: 'panel-heading' },
+                        header
+                    ),
+                    React.createElement(
+                        'div',
                         { className: 'panel-body' },
+                        form,
                         React.createElement(
                             'div',
                             { className: 'container-fluid' },
                             list
-                        ),
-                        form
+                        )
                     ),
                     React.createElement(
                         'div',
                         { className: 'panel-footer' },
-                        React.createElement(
-                            'div',
-                            { className: 'row' },
-                            React.createElement(
-                                'span',
-                                { className: 'h3 col-xs-12 col-sm-6 col-md-7 col-lg-8' },
-                                'Ваша карма ',
-                                karma
-                            ),
-                            React.createElement(
-                                'div',
-                                { className: 'h3 col-xs-12 col-sm-6 col-md-5 col-lg-4' },
-                                React.createElement(
-                                    'div',
-                                    { className: 'btn-group' },
-                                    btn,
-                                    ' ',
-                                    btn_cear,
-                                    React.createElement(
-                                        'div',
-                                        { onClick: this.onClose, className: 'btn btn-default' },
-                                        React.createElement('i', { className: 'fa fa-close' }),
-                                        '  Закрыть'
-                                    )
-                                )
-                            )
-                        )
+                        header
                     )
                 )
             )
