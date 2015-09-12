@@ -17,6 +17,8 @@
         }
         React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
         React.render(React.createElement(BasketList, { link: '{% url 'order' %}', csrf_token: '{{ csrf_token }}' }), document.getElementById('basket-list'));
+        if( $('#basket2').length )
+            React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket2'));
     });
     </script>
 {% endblock %}
@@ -44,6 +46,14 @@
             </div>
         </div>
         {% endfor %}
+        {% if not products %}
+            <div class="jumbotron">
+                <h1>Отличная попытка!</h1>
+                <p>Но, к сожалению, товаров, похожих на <strong>"{{ q }}"</strong> у нас в базе пока нет.</p>
+                <p>Однако не надо отчаиваться – любой товар можно заказать, нажав на кнопку <span id="basket2">КАРМА</span></p>
+                <p>Удачной охоты <i class="h3 text-muted fa fa-binoculars"></i></p>
+            </div>
+        {% endif %}
     </div>
     {% include 'shop/catalog/_pager.html' %}
 </div>

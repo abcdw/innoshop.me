@@ -194,7 +194,7 @@ var BasketList = React.createClass({
                         <i className="fa fa-shopping-cart" />&nbsp;&nbsp;Потратить
                     </button>)
                     : '';
-        var btn_cear = this.props.items ? (<div className="btn btn-danger"><i className="fa fa-trash-o"></i>&nbsp;&nbsp;Очистить</div>) : '';
+        var btn_cear = this.props.items && this.props.items.length > 0 ? (<div onClick={this.clearBusket} className="btn btn-danger"><i className="fa fa-trash-o"></i>&nbsp;&nbsp;Очистить</div>) : '';
         var form = this.props.link ? (
             <div><br></br>
                 <div className="form-group">

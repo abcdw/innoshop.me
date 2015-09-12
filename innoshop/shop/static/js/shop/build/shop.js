@@ -257,9 +257,9 @@ var BasketList = React.createClass({
             React.createElement('i', { className: 'fa fa-shopping-cart' }),
             '  Потратить'
         ) : '';
-        var btn_cear = this.props.items ? React.createElement(
+        var btn_cear = this.props.items && this.props.items.length > 0 ? React.createElement(
             'div',
-            { className: 'btn btn-danger' },
+            { onClick: this.clearBusket, className: 'btn btn-danger' },
             React.createElement('i', { className: 'fa fa-trash-o' }),
             '  Очистить'
         ) : '';
