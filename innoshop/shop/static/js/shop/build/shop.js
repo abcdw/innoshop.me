@@ -1,6 +1,6 @@
 'use strict';
 
-var actions = Reflux.createActions(['addToBasket', 'decFromBasket']);
+var actions = Reflux.createActions(['addToBasket', 'decFromBasket', 'clearBusket']);
 
 var ProductStore = Reflux.createStore({
     init: function init() {
@@ -25,6 +25,7 @@ var BasketStore = Reflux.createStore({
         this.data = [];
         this.listenTo(actions.addToBasket, this.onAddToBasket);
         this.listenTo(actions.decFromBasket, this.onDecFromBasket);
+        this.listenTo(actions.clearBusket, this.onClearFromBasket);
     },
     initialize: function initialize(url, get_url) {
         this.url = url;
@@ -37,6 +38,13 @@ var BasketStore = Reflux.createStore({
             }
             self.trigger(self.totalSum());
         });
+    },
+    onClearFromBasket: function onClearFromBasket() {
+        for (var i in this.data) {
+            $.get(this.url + '?id=' + i + '&count=-' + this.data[i].count, function (res) {});
+        }
+        this.data = [];
+        this.trigger(0);
     },
     onDecFromBasket: function onDecFromBasket(id, remove) {
         if (this.data[id]) {
@@ -132,7 +140,7 @@ var Basket = React.createClass({
             React.createElement(
                 'span',
                 { className: basket_class },
-                React.createElement('i', { className: 'fa fa-shopping-cart' }),
+                React.createElement('i', { className: 'fa fa-opencart' }),
                 ' Карма',
                 price
             )
@@ -154,12 +162,17 @@ var BasketLine = React.createClass({
     },
     render: function render() {
         var sum = this.props.product.price * this.props.count;
+        var min_count = this.props.product.min_count > 1 ? React.createElement(
+            'sup',
+            { className: 'text-info' },
+            this.props.product.min_count
+        ) : '';
         return React.createElement(
-            'tr',
-            null,
+            'div',
+            { className: 'row basket-list__line' },
             React.createElement(
-                'td',
-                { width: '1%' },
+                'div',
+                { className: 'col-xs-2 col-sm-1 col-md-1 col-lg-1 text-right' },
                 React.createElement(
                     'div',
                     { className: 'btn  btn-default', onClick: this.add },
@@ -167,8 +180,8 @@ var BasketLine = React.createClass({
                 )
             ),
             React.createElement(
-                'td',
-                { width: '1%' },
+                'div',
+                { className: 'col-xs-2 col-sm-1 col-md-1 col-lg-1' },
                 React.createElement(
                     'div',
                     { className: 'btn  btn-default', onClick: this.dec },
@@ -176,17 +189,15 @@ var BasketLine = React.createClass({
                 )
             ),
             React.createElement(
-                'td',
-                null,
-                React.createElement(
-                    'span',
-                    { className: 'h4' },
-                    this.props.count
-                )
+                'div',
+                { className: 'h4 col-xs-2 col-sm-1 col-md-1 col-lg-1' },
+                this.props.count,
+                ' ',
+                min_count
             ),
             React.createElement(
-                'td',
-                null,
+                'div',
+                { className: 'hidden-xs visible-sm col-sm-8 visible-md col-md-8 visible-lg col-lg-8' },
                 React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
                 React.createElement(
                     'sup',
@@ -198,11 +209,24 @@ var BasketLine = React.createClass({
                 )
             ),
             React.createElement(
-                'td',
-                { className: 'h4 text-right' },
+                'div',
+                { className: 'h4 col-xs-6 col-sm-1 col-md-1 col-lg-1 text-right' },
                 sum,
                 ' ',
                 React.createElement('i', { className: 'fa fa-ruble' })
+            ),
+            React.createElement(
+                'div',
+                { className: 'col-xs-12 visible-xs hidden-sm hidden-md hidden-lg' },
+                React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
+                React.createElement(
+                    'sup',
+                    { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
+                    ' ',
+                    this.props.product.price,
+                    ' ',
+                    React.createElement('i', { className: 'fa fa-ruble' })
+                )
             )
         );
     }
@@ -215,6 +239,12 @@ var BasketList = React.createClass({
     onBasketChange: function onBasketChange(total) {
         this.setProps({ items: BasketStore.items(), total: BasketStore.totalSum() });
     },
+    onClose: function onClose() {
+        $(this.getDOMNode()).parents('#basket-list').slideToggle();
+    },
+    clearBusket: function clearBusket() {
+        actions.clearBusket();
+    },
     render: function render() {
         var self = this;
         var items = this.props.items;
@@ -223,11 +253,16 @@ var BasketList = React.createClass({
         }) : '';
         var btn = this.props.link ? React.createElement(
             'button',
-            { type: 'submit', target: 'orderForm', className: 'btn btn-info', href: this.props.link, alt: 'Потратить карму' },
+            { type: 'submit', target: 'orderForm', className: 'btn btn-success', href: this.props.link, alt: 'Потратить карму' },
             React.createElement('i', { className: 'fa fa-shopping-cart' }),
             '  Потратить'
         ) : '';
-
+        var btn_cear = this.props.items && this.props.items.length > 0 ? React.createElement(
+            'div',
+            { onClick: this.clearBusket, className: 'btn btn-danger' },
+            React.createElement('i', { className: 'fa fa-trash-o' }),
+            '  Очистить'
+        ) : '';
         var form = this.props.link ? React.createElement(
             'div',
             null,
@@ -260,31 +295,43 @@ var BasketList = React.createClass({
                         'div',
                         { className: 'panel-body' },
                         React.createElement(
-                            'table',
-                            null,
-                            React.createElement(
-                                'tbody',
-                                null,
-                                list
-                            )
+                            'div',
+                            { className: 'container-fluid' },
+                            list
                         ),
                         form
                     ),
                     React.createElement(
                         'div',
-                        { className: 'panel-footer clearfix' },
-                        React.createElement(
-                            'span',
-                            { className: 'h3' },
-                            'Ваша карма ',
-                            this.props.total,
-                            ' ',
-                            React.createElement('i', { className: 'fa fa-ruble' })
-                        ),
+                        { className: 'panel-footer' },
                         React.createElement(
                             'div',
-                            { className: 'pull-right product__add' },
-                            btn
+                            { className: 'row' },
+                            React.createElement(
+                                'span',
+                                { className: 'h3 col-xs-12 col-sm-8 col-md-8 col-lg-8' },
+                                'Ваша карма ',
+                                this.props.total,
+                                ' ',
+                                React.createElement('i', { className: 'fa fa-ruble' })
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'h3 col-xs-12 col-sm-4 col-md-4 col-lg-4' },
+                                React.createElement(
+                                    'div',
+                                    { className: 'btn-group pull-right' },
+                                    btn,
+                                    ' ',
+                                    btn_cear,
+                                    React.createElement(
+                                        'div',
+                                        { onClick: this.onClose, className: 'btn btn-default' },
+                                        React.createElement('i', { className: 'fa fa-close' }),
+                                        '  Закрыть'
+                                    )
+                                )
+                            )
                         )
                     )
                 )
@@ -292,3 +339,5 @@ var BasketList = React.createClass({
         ) : '';
     }
 });
+
+//# sourceMappingURL=shop.js.map

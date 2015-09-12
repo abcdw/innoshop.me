@@ -7,7 +7,7 @@
     $(document).ready(function(){
         var products = {};
         {% for product in products %}
-            products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }} };
+            products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }}, min_count: {{ product.min_count }} };
         {% endfor %}
         ProductStore.setInitialState(products);
         BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
@@ -17,6 +17,8 @@
         }
         React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
         React.render(React.createElement(BasketList, { link: '{% url 'order' %}', csrf_token: '{{ csrf_token }}' }), document.getElementById('basket-list'));
+        if( $('#basket2').length )
+            React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket2'));
     });
     </script>
 {% endblock %}
@@ -38,12 +40,20 @@
                     <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
                 </div>
                 <div class="panel-footer clearfix">
-                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i></span>
+                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i>{% if product.min_count > 1 %}&nbsp;<sup class="text-info">{{ product.min_count }}</sup>{% endif %}</span>
                     <div class="pull-right" id="product-{{ product.id }}"></div>
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% if not products %}
+            <div class="jumbotron">
+                <h1>Отличная попытка!</h1>
+                <p>Но, к сожалению, товаров, похожих на <strong>"{{ q }}"</strong> у нас в базе пока нет.</p>
+                <p>Однако не надо отчаиваться – любой товар можно заказать, нажав на кнопку <span id="basket2">КАРМА</span></p>
+                <p>Удачной охоты <i class="h3 text-muted fa fa-binoculars"></i></p>
+            </div>
+        {% endif %}
     </div>
     {% include 'shop/catalog/_pager.html' %}
 </div>
