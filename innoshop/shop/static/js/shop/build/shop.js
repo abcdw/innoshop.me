@@ -1,6 +1,6 @@
 'use strict';
 
-var actions = Reflux.createActions(['addToBasket', 'decFromBasket', 'clearBusket']);
+var actions = Reflux.createActions(['addToBasket', 'decFromBasket', 'clearBusket', 'updateLogin']);
 
 var ProductStore = Reflux.createStore({
     init: function init() {
@@ -20,12 +20,52 @@ var ProductStore = Reflux.createStore({
     }
 });
 
+var ClientStore = Reflux.createStore({
+    init: function init() {
+        var self = this;
+        this.storage = window.localStorage;
+        var data = this.storage.getItem('client-login-data');
+        this.data = { login: '', comment: '' };
+        if (data) {
+            data = JSON.parse(data);
+            this.data = data;
+        }
+        this.listenTo(actions.updateLogin, this.onLoginChange);
+        $(window).on('storage', function (event) {
+            if (event.originalEvent.key == 'client-login-data') {
+                var data = JSON.parse(event.originalEvent.newValue);
+                self.update(data.login, data.comment, true);
+            }
+        });
+    },
+    getInitialState: function getInitialState() {
+        return this.data;
+    },
+    update: function update(login, comment, dontStore) {
+        this.data.login = login;
+        this.data.comment = comment;
+        this.trigger(this.data);
+        if (!dontStore) this.storage.setItem('client-login-data', JSON.stringify(this.data));
+    },
+    onLoginChange: function onLoginChange(login, comment) {
+        this.update(login, comment);
+    }
+});
+
 var BasketStore = Reflux.createStore({
     init: function init() {
+        var self = this;
+        this.storage = window.localStorage;
         this.data = [];
         this.listenTo(actions.addToBasket, this.onAddToBasket);
         this.listenTo(actions.decFromBasket, this.onDecFromBasket);
         this.listenTo(actions.clearBusket, this.onClearFromBasket);
+        $(window).on('storage', function (event) {
+            if (event.originalEvent.key == 'client-basket-data') {
+                var data = JSON.parse(event.originalEvent.newValue);
+                self.update(data);
+            }
+        });
     },
     initialize: function initialize(url, get_url) {
         this.url = url;
@@ -39,6 +79,13 @@ var BasketStore = Reflux.createStore({
             self.trigger(self.totalSum());
         });
     },
+    update: function update(data) {
+        this.data = [];
+        data.forEach(function (product, id) {
+            if (id && product) this.data[id] = product;
+        }, this);
+        this.trigger(this.totalSum());
+    },
     onClearFromBasket: function onClearFromBasket() {
         var self = this;
         for (var i in this.data) {
@@ -46,6 +93,7 @@ var BasketStore = Reflux.createStore({
         }
         this.data = [];
         this.trigger(0);
+        this.storage.setItem('client-basket-data', JSON.stringify(this.data));
     },
     onDecFromBasket: function onDecFromBasket(id, remove) {
         if (this.data[id]) {
@@ -54,6 +102,7 @@ var BasketStore = Reflux.createStore({
             if (this.data[id].count <= 0) delete this.data[id];
             $.get(this.url + '?id=' + id + '&count=-' + cnt, function (res) {});
             this.trigger(this.totalSum());
+            this.storage.setItem('client-basket-data', JSON.stringify(this.data));
         }
     },
     onAddToBasket: function onAddToBasket(id) {
@@ -65,6 +114,7 @@ var BasketStore = Reflux.createStore({
         }
         $.get(this.url + '?id=' + id + '&count=1', function (res) {});
         this.trigger(this.totalSum());
+        this.storage.setItem('client-basket-data', JSON.stringify(this.data));
     },
     totalSum: function totalSum() {
         var total = 0;
@@ -233,6 +283,58 @@ var BasketLine = React.createClass({
     }
 });
 
+var BasketForm = React.createClass({
+    displayName: 'BasketForm',
+
+    mixins: [Reflux.listenTo(ClientStore, "onLoginChange")],
+    onLoginChange: function onLoginChange(data) {
+        this.setState(data);
+    },
+    getInitialState: function getInitialState() {
+        return ClientStore.getInitialState();
+    },
+    handleChangeLogin: function handleChangeLogin(event) {
+        actions.updateLogin(event.target.value, this.state.comment);
+    },
+    handleChangeComment: function handleChangeComment(event) {
+        actions.updateLogin(this.state.login, event.target.value);
+    },
+    render: function render() {
+        var login = this.state.login;
+        var comment = this.state.comment;
+        return React.createElement(
+            'div',
+            null,
+            React.createElement('br', null),
+            React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement('input', { ref: 'telegram', value: login, onChange: this.handleChangeLogin,
+                    type: 'text', id: 'contact', name: 'contact', className: 'form-control',
+                    placeholder: '@telegram или номер телефона' })
+            ),
+            React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement('textarea', { name: 'comment', value: comment, onChange: this.handleChangeComment,
+                    id: 'comment', cols: '30', rows: '3', placeholder: 'Комментарий',
+                    className: 'form-control' })
+            )
+        );
+    },
+    check: function check() {
+        var $login = $(this.refs.telegram.getDOMNode()),
+            $group = $login.parents('.form-group');
+        $group.removeClass("has-error");
+        if ($login.val().trim() == '') {
+            $group.addClass("has-error");
+            $login.focus();
+            return false;
+        }
+        return true;
+    }
+});
+
 var BasketList = React.createClass({
     displayName: 'BasketList',
 
@@ -247,14 +349,7 @@ var BasketList = React.createClass({
         actions.clearBusket();
     },
     onSubmit: function onSubmit(event) {
-        var $login = $(this.refs.telegram.getDOMNode()),
-            $group = $login.parents('.form-group');
-        $group.removeClass("has-error");
-        if ($login.val().trim() == '') {
-            event.preventDefault();
-            $group.addClass("has-error");
-            $login.focus();
-        }
+        if (!this.refs.form.check()) event.preventDefault();
     },
     render: function render() {
         var self = this;
@@ -274,23 +369,7 @@ var BasketList = React.createClass({
             React.createElement('i', { className: 'fa fa-trash-o' }),
             '  Очистить'
         ) : '';
-        var form = this.props.link ? React.createElement(
-            'div',
-            null,
-            React.createElement('br', null),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement('input', { ref: 'telegram', type: 'text', id: 'contact', name: 'contact', className: 'form-control',
-                    placeholder: '@telegram или номер телефона' })
-            ),
-            React.createElement(
-                'div',
-                { className: 'form-group' },
-                React.createElement('textarea', { name: 'comment', id: 'comment', cols: '30', rows: '3', placeholder: 'Комментарий',
-                    className: 'form-control' })
-            )
-        ) : '';
+        var form = this.props.link ? React.createElement(BasketForm, { ref: 'form' }) : '';
         var karma = this.props.total > 0 ? React.createElement(
             'span',
             null,
@@ -327,16 +406,16 @@ var BasketList = React.createClass({
                             { className: 'row' },
                             React.createElement(
                                 'span',
-                                { className: 'h3 col-xs-12 col-sm-8 col-md-8 col-lg-8' },
+                                { className: 'h3 col-xs-12 col-sm-6 col-md-7 col-lg-8' },
                                 'Ваша карма ',
                                 karma
                             ),
                             React.createElement(
                                 'div',
-                                { className: 'h3 col-xs-12 col-sm-4 col-md-4 col-lg-4' },
+                                { className: 'h3 col-xs-12 col-sm-6 col-md-5 col-lg-4' },
                                 React.createElement(
                                     'div',
-                                    { className: 'btn-group pull-right' },
+                                    { className: 'btn-group' },
                                     btn,
                                     ' ',
                                     btn_cear,

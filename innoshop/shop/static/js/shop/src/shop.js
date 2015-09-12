@@ -1,5 +1,5 @@
 var actions = Reflux.createActions([
-    'addToBasket', 'decFromBasket', 'clearBusket'
+    'addToBasket', 'decFromBasket', 'clearBusket', 'updateLogin'
 ]);
 
 var ProductStore = Reflux.createStore({
@@ -20,12 +20,53 @@ var ProductStore = Reflux.createStore({
     }
 });
 
+var ClientStore = Reflux.createStore({
+    init: function() {
+        var self = this;
+        this.storage = window.localStorage;
+        var data = this.storage.getItem('client-login-data');
+        this.data = { login: '', comment: '' };
+        if( data ) {
+            data = JSON.parse(data);
+            this.data = data;
+        }
+        this.listenTo(actions.updateLogin, this.onLoginChange);
+        $(window).on('storage', function (event) {
+            if (event.originalEvent.key == 'client-login-data') {
+                var data = JSON.parse(event.originalEvent.newValue);
+                self.update( data.login, data.comment, true );
+            }
+        });
+    },
+    getInitialState: function() {
+        return this.data;
+    },
+    update: function(login, comment, dontStore) {
+        this.data.login = login;
+        this.data.comment = comment;
+        this.trigger(this.data);
+        if( !dontStore )
+            this.storage.setItem('client-login-data', JSON.stringify(this.data));
+    },
+    onLoginChange: function(login, comment) {
+        this.update(login, comment);
+    }
+});
+
 var BasketStore = Reflux.createStore({
     init: function() {
+        var self = this;
+        this.storage = window.localStorage;
         this.data = [];
         this.listenTo(actions.addToBasket, this.onAddToBasket);
         this.listenTo(actions.decFromBasket, this.onDecFromBasket);
         this.listenTo(actions.clearBusket, this.onClearFromBasket);
+        $(window).on('storage', function (event) {
+            if (event.originalEvent.key == 'client-basket-data') {
+                var data = JSON.parse(event.originalEvent.newValue);
+                self.update( data );
+            }
+        });
     },
     initialize: function(url, get_url){
         this.url = url;
@@ -39,6 +80,14 @@ var BasketStore = Reflux.createStore({
             self.trigger( self.totalSum() );
         })
     },
+    update: function(data) {
+        this.data = [];
+        data.forEach(function(product, id){
+            if(id && product)
+                this.data[id] = product;
+        }, this);
+        this.trigger( this.totalSum() );
+    },
     onClearFromBasket: function() {
         var self = this;
         for(var i in this.data ) {
@@ -46,6 +95,7 @@ var BasketStore = Reflux.createStore({
         }
         this.data = [];
         this.trigger( 0 );
+        this.storage.setItem('client-basket-data', JSON.stringify(this.data));
     },
     onDecFromBasket: function(id, remove){
         if( this.data[id] ) {
@@ -55,6 +105,7 @@ var BasketStore = Reflux.createStore({
                 delete this.data[id];
             $.get( this.url + '?id=' + id + '&count=-' + cnt, function(res){  } );
             this.trigger( this.totalSum() );
+            this.storage.setItem('client-basket-data', JSON.stringify(this.data));
         }
     },
     onAddToBasket: function(id) {
@@ -67,6 +118,7 @@ var BasketStore = Reflux.createStore({
         }
         $.get( this.url + '?id=' + id + '&count=1', function(res){  } );
         this.trigger( this.totalSum() );
+        this.storage.setItem('client-basket-data', JSON.stringify(this.data));
     },
     totalSum: function() {
         var total = 0;
@@ -173,6 +225,49 @@ var BasketLine = React.createClass({
     }
 });
 
+var BasketForm = React.createClass({
+    mixins: [Reflux.listenTo(ClientStore, "onLoginChange")],
+    onLoginChange: function(data) {
+        this.setState(data);
+    },
+    getInitialState: function() {
+        return ClientStore.getInitialState();
+    },
+    handleChangeLogin: function (event) {
+        actions.updateLogin(event.target.value, this.state.comment);
+    },
+    handleChangeComment: function (event) {
+        actions.updateLogin(this.state.login, event.target.value);
+    },
+    render: function(){
+        var login = this.state.login;
+        var comment = this.state.comment;
+        return (<div><br></br>
+                <div className="form-group">
+                    <input ref="telegram" value={ login } onChange={this.handleChangeLogin}
+                           type="text" id="contact" name="contact" className="form-control"
+                           placeholder="@telegram или номер телефона"></input>
+                </div>
+                <div className="form-group">
+                    <textarea name="comment" value={ comment } onChange={this.handleChangeComment}
+                              id="comment" cols="30" rows="3" placeholder="Комментарий"
+                              className="form-control" ></textarea>
+                </div>
+            </div>);
+    },
+    check: function() {
+        var $login = $(this.refs.telegram.getDOMNode()),
+            $group = $login.parents('.form-group');
+        $group.removeClass("has-error");
+        if( $login.val().trim() == '' ) {
+            $group.addClass("has-error");
+            $login.focus();
+            return false;
+        }
+        return true;
+    }
+});
+
 var BasketList = React.createClass({
     mixins: [Reflux.listenTo(BasketStore, "onBasketChange")],
     onBasketChange: function(total) {
@@ -185,14 +280,8 @@ var BasketList = React.createClass({
         actions.clearBusket();
     },
     onSubmit: function(event) {
-        var $login = $(this.refs.telegram.getDOMNode()),
-            $group = $login.parents('.form-group');
-        $group.removeClass("has-error");
-        if( $login.val().trim() == '' ) {
+        if(!this.refs.form.check())
             event.preventDefault();
-            $group.addClass("has-error");
-            $login.focus();
-        }
     },
     render: function() {
         var self = this;
@@ -206,18 +295,7 @@ var BasketList = React.createClass({
                     </button>)
                     : '';
         var btn_cear = this.props.items && this.props.items.length > 0 ? (<div onClick={this.clearBusket} className="btn btn-danger"><i className="fa fa-trash-o"></i>&nbsp;&nbsp;Очистить</div>) : '';
-        var form = this.props.link ? (
-            <div><br></br>
-                <div className="form-group">
-                    <input ref="telegram" type="text" id="contact" name="contact" className="form-control"
-                           placeholder="@telegram или номер телефона"></input>
-                </div>
-                <div className="form-group">
-                    <textarea name="comment" id="comment" cols="30" rows="3" placeholder="Комментарий"
-                              className="form-control" ></textarea>
-                </div>
-            </div>
-        ) :'';
+        var form = this.props.link ? ( <BasketForm ref="form" /> ) : '';
         var karma = this.props.total > 0 ? (<span>{this.props.total} <i className="fa fa-ruble"></i></span>) : 'чиста';
         var csrf = this.props.csrf_token ? (<input type="hidden" name="csrfmiddlewaretoken" value={this.props.csrf_token}></input>) : '';
         return (items || this.props.link) ? (
@@ -231,10 +309,11 @@ var BasketList = React.createClass({
                       </div>
                       <div className="panel-footer">
                           <div className="row">
-                            <span className="h3 col-xs-12 col-sm-8 col-md-8 col-lg-8">Ваша карма { karma }</span>
-                            <div className="h3 col-xs-12 col-sm-4 col-md-4 col-lg-4">
-                                <div className="btn-group pull-right">{ btn } { btn_cear }
-                                    <div onClick={this.onClose} className="btn btn-default"><i className="fa fa-close"></i>&nbsp;&nbsp;Закрыть</div></div>
+                            <span className="h3 col-xs-12 col-sm-6 col-md-7 col-lg-8">Ваша карма { karma }</span>
+                            <div className="h3 col-xs-12 col-sm-6 col-md-5 col-lg-4">
+                                <div className="btn-group">{ btn } { btn_cear }
+                                    <div onClick={this.onClose} className="btn btn-default">
+                                        <i className="fa fa-close"></i>&nbsp;&nbsp;Закрыть</div></div>
                                 </div>
                           </div>
                       </div>
