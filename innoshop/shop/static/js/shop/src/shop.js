@@ -137,24 +137,28 @@ var BasketLine = React.createClass({
     },
     render: function() {
         var sum = this.props.product.price * this.props.count;
-        return (<tr>
-                    <td width="1%">
+        return (<div className="row basket-list__line">
+                    <div className="col-xs-2 col-sm-1 col-md-1 col-lg-1 text-right">
                         <div className="btn  btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
-                    </td>
-                    <td width="1%">
+                    </div>
+                    <div className="col-xs-2 col-sm-1 col-md-1 col-lg-1">
                         <div className="btn  btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
-                    </td>
-                    <td>
-                        <span className="h4">{this.props.count}</span>
-                    </td>
-                    <td>
+                    </div>
+                    <div className="h4 col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                        {this.props.count}
+                    </div>
+                    <div className="hidden-xs visible-sm col-sm-8 visible-md col-md-8 visible-lg col-lg-8">
                         <span dangerouslySetInnerHTML={{__html: this.props.product.name}} />
                         <sup className="text-danger" style={ { whiteSpace: 'nowrap' } }> {this.props.product.price} <i className="fa fa-ruble"></i></sup>
-                    </td>
-                    <td className="h4 text-right">
+                    </div>
+                    <div className="h4 col-xs-6 col-sm-1 col-md-1 col-lg-1 text-right">
                         {sum}&nbsp;<i className="fa fa-ruble" />
-                    </td>
-                </tr>
+                    </div>
+                    <div className="col-xs-12 visible-xs hidden-sm hidden-md hidden-lg">
+                        <span dangerouslySetInnerHTML={{__html: this.props.product.name}} />
+                        <sup className="text-danger" style={ { whiteSpace: 'nowrap' } }> {this.props.product.price} <i className="fa fa-ruble"></i></sup>
+                    </div>
+                </div>
             )
     }
 });
@@ -195,7 +199,7 @@ var BasketList = React.createClass({
                     {csrf}
                     <div className="panel panel-default">
                       <div className="panel-body">
-                        <table><tbody>{list}</tbody></table>
+                        <div className="container-fluid">{list}</div>
                         {form}
                       </div>
                       <div className="panel-footer clearfix">

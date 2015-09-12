@@ -155,11 +155,11 @@ var BasketLine = React.createClass({
     render: function render() {
         var sum = this.props.product.price * this.props.count;
         return React.createElement(
-            'tr',
-            null,
+            'div',
+            { className: 'row basket-list__line' },
             React.createElement(
-                'td',
-                { width: '1%' },
+                'div',
+                { className: 'col-xs-2 col-sm-1 col-md-1 col-lg-1 text-right' },
                 React.createElement(
                     'div',
                     { className: 'btn  btn-default', onClick: this.add },
@@ -167,8 +167,8 @@ var BasketLine = React.createClass({
                 )
             ),
             React.createElement(
-                'td',
-                { width: '1%' },
+                'div',
+                { className: 'col-xs-2 col-sm-1 col-md-1 col-lg-1' },
                 React.createElement(
                     'div',
                     { className: 'btn  btn-default', onClick: this.dec },
@@ -176,17 +176,13 @@ var BasketLine = React.createClass({
                 )
             ),
             React.createElement(
-                'td',
-                null,
-                React.createElement(
-                    'span',
-                    { className: 'h4' },
-                    this.props.count
-                )
+                'div',
+                { className: 'h4 col-xs-2 col-sm-1 col-md-1 col-lg-1' },
+                this.props.count
             ),
             React.createElement(
-                'td',
-                null,
+                'div',
+                { className: 'hidden-xs visible-sm col-sm-8 visible-md col-md-8 visible-lg col-lg-8' },
                 React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
                 React.createElement(
                     'sup',
@@ -198,11 +194,24 @@ var BasketLine = React.createClass({
                 )
             ),
             React.createElement(
-                'td',
-                { className: 'h4 text-right' },
+                'div',
+                { className: 'h4 col-xs-6 col-sm-1 col-md-1 col-lg-1 text-right' },
                 sum,
                 ' ',
                 React.createElement('i', { className: 'fa fa-ruble' })
+            ),
+            React.createElement(
+                'div',
+                { className: 'col-xs-12 visible-xs hidden-sm hidden-md hidden-lg' },
+                React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
+                React.createElement(
+                    'sup',
+                    { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
+                    ' ',
+                    this.props.product.price,
+                    ' ',
+                    React.createElement('i', { className: 'fa fa-ruble' })
+                )
             )
         );
     }
@@ -260,13 +269,9 @@ var BasketList = React.createClass({
                         'div',
                         { className: 'panel-body' },
                         React.createElement(
-                            'table',
-                            null,
-                            React.createElement(
-                                'tbody',
-                                null,
-                                list
-                            )
+                            'div',
+                            { className: 'container-fluid' },
+                            list
                         ),
                         form
                     ),
@@ -292,3 +297,5 @@ var BasketList = React.createClass({
         ) : '';
     }
 });
+
+//# sourceMappingURL=shop.js.map

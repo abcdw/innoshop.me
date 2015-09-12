@@ -16,13 +16,13 @@
     width: 100%;
     border-collapse: collapse;
 }
-.basket-list tr {
+.basket-list tr, .basket-list__line {
     border-top: 1px dotted #aaa;
 }
-.basket-list tr:first-child {
+.basket-list tr:first-child, .basket-list__line:first-child {
     border: none;
 }
-.basket-list td {
+.basket-list td, .basket-list__line {
     padding: 5px;
 }
 .navbar-form {
