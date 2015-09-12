@@ -7,7 +7,7 @@
     $(document).ready(function(){
         var products = {};
         {% for product in products %}
-            products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }} };
+            products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }}, min_count: {{ product.min_count }} };
         {% endfor %}
         ProductStore.setInitialState(products);
         BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
@@ -38,7 +38,7 @@
                     <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
                 </div>
                 <div class="panel-footer clearfix">
-                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i></span>
+                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i>{% if product.min_count > 1 %}&nbsp;<sup class="text-info">{{ product.min_count }}</sup>{% endif %}</span>
                     <div class="pull-right" id="product-{{ product.id }}"></div>
                 </div>
             </div>

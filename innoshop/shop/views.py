@@ -83,7 +83,7 @@ def add_product(request):
 
 def get_products(request):
     counts = request.session.get('products', {})
-    objs = Product.objects.filter(id__in=counts.keys()).values('id', 'name', 'price')
+    objs = Product.objects.filter(id__in=counts.keys()).values('id', 'name', 'price', 'min_count')
     products = map(lambda x: {'count': counts[str(x['id'])], 'product': x}, objs)
     return HttpResponse(json.dumps((products)))
 
