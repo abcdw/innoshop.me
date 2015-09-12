@@ -2,6 +2,46 @@ var actions = Reflux.createActions([
     'addToBasket', 'decFromBasket', 'clearBusket', 'updateLogin'
 ]);
 
+var Store = function(key){
+    var self = this;
+
+    this.key = key;
+    this.storage = window.localStorage;
+    this.onUpdatedCallback = undefined;
+
+    if( window.localStorage ) {
+        $(window).on('storage', function (event) {
+            if ( self.onUpdatedCallback && event.originalEvent.key == self.key) {
+                var data = event.originalEvent.newValue || false;
+                data = JSON.parse(data);
+                self.onUpdatedCallback(data);
+            }
+        });
+    }
+
+    this.onUpdated = function(callback) {
+        this.onUpdatedCallback = callback;
+    };
+
+    this.get = function() {
+        if( !self._check() )
+            return false;
+        var data = self.storage.getItem(self.key);
+        data = data || false;
+        data = JSON.parse(data);
+        return data;
+    };
+
+    this.set = function(data) {
+        if( !self._check() )
+            return false;
+        data = data || false;
+        self.storage.setItem(self.key, JSON.stringify(data));
+    };
+
+    this._check = function() { return this.storage != undefined; };
+};
+
 var ProductStore = Reflux.createStore({
     init: function() {
         this.data = [];
@@ -23,22 +63,14 @@ var ProductStore = Reflux.createStore({
 var ClientStore = Reflux.createStore({
     init: function() {
         var self = this;
-        this.storage = window.localStorage;
-        var data = this.storage.getItem('client-login-data');
-        this.data = { login: '', comment: '' };
-        if( data ) {
-            data = JSON.parse(data);
-            this.data = data;
-        }
+        this.storage = new Store('client-login-data');
+
+        this.data = this.storage.get() || { login: '', comment: '' };
         this.listenTo(actions.updateLogin, this.onLoginChange);
-        $(window).on('storage', function (event) {
-            if (event.originalEvent.key == 'client-login-data') {
-                var data = { login: '', comment: '' };
-                if( event.originalEvent.newValue ) {
-                    data = JSON.parse(event.originalEvent.newValue);
-                }
-                self.update( data.login, data.comment, true );
-            }
+
+        this.storage.onUpdated(function(data){
+            var d = data || { login: '', comment: '' };
+            self.update( d.login, d.comment, true );
         });
     },
     getInitialState: function() {
@@ -49,7 +81,7 @@ var ClientStore = Reflux.createStore({
         this.data.comment = comment;
         this.trigger(this.data);
         if( !dontStore )
-            this.storage.setItem('client-login-data', JSON.stringify(this.data));
+            this.storage.set(this.data);
     },
     onLoginChange: function(login, comment) {
         this.update(login, comment);
@@ -59,19 +91,14 @@ var ClientStore = Reflux.createStore({
 var BasketStore = Reflux.createStore({
     init: function() {
         var self = this;
-        this.storage = window.localStorage;
+        this.storage = new Store('client-basket-data');
         this.data = [];
         this.listenTo(actions.addToBasket, this.onAddToBasket);
         this.listenTo(actions.decFromBasket, this.onDecFromBasket);
         this.listenTo(actions.clearBusket, this.onClearFromBasket);
-        $(window).on('storage', function (event) {
-            if (event.originalEvent.key == 'client-basket-data') {
-                var data = [];
-                if( event.originalEvent.newValue ) {
-                    data = JSON.parse(event.originalEvent.newValue);
-                }
-                self.update( data );
-            }
+        this.storage.onUpdated(function(data){
+            data = data || [];
+            self.update( data );
         });
     },
     initialize: function(url, get_url){
@@ -84,7 +111,7 @@ var BasketStore = Reflux.createStore({
                 self.data[res[i].product.id] = res[i];
             }
             self.trigger( self.totalSum() );
-            self.storage.setItem('client-basket-data', JSON.stringify(this.data));
+            self.storage.set(self.data);
         })
     },
     update: function(data) {
@@ -102,7 +129,7 @@ var BasketStore = Reflux.createStore({
         }
         this.data = [];
         this.trigger( 0 );
-        this.storage.setItem('client-basket-data', JSON.stringify(this.data));
+        this.storage.set(this.data);
     },
     onDecFromBasket: function(id, remove, dontStore){
         if( this.data[id] ) {
@@ -113,7 +140,7 @@ var BasketStore = Reflux.createStore({
             $.get( this.url + '?id=' + id + '&count=-' + cnt, function(res){  } );
             this.trigger( this.totalSum() );
             if(!dontStore)
-                this.storage.setItem('client-basket-data', JSON.stringify(this.data));
+                this.storage.set(this.data);
         }
     },
     onAddToBasket: function(id) {
@@ -126,7 +153,7 @@ var BasketStore = Reflux.createStore({
         }
         $.get( this.url + '?id=' + id + '&count=1', function(res){  } );
         this.trigger( this.totalSum() );
-        this.storage.setItem('client-basket-data', JSON.stringify(this.data));
+        this.storage.set(this.data);
     },
     totalSum: function() {
         var total = 0;
