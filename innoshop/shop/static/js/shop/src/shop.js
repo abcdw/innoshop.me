@@ -33,7 +33,10 @@ var ClientStore = Reflux.createStore({
         this.listenTo(actions.updateLogin, this.onLoginChange);
         $(window).on('storage', function (event) {
             if (event.originalEvent.key == 'client-login-data') {
-                var data = JSON.parse(event.originalEvent.newValue);
+                var data = { login: '', comment: '' };
+                if( event.originalEvent.newValue ) {
+                    data = JSON.parse(event.originalEvent.newValue);
+                }
                 self.update( data.login, data.comment, true );
             }
         });
@@ -63,7 +66,10 @@ var BasketStore = Reflux.createStore({
         this.listenTo(actions.clearBusket, this.onClearFromBasket);
         $(window).on('storage', function (event) {
             if (event.originalEvent.key == 'client-basket-data') {
-                var data = JSON.parse(event.originalEvent.newValue);
+                var data = [];
+                if( event.originalEvent.newValue ) {
+                    data = JSON.parse(event.originalEvent.newValue);
+                }
                 self.update( data );
             }
         });
@@ -78,12 +84,13 @@ var BasketStore = Reflux.createStore({
                 self.data[res[i].product.id] = res[i];
             }
             self.trigger( self.totalSum() );
+            self.storage.setItem('client-basket-data', JSON.stringify(this.data));
         })
     },
     update: function(data) {
         this.data = [];
         data.forEach(function(product, id){
-            if(id && product)
+            if(id != undefined && product)
                 this.data[id] = product;
         }, this);
         this.trigger( this.totalSum() );
@@ -91,13 +98,13 @@ var BasketStore = Reflux.createStore({
     onClearFromBasket: function() {
         var self = this;
         for(var i in this.data ) {
-            this.onDecFromBasket(this.data[i].product.id, true);
+            this.onDecFromBasket(this.data[i].product.id, true, true);
         }
         this.data = [];
         this.trigger( 0 );
         this.storage.setItem('client-basket-data', JSON.stringify(this.data));
     },
-    onDecFromBasket: function(id, remove){
+    onDecFromBasket: function(id, remove, dontStore){
         if( this.data[id] ) {
             var cnt = remove ? this.data[id].count : 1;
             this.data[id].count = this.data[id].count - cnt;
@@ -105,7 +112,8 @@ var BasketStore = Reflux.createStore({
                 delete this.data[id];
             $.get( this.url + '?id=' + id + '&count=-' + cnt, function(res){  } );
             this.trigger( this.totalSum() );
-            this.storage.setItem('client-basket-data', JSON.stringify(this.data));
+            if(!dontStore)
+                this.storage.setItem('client-basket-data', JSON.stringify(this.data));
         }
     },
     onAddToBasket: function(id) {
@@ -320,6 +328,6 @@ var BasketList = React.createClass({
                     </div>
                 </form>
            </div>
-        ) : '';
+        ) : (<div></div>);
     }
 });

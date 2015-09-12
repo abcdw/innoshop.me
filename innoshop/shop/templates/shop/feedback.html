@@ -1,23 +1,27 @@
 {% extends "shop/layout/base.html" %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        var handleCtrlEnter = function (e) {
+            var charCode;
+
+            if (e && e.which) {
+                charCode = e.which;
+            } else if (window.event) {
+                e = window.event;
+                charCode = e.keyCode;
+            }
+
+            if (((charCode == 13) && (e.ctrlKey)) || (charCode == 10)) {
+                document.getElementById('orderForm').submit();
+            }
+        }
+    </script>
+{% endblock %}
+
 {% block content%}
 <div class="container">
- <script>
-    var handleCtrlEnter = function (e) {
-      var charCode;
-
-      if (e && e.which) {
-        charCode = e.which;
-      } else if (window.event) {
-        e = window.event;
-        charCode = e.keyCode;
-      }
-
-      if (((charCode == 13)&&(e.ctrlKey))||(charCode==10)) {
-        document.getElementById('orderForm').submit();
-      }
-    }
-  </script>
-
   <form action="{% url 'feedback' %}" id="feedbackForm" method="POST">
   {% csrf_token %}
     <div class="form-group">
