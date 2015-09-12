@@ -277,19 +277,23 @@ var BasketList = React.createClass({
                     ),
                     React.createElement(
                         'div',
-                        { className: 'panel-footer clearfix' },
-                        React.createElement(
-                            'span',
-                            { className: 'h3' },
-                            'Ваша карма ',
-                            this.props.total,
-                            ' ',
-                            React.createElement('i', { className: 'fa fa-ruble' })
-                        ),
+                        { className: 'panel-footer' },
                         React.createElement(
                             'div',
-                            { className: 'pull-right product__add' },
-                            btn
+                            { className: 'row' },
+                            React.createElement(
+                                'span',
+                                { className: 'h3 col-xs-12 col-sm-10 col-md-10 col-lg-10' },
+                                'Ваша карма ',
+                                this.props.total,
+                                ' ',
+                                React.createElement('i', { className: 'fa fa-ruble' })
+                            ),
+                            React.createElement(
+                                'div',
+                                { className: 'h3 col-xs-12 col-sm-2 col-md-2 col-lg-2' },
+                                btn
+                            )
                         )
                     )
                 )

@@ -6,7 +6,7 @@
 }
 .product .panel-heading {
     height: 60px;
-    text-overflow: ellipses;
+    text-overflow: ellipsis;
 }
 .basket {
     text-transform: uppercase;
@@ -38,3 +38,8 @@
 }
 body { padding-top: 70px; }
 .pager { margin-top: 0; }
+
+.navbar-fixed-top {
+    max-height: 100%;
+    overflow: auto;
+}

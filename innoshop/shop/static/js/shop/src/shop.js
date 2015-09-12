@@ -202,9 +202,11 @@ var BasketList = React.createClass({
                         <div className="container-fluid">{list}</div>
                         {form}
                       </div>
-                      <div className="panel-footer clearfix">
-                        <span className="h3">Ваша карма {this.props.total} <i className="fa fa-ruble"></i></span>
-                        <div className="pull-right product__add">{ btn }</div>
+                      <div className="panel-footer">
+                          <div className="row">
+                            <span className="h3 col-xs-12 col-sm-10 col-md-10 col-lg-10">Ваша карма {this.props.total} <i className="fa fa-ruble"></i></span>
+                            <div className="h3 col-xs-12 col-sm-2 col-md-2 col-lg-2">{ btn }</div>
+                          </div>
                       </div>
                     </div>
                 </form>
