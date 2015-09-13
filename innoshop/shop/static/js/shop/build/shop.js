@@ -431,7 +431,7 @@ var BasketList = React.createClass({
                     React.createElement(
                         'div',
                         { onClick: this.onClose, className: 'btn btn-default' },
-                        React.createElement('i', { className: 'fa fa-close' })
+                        React.createElement('i', { className: 'fa fa-chevron-up' })
                     )
                 )
             )

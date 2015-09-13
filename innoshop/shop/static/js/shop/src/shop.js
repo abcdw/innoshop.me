@@ -343,7 +343,7 @@ var BasketList = React.createClass({
                         { btn }
                         { btn_cear }
                         <div onClick={this.onClose} className="btn btn-default">
-                            <i className="fa fa-close"></i>
+                            <i className="fa fa-chevron-up"></i>
                         </div>
                     </div>
                 </div>
