@@ -369,3 +369,24 @@ var BasketList = React.createClass({
         ) : (<div></div>);
     }
 });
+
+var Messages = React.createClass({
+    getInitialState: function() {
+        return { messages: [] };
+    },
+    componentDidMount: function() {
+        var self = this;
+        $.get(this.props.link, function(data){
+            self.replaceState({messages: JSON.parse(data)});
+        })
+    },
+    render: function() {
+        var msgs = (this.state.messages.map(function( message ){
+            return (<div key={message.name} className="panel panel-default">
+                        <div className="panel-heading">{message.name}</div>
+                        <div className="panel-body" dangerouslySetInnerHTML={{__html: message._text_rendered}}></div>
+                    </div>);
+        }));
+        return (<div>{msgs}</div>);
+    }
+});

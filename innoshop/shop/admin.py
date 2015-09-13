@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Order, Feedback, ProductItem, Faq
+from .models import Category, Product, Order, Feedback, ProductItem, Faq, Message
 from django.db.models.fields import TextField
 from markitup.widgets import AdminMarkItUpWidget
 
@@ -38,4 +38,7 @@ class Feedback(admin.ModelAdmin):
 @admin.register(Faq)
 class Faq(admin.ModelAdmin):
     list_display = ('name',)
-    formfield_overrides = {TextField: {'widget': AdminMarkItUpWidget}}
+
+@admin.register(Message)
+class Message(admin.ModelAdmin):
+    list_display = ('name', 'start', 'end')

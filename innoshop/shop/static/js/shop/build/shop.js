@@ -472,4 +472,37 @@ var BasketList = React.createClass({
     }
 });
 
+var Messages = React.createClass({
+    displayName: 'Messages',
+
+    getInitialState: function getInitialState() {
+        return { messages: [] };
+    },
+    componentDidMount: function componentDidMount() {
+        var self = this;
+        $.get(this.props.link, function (data) {
+            self.replaceState({ messages: JSON.parse(data) });
+        });
+    },
+    render: function render() {
+        var msgs = this.state.messages.map(function (message) {
+            return React.createElement(
+                'div',
+                { key: message.name, className: 'panel panel-default' },
+                React.createElement(
+                    'div',
+                    { className: 'panel-heading' },
+                    message.name
+                ),
+                React.createElement('div', { className: 'panel-body', dangerouslySetInnerHTML: { __html: message._text_rendered } })
+            );
+        });
+        return React.createElement(
+            'div',
+            null,
+            msgs
+        );
+    }
+});
+
 //# sourceMappingURL=shop.js.map

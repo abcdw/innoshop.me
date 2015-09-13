@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from markitup.fields import MarkupField
 
 
 class Category(models.Model):
@@ -61,4 +62,10 @@ class Feedback(models.Model):
 
 class Faq(models.Model):
     name = models.CharField(max_length=255)
-    text = models.TextField()
+    text = MarkupField()
+
+class Message(models.Model):
+    name = models.CharField(max_length=255)
+    text = MarkupField()
+    start = models.DateField()
+    end = models.DateField()

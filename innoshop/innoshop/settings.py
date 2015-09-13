@@ -43,6 +43,7 @@ INSTALLED_APPS = (
 INSTALLED_APPS += ('markitup', )
 MARKITUP_SET = 'markitup/sets/markdown'
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+MARKITUP_AUTO_PREVIEW = True
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

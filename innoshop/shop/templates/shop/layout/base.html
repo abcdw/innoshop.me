@@ -23,6 +23,13 @@
 <body>
     {% include "shop/layout/menu.html" %}
 
+
+    {% block messages %}
+        <div class="container"><div class="row"><div class="col-xs-12">
+            <div id="messages"></div>
+        </div></div></div>
+    {% endblock %}
+
     {% block content %}{% endblock %}
 
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
@@ -47,6 +54,11 @@
                     link: '{% url 'order' %}',
                     csrf_token: '{{ csrf_token }}'
                 }), document.getElementById('basket-list'));
+            }
+            if( document.getElementById('messages') ) {
+                React.render(React.createElement(Messages, {
+                    link: '{% url 'get_messages' %}'
+                }), document.getElementById('messages'));
             }
         });
     </script>

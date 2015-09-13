@@ -1,6 +1,7 @@
 import json
+import datetime
 from django.shortcuts import render
-from .models import Category, Faq
+from .models import Category, Faq, Message
 from .models import Product
 from django.http import HttpResponse
 from .forms import OrderForm
@@ -92,7 +93,7 @@ def order(request):
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order_form.create_order( request.session.setdefault('products', {}) )
+            order_form.create_order(request.session.setdefault('products', {}))
             del request.session['products']
             request.session.modified = True
             return render(request, 'shop/thanks.html')
@@ -122,3 +123,8 @@ def feedback(request):
         'faq': faq
     }
     return render(request, 'shop/feedback.html', context)
+
+
+def get_messages(request):
+    messages = Message.objects.filter(start__lte=datetime.date.today(), end__gte=datetime.date.today()).values('name', '_text_rendered')
+    return HttpResponse(json.dumps(list(messages)))
