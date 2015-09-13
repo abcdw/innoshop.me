@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static from staticfiles %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,8 +9,8 @@
     <title>{{ title }}</title>
 
     <!-- Bootstrap -->
-    <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <link href="/static/css/app.css" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/app.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.css">
     {% block stylesheet %}{% endblock %}
 
@@ -23,13 +24,20 @@
 <body>
     {% include "shop/layout/menu.html" %}
 
+
+    {% block messages %}
+        <div class="container"><div class="row"><div class="col-xs-12">
+            <div id="messages"></div>
+        </div></div></div>
+    {% endblock %}
+
     {% block content %}{% endblock %}
 
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.js"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="//cdn.jsdelivr.net/react/0.13.3/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
-    <script src="/static/js/shop/build/shop.js"></script>
+    <script src="{% static 'js/shop/build/shop.js' %}"></script>
     <script>
         $(document).ready(function(){
             BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
@@ -47,6 +55,11 @@
                     link: '{% url 'order' %}',
                     csrf_token: '{{ csrf_token }}'
                 }), document.getElementById('basket-list'));
+            }
+            if( document.getElementById('messages') ) {
+                React.render(React.createElement(Messages, {
+                    link: '{% url 'get_messages' %}'
+                }), document.getElementById('messages'));
             }
         });
     </script>

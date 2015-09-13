@@ -343,7 +343,7 @@ var BasketList = React.createClass({
                         { btn }
                         { btn_cear }
                         <div onClick={this.onClose} className="btn btn-default">
-                            <i className="fa fa-close"></i>
+                            <i className="fa fa-chevron-up"></i>
                         </div>
                     </div>
                 </div>
@@ -367,5 +367,26 @@ var BasketList = React.createClass({
                 </form>
             </div>
         ) : (<div></div>);
+    }
+});
+
+var Messages = React.createClass({
+    getInitialState: function() {
+        return { messages: [] };
+    },
+    componentDidMount: function() {
+        var self = this;
+        $.get(this.props.link, function(data){
+            self.replaceState({messages: JSON.parse(data)});
+        })
+    },
+    render: function() {
+        var msgs = (this.state.messages.map(function( message ){
+            return (<div key={message.name} className="panel panel-default">
+                        <div className="panel-heading">{message.name}</div>
+                        <div className="panel-body" dangerouslySetInnerHTML={{__html: message._text_rendered}}></div>
+                    </div>);
+        }));
+        return (<div>{msgs}</div>);
     }
 });

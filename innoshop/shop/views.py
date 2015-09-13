@@ -1,11 +1,13 @@
+import json
+import datetime
+from django.shortcuts import render
+from .models import Category, Faq, Message
 from django.http import HttpResponse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.conf import settings
-
 from .models import Category, Faq
 from .models import Product
 from .forms import OrderForm
@@ -19,7 +21,7 @@ def degrades(function):
     def wrap(request, *args, **kwargs):
         if function.__name__ in settings.DEGRADE:
             # better because it's not necessary to redirect
-            return HttpResponse('Yep, we know. We are working on that =)', status=500)
+            return HttpResponse('Yep, we know. We are working on that =)', status=503)
             #  return HttpResponseRedirect(reverse('maintenance'))
         else:
             return function(request, *args, **kwargs)
@@ -101,7 +103,7 @@ def order(request):
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order_form.create_order( request.session.setdefault('products', {}) )
+            order_form.create_order(request.session.setdefault('products', {}))
             del request.session['products']
             request.session.modified = True
             return render(request, 'shop/thanks.html')
@@ -132,3 +134,9 @@ def feedback(request):
         'faq': faq
     }
     return render(request, 'shop/feedback.html', context)
+
+
+def get_messages(request):
+    messages = Message.objects.filter(start__lte=datetime.date.today(), end__gte=datetime.date.today()).values('name',
+                                                                                                               '_text_rendered')
+    return HttpResponse(json.dumps(list(messages)))
