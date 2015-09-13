@@ -36,10 +36,8 @@
 <div class="container">
 
     {% include 'shop/catalog/_pager.html' %}
-    <!--<div class="block-grid-lg-4 block-grid-md-3 block-grid-sm-2">-->
     <div class="row">
         {% for product in products %}
-        <!--<div class="block-grid-item">-->
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div class="panel panel-info product">
                 <div class="panel-heading">
@@ -62,7 +60,6 @@
                 <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
                     <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i class="text-muted fa fa-tripadvisor"></i> продолжить охоту</a>
                 </p>
-
             </div>
         {% endif %}
     </div>
