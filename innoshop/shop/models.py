@@ -13,7 +13,7 @@ class Category(models.Model):
 
 class ProductManager(models.Manager):
     def get_sallable(self):
-        return self.filter(price__gt=0)
+        return self.filter(price__gt=0).order_by('-rating')
 
 
 class Product(models.Model):
