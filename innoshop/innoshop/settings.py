@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DEGRADE = (
+    #  'index',
+    #  'feedback',
+    #  'add_product',
+    #  'get_products',
+    #  'order',
+)
 
 # Application definition
 
@@ -39,8 +46,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'debug_toolbar',
     'shop',
+    'markitup',
 )
-INSTALLED_APPS += ('markitup', )
+
 MARKITUP_SET = 'markitup/sets/markdown'
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 
