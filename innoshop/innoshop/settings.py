@@ -24,8 +24,8 @@ SECRET_KEY = 'v3dkk14p!o!$g^&6sv#o49oqx$#kg2#5ndk9#$x#&(#qxx8b!k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+MAINTENANCE_MODE = False
+ALLOWED_HOSTS = ['*']
 
 DEGRADE = (
     #  'index',
@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'shop',
     'markitup',
+    'maintenancemode',
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'
@@ -62,6 +63,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'maintenancemode.middleware.MaintenanceModeMiddleware',
 )
 
 ROOT_URLCONF = 'innoshop.urls'
