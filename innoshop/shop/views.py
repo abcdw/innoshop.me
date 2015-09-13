@@ -19,7 +19,7 @@ def degrades(function):
     def wrap(request, *args, **kwargs):
         if function.__name__ in settings.DEGRADE:
             # better because it's not necessary to redirect
-            return HttpResponse('Yep, we know. We are working on that =)')
+            return HttpResponse('Yep, we know. We are working on that =)', status=500)
             #  return HttpResponseRedirect(reverse('maintenance'))
         else:
             return function(request, *args, **kwargs)
