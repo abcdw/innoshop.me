@@ -40,6 +40,9 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'shop',
 )
+INSTALLED_APPS += ('markitup', )
+MARKITUP_SET = 'markitup/sets/markdown'
+MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

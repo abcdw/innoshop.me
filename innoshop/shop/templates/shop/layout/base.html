@@ -29,6 +29,27 @@
     <script src="/static/js/bootstrap.js"></script>
     <script src="//cdn.jsdelivr.net/react/0.13.3/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
+    <script src="/static/js/shop/build/shop.js"></script>
+    <script>
+        $(document).ready(function(){
+            BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
+
+            if( document.getElementById('basket') )
+            {
+                React.render(React.createElement(Basket, {
+                    url: '{% url 'order' %}',
+                    price: BasketStore.totalSum()
+                }), document.getElementById('basket'));
+            }
+            if( document.getElementById('basket-list') )
+            {
+                React.render(React.createElement(BasketList, {
+                    link: '{% url 'order' %}',
+                    csrf_token: '{{ csrf_token }}'
+                }), document.getElementById('basket-list'));
+            }
+        });
+    </script>
     {% block javascript %}{% endblock %}
 </body>
 </html>

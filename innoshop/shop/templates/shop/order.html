@@ -2,14 +2,6 @@
 
 {% block javascript %}
     {{ block.super }}
-    <script src="/static/js/shop/build/shop.js"></script>
-    <script>
-    $(document).ready(function(){
-        BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
-        React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
-        React.render(React.createElement(BasketList, {}), document.getElementById('basket-list'));
-    });
-    </script>
     <script>
         var handleCtrlEnter = function (e) {
           var charCode;

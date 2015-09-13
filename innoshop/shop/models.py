@@ -58,3 +58,7 @@ class ProductItem(models.Model):
 class Feedback(models.Model):
     contact = models.CharField(max_length=255, blank=True)
     feedback = models.TextField(blank=True)
+
+class Faq(models.Model):
+    name = models.CharField(max_length=255)
+    text = models.TextField()

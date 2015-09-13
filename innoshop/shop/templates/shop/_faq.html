@@ -1,0 +1,5 @@
+{% if faq.text  %}
+    {% load markitup_tags %}
+    {% if not without_name %}<h1>{{ faq.name }}</h1>{% endif %}
+    {{ faq.text | render_markup | safe }}
+{% endif %}
