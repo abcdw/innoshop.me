@@ -28,6 +28,7 @@ class Order(admin.ModelAdmin):
         ProductItemInline,
     ]
     list_display = ('owner', 'contact')
+    readonly_fields = ('comment', )
 
 
 @admin.register(Feedback)
