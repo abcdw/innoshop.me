@@ -14,8 +14,15 @@ class OrderForm(ModelForm):
         order.contact = self.cleaned_data['contact']
         order.comment = self.cleaned_data['comment']
         order.save()
-        for pid, cnt in product_counts.iteritems():
-            order.get_items().create(count=cnt, product_id=pid)
+
+        products = Product.objects.filter(id__in=product_counts.keys()).all() \
+            .values('id', 'name', 'SKU', 'price', 'actual_price', 'min_count', 'source_link', 'img_url')
+        for p in products:
+            id = p['id']
+            order.get_items().create(
+                count=product_counts[str(id)], product_id=id, name=p['name'], SKU=p['SKU'],
+                price=p['price'], actual_price=p['actual_price'], min_count=p['min_count'],
+                source_link=p['source_link'], img_url=p['img_url'])
 
 
 class FeedbackForm(ModelForm):
