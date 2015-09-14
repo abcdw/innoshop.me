@@ -1,20 +1,22 @@
-import json
-import datetime
 from django.shortcuts import render
-from .models import Category, Faq, Message
 from django.http import HttpResponse
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.conf import settings
+
 from .models import Category, Faq
 from .models import Product
+from .models import Category, Faq, Message
+from .models import SearchQuery
+
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
 
 import json
 import inspect
+import datetime
 
 
 def degrades(function):
@@ -39,6 +41,7 @@ def index(request):
     q = request.GET.get('q')
     if q:
         products = products.filter(name__icontains=q)
+        SearchQuery.add_query(q, products.count())
 
     paginator = Paginator(products, 12)
     page = request.GET.get('page')

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from markitup.fields import MarkupField
+from django.db.models import F
 
 
 class Category(models.Model):
@@ -69,12 +70,28 @@ class Feedback(models.Model):
     contact = models.CharField(max_length=255, blank=True)
     feedback = models.TextField(blank=True)
 
+
 class Faq(models.Model):
     name = models.CharField(max_length=255)
     text = MarkupField()
+
 
 class Message(models.Model):
     name = models.CharField(max_length=255)
     text = MarkupField()
     start = models.DateField()
     end = models.DateField()
+
+
+class SearchQuery(models.Model):
+    q = models.CharField(max_length=255)
+    count = models.IntegerField(default=0)
+    product_count = models.IntegerField(default=0)
+
+    @staticmethod
+    def add_query(query, pcount):
+        sq, created = SearchQuery.objects.get_or_create(q=query)
+        SearchQuery.objects.filter(id=sq.id).update(count=F('count') + 1)
+        SearchQuery.objects.filter(id=sq.id).update(product_count=pcount)
+
+

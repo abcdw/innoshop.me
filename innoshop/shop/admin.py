@@ -1,6 +1,9 @@
-from django.contrib import admin
 from .models import Category, Product, Order, Feedback, ProductItem, Faq, Message
+from .models import SearchQuery
+
+from django.contrib import admin
 from django.db.models.fields import TextField
+
 from markitup.widgets import AdminMarkItUpWidget
 
 
@@ -40,6 +43,12 @@ class Feedback(admin.ModelAdmin):
 class Faq(admin.ModelAdmin):
     list_display = ('name',)
 
+
 @admin.register(Message)
 class Message(admin.ModelAdmin):
     list_display = ('name', 'start', 'end')
+
+
+@admin.register(SearchQuery)
+class SearchQuery(admin.ModelAdmin):
+    list_display = ('q', 'count', 'product_count')
