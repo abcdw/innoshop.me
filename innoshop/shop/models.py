@@ -42,6 +42,8 @@ class Order(models.Model):
     #  products = models.ManyToManyField(Product)
     comment = models.TextField(blank=True)
     moderator_comment = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='orders', blank=True)
 
     def get_items(self):
         return self.productitem_set
