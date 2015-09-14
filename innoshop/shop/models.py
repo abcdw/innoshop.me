@@ -32,7 +32,7 @@ class Product(models.Model):
     objects = ProductManager()
 
     def __unicode__(self):
-        return self.name
+        return self.SKU
 
 
 class Order(models.Model):
@@ -49,11 +49,18 @@ class Order(models.Model):
 
 class ProductItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     count = models.IntegerField(default=1)
+    name = models.CharField(max_length=255, blank=True)
+    SKU = models.CharField(max_length=100, blank=True)
+    price = models.IntegerField(default=10000000)  # price from shop
+    actual_price = models.IntegerField(default=10000000)  # actual price from shop
+    min_count = models.IntegerField(default=1)
+    source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
+    img_url = models.CharField(max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.product.name
+        return self.name
 
 
 class Feedback(models.Model):
