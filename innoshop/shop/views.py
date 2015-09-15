@@ -46,7 +46,7 @@ def index(request):
         products = Product.objects.smart_filter(q)
         SearchQuery.add_query(q, products.count())
 
-    paginator = Paginator(products, settings.PRODUCT_PER_PAGE)
+    paginator = Paginator(products, settings.PRODUCTS_PER_PAGE)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
