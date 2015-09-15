@@ -117,12 +117,12 @@ def order(request):
             return render(request, 'shop/thanks.html')
 
     raise Http404
-    form = OrderForm()
-    context = {
-        'form': form,
-        'title': 'order form',
-    }
-    return render(request, 'shop/order.html', context)
+    # form = OrderForm()
+    # context = {
+    #     'form': form,
+    #     'title': 'order form',
+    # }
+    # return render(request, 'shop/order.html', context)
 
 
 @degrades

@@ -233,7 +233,7 @@ var BasketLine = React.createClass({
     },
     render: function() {
         var sum = this.props.product.price * this.props.count;
-        var min_count = this.props.product.min_count > 1 ? (<sup className="text-info">{this.props.product.min_count}</sup>) : '';
+        var min_count = this.props.product.min_count > 1 ? (<span className="text-muted">{this.props.product.min_count} <i className="fa fa-close"></i></span>) : '';
         return (<div className="row basket-list__line">
                     <div className="col-xs-2 col-sm-1 col-md-1 col-lg-1 text-right">
                         <div className="btn  btn-default" onClick={this.add}><i className="fa fa-plus"></i></div>
@@ -241,14 +241,14 @@ var BasketLine = React.createClass({
                     <div className="col-xs-2 col-sm-1 col-md-1 col-lg-1">
                         <div className="btn  btn-default" onClick={this.dec}><i className="fa fa-minus"></i></div>
                     </div>
-                    <div className="h4 col-xs-2 col-sm-1 col-md-1 col-lg-1">
-                        {this.props.count}&nbsp;{min_count}
+                    <div className="h4 col-xs-3 col-sm-2 col-md-2 col-lg-2">
+                        {min_count}&nbsp;{this.props.count}
                     </div>
-                    <div className="hidden-xs visible-sm col-sm-8 visible-md col-md-8 visible-lg col-lg-8">
+                    <div className="hidden-xs visible-sm col-sm-6 visible-md col-md-6 visible-lg col-lg-6">
                         <span dangerouslySetInnerHTML={{__html: this.props.product.name}} />
                         <sup className="text-danger" style={ { whiteSpace: 'nowrap' } }> {this.props.product.price} <i className="fa fa-ruble"></i></sup>
                     </div>
-                    <div className="h4 col-xs-6 col-sm-1 col-md-1 col-lg-1 text-right">
+                    <div className="h4 col-xs-5 col-sm-2 col-md-2 col-lg-2 text-right">
                         {sum}&nbsp;<i className="fa fa-ruble" />
                     </div>
                     <div className="col-xs-12 visible-xs hidden-sm hidden-md hidden-lg">

@@ -248,9 +248,11 @@ var BasketLine = React.createClass({
     render: function render() {
         var sum = this.props.product.price * this.props.count;
         var min_count = this.props.product.min_count > 1 ? React.createElement(
-            'sup',
-            { className: 'text-info' },
-            this.props.product.min_count
+            'span',
+            { className: 'text-muted' },
+            this.props.product.min_count,
+            ' ',
+            React.createElement('i', { className: 'fa fa-close' })
         ) : '';
         return React.createElement(
             'div',
@@ -275,14 +277,14 @@ var BasketLine = React.createClass({
             ),
             React.createElement(
                 'div',
-                { className: 'h4 col-xs-2 col-sm-1 col-md-1 col-lg-1' },
-                this.props.count,
+                { className: 'h4 col-xs-3 col-sm-2 col-md-2 col-lg-2' },
+                min_count,
                 ' ',
-                min_count
+                this.props.count
             ),
             React.createElement(
                 'div',
-                { className: 'hidden-xs visible-sm col-sm-8 visible-md col-md-8 visible-lg col-lg-8' },
+                { className: 'hidden-xs visible-sm col-sm-6 visible-md col-md-6 visible-lg col-lg-6' },
                 React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
                 React.createElement(
                     'sup',
@@ -295,7 +297,7 @@ var BasketLine = React.createClass({
             ),
             React.createElement(
                 'div',
-                { className: 'h4 col-xs-6 col-sm-1 col-md-1 col-lg-1 text-right' },
+                { className: 'h4 col-xs-5 col-sm-2 col-md-2 col-lg-2 text-right' },
                 sum,
                 ' ',
                 React.createElement('i', { className: 'fa fa-ruble' })

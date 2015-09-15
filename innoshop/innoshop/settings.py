@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'shop',
     'markitup',
     'maintenancemode',
+    'mathfilters'
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'
