@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import Http404, HttpResponseRedirect
@@ -17,6 +18,8 @@ from .forms import OrderForm, FeedbackForm
 import json
 import inspect
 import datetime
+
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 def degrades(function):
@@ -43,7 +46,7 @@ def index(request):
         products = Product.objects.smart_filter(q)
         SearchQuery.add_query(q, products.count())
 
-    paginator = Paginator(products, 12)
+    paginator = Paginator(products, settings.PRODUCTS_PER_PAGE)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
@@ -57,7 +60,8 @@ def index(request):
     context = {
         'catalog': catalog,
         'products': products,
-        'q': q or ''
+        'q': q or '',
+        'admin': request.user.is_staff
     }
     # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)
@@ -67,19 +71,20 @@ def catalog(request):
     return HttpResponse('catalog')
 
 
+def get_int(request, name, default=None):
+    try:
+        return int(request.GET.get(name))
+    except ValueError:
+        return default
+
+
 @degrades
 def add_product(request):
-    def get_int(name, default=None):
-        try:
-            return int(request.GET.get(name))
-        except ValueError:
-            return default
-
     result = {'status': 'error', 'result': 'use GET method'}
     if request.method == 'GET':
         try:
-            id = get_int('id')
-            count = get_int('count', 0)
+            id = get_int(request, 'id')
+            count = get_int(request, 'count', 0)
             if id >= 0 and count:
                 id = str(id)
                 s = request.session.setdefault('products', {})
@@ -112,12 +117,12 @@ def order(request):
             return render(request, 'shop/thanks.html')
 
     raise Http404
-    form = OrderForm()
-    context = {
-        'form': form,
-        'title': 'order form',
-    }
-    return render(request, 'shop/order.html', context)
+    # form = OrderForm()
+    # context = {
+    #     'form': form,
+    #     'title': 'order form',
+    # }
+    # return render(request, 'shop/order.html', context)
 
 
 @degrades
@@ -140,6 +145,22 @@ def feedback(request):
 
 
 def get_messages(request):
-    messages = Message.objects.filter(start__lte=datetime.date.today(), end__gte=datetime.date.today()).values('name',
-                                                                                                               '_text_rendered')
+    messages = Message.objects.filter(start__lte=datetime.date.today(),
+                                      end__gte=datetime.date.today()).values('name', '_text_rendered')
     return HttpResponse(json.dumps(list(messages)))
+
+
+@staff_member_required
+def update_rating(request):
+    result = {'status': 'error', 'result': 'use GET method'}
+    if request.method == 'GET':
+        try:
+            id = get_int(request, 'id')
+            count = get_int(request, 'count', 0)
+            if id >= 0 and count:
+                product = Product.objects.filter(id=id)
+                product.update(rating=F('rating') + count)
+                result.update({'status': 'ok', 'result': product.first().rating})
+        except Exception, e:
+            result.update({'result': 'invalid id or count'})
+    return HttpResponse(json.dumps(result))

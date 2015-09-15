@@ -20,27 +20,28 @@ class ProductManager(models.Manager):
         return self.filter(price__gt=0).order_by('-rating')
 
     def smart_filter(self, q):
-        words = filter(None, [x.strip() for x in q.split(' ')])
+        words = filter(lambda x: len(x) > 0, [x.strip() for x in q.split(' ')])
 
         import operator
-        def combine(op, words):
-            Qs = [Q(name__icontains=word) for word in words]
+        def combine(op, queries):
+            print queries
+            Qs = [Q(name__icontains=query) for query in queries]
             qe = reduce(op, Qs)
             return qe
 
         import itertools
-        perms = [' '.join(p) for p in itertools.permutations(words)]
+        perms = [u' '.join(p) for p in itertools.permutations(words)]
         qe = combine(operator.or_, perms)
 
         products = self.get_sallable()
         result = products.filter(qe)
 
         if result.count() < settings.PRODUCTS_PER_PAGE:
-            qe = combine(operator.and_)
+            qe = combine(operator.and_, words)
             result |= products.filter(qe)
 
         if result.count() < settings.PRODUCTS_PER_PAGE:
-            qe = combine(operator.or_)
+            qe = combine(operator.or_, words)
             result |= products.filter(qe)
 
         return result
