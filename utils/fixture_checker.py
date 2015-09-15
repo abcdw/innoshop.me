@@ -8,8 +8,7 @@ def main():
 
     double =[]
 
-    fi = open("../innoshop/fixtures/products.json")
-
+    fi = open("../innoshop/fixtures/products.json","r")
     js = json.load(fi)
     fi.close()
     result=[]
@@ -21,6 +20,7 @@ def main():
             SKU.add(SKF)
             result.append(x)
 
+    
     fi = open("../innoshop/fixtures/products.json","w")
     json.dump(result,fi)
     fi.close()
