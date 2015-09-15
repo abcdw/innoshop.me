@@ -10,7 +10,8 @@
                     name: '{{ product.name }}',
                     price: {{ product.price }},
                     id: {{ product.id }},
-                    min_count: {{ product.min_count }}
+                    min_count: {{ product.min_count }},
+                    rating: {{ product.rating }}
                 };
             {% endfor %}
             ProductStore.setInitialState(products);
@@ -21,6 +22,13 @@
                     id: i,
                     count: BasketStore.getProductCount(i)
                 }), document.getElementById('product-' + i));
+                {% if admin %}
+                    React.render(React.createElement(Rating, {
+                        id: i,
+                        rating: products[i].rating,
+                        url: '{% url 'update_rating' %}'
+                    }), document.getElementById('product-rating-' + i));
+                {% endif %}
             }
 
             if ($('#basket2').length)
@@ -41,14 +49,18 @@
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div class="panel panel-info product">
                 <div class="panel-heading">
-                    <div title="{{ product.name }}">{{ product.name | truncatechars:52 }}</div>
+                    <div title="{{ product.name }}">{% if admin %}<span class="badge">{{ product.id }}</span>&nbsp;{% endif %}{{ product.name | truncatechars:52 }}</div>
                 </div>
                 <div class="panel-body text-center">
+
                     <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
                 </div>
                 <div class="panel-footer clearfix">
                     <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i>{% if product.min_count > 1 %}&nbsp;<sup class="text-info">{{ product.min_count }}</sup>{% endif %}</span>
                     <div class="pull-right" id="product-{{ product.id }}"></div>
+                    {% if admin %}
+                        <div id="product-rating-{{ product.id }}"></div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -58,7 +70,7 @@
                 <h1>Отличная попытка!</h1>
                 <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
                 <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
-                    <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i class="text-muted fa fa-tripadvisor"></i> продолжить охоту</a>
+                    <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i class="text-muted fa fa-binoculars"></i> продолжить охоту</a>
                 </p>
             </div>
         {% endif %}

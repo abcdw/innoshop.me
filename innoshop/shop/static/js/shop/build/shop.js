@@ -505,4 +505,54 @@ var Messages = React.createClass({
     }
 });
 
+var Rating = React.createClass({
+    displayName: 'Rating',
+
+    inc: function inc(cnt) {
+        var self = this;
+        $.get(this.props.url + '?id=' + this.props.id + '&count=' + cnt, function (res) {
+            console.log(res);
+            res = JSON.parse(res);
+            if (res.status == 'ok') {
+                self.setProps({ rating: res.result });
+            }
+        });
+    },
+    onInc: function onInc() {
+        this.inc(1);
+    },
+    onDec: function onDec() {
+        this.inc(-1);
+    },
+    render: function render() {
+        return React.createElement(
+            'div',
+            { className: '' },
+            React.createElement(
+                'span',
+                { className: 'label label-default' },
+                React.createElement('i', { className: 'fa fa-star' }),
+                ' ',
+                this.props.rating
+            ),
+            ' ',
+            React.createElement(
+                'div',
+                { className: 'btn-group' },
+                React.createElement(
+                    'button',
+                    { onClick: this.onInc, className: 'btn btn-default btn-xs' },
+                    React.createElement('i', { className: 'fa fa-plus' })
+                ),
+                React.createElement(
+                    'button',
+                    { onClick: this.onDec, className: 'btn btn-default btn-xs' },
+                    React.createElement('i', { className: 'fa fa-minus' })
+                )
+            ),
+            React.createElement('br', null)
+        );
+    }
+});
+
 //# sourceMappingURL=shop.js.map

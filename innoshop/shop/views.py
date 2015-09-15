@@ -43,7 +43,7 @@ def index(request):
         products = products.filter(name__icontains=q)
         SearchQuery.add_query(q, products.count())
 
-    paginator = Paginator(products, 12)
+    paginator = Paginator(products, 24)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
@@ -57,7 +57,8 @@ def index(request):
     context = {
         'catalog': catalog,
         'products': products,
-        'q': q or ''
+        'q': q or '',
+        'admin': request.user.is_superuser
     }
     # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)
@@ -67,19 +68,20 @@ def catalog(request):
     return HttpResponse('catalog')
 
 
+def get_int(request, name, default=None):
+    try:
+        return int(request.GET.get(name))
+    except ValueError:
+        return default
+
+
 @degrades
 def add_product(request):
-    def get_int(name, default=None):
-        try:
-            return int(request.GET.get(name))
-        except ValueError:
-            return default
-
     result = {'status': 'error', 'result': 'use GET method'}
     if request.method == 'GET':
         try:
-            id = get_int('id')
-            count = get_int('count', 0)
+            id = get_int(request, 'id')
+            count = get_int(request, 'count', 0)
             if id >= 0 and count:
                 id = str(id)
                 s = request.session.setdefault('products', {})
@@ -143,3 +145,18 @@ def get_messages(request):
     messages = Message.objects.filter(start__lte=datetime.date.today(), end__gte=datetime.date.today()).values('name',
                                                                                                                '_text_rendered')
     return HttpResponse(json.dumps(list(messages)))
+
+def update_rating(request):
+    result = {'status': 'error', 'result': 'use GET method'}
+    if request.method == 'GET' and request.user.is_superuser:
+        try:
+            id = get_int(request, 'id')
+            count = get_int(request, 'count', 0)
+            if id >= 0 and count:
+                product = Product.objects.get(id=id)
+                product.rating += count
+                product.save()
+                result.update({'status': 'ok', 'result': product.rating })
+        except Exception, e:
+            result.update({'result': 'invalid id or count'})
+    return HttpResponse(json.dumps(result))

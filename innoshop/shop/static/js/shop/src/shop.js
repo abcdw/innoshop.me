@@ -390,3 +390,32 @@ var Messages = React.createClass({
         return (<div>{msgs}</div>);
     }
 });
+
+var Rating = React.createClass({
+    inc: function(cnt){
+        var self = this;
+        $.get(this.props.url+'?id='+this.props.id+'&count='+cnt, function(res){
+            console.log(res);
+            res = JSON.parse(res);
+            if( res.status == 'ok' ) {
+                self.setProps({rating: res.result});
+            }
+        });
+    },
+    onInc: function() {
+        this.inc(1);
+    },
+    onDec: function() {
+        this.inc(-1);
+    },
+    render: function() {
+        return (<div className="">
+            <span className="label label-default"><i className="fa fa-star"></i> { this.props.rating }</span>&nbsp;
+            <div className="btn-group">
+                <button onClick={this.onInc} className="btn btn-default btn-xs"><i className="fa fa-plus"></i></button>
+                <button onClick={this.onDec} className="btn btn-default btn-xs"><i className="fa fa-minus"></i></button>
+            </div>
+            <br></br>
+        </div>);
+    }
+});
