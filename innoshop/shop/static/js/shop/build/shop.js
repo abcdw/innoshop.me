@@ -260,7 +260,7 @@ var BasketLine = React.createClass({
             ' ',
             this.props.product.min_count,
             ' x ',
-            this.props.product.price / this.props.product.min_count,
+            (this.props.product.price / this.props.product.min_count).toFixed(1),
             ' = ',
             this.props.product.price
         ) : this.props.product.price;

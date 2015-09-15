@@ -235,7 +235,7 @@ var BasketLine = React.createClass({
         var sum = this.props.product.price * this.props.count;
         var min_count = this.props.product.min_count > 1 ? (<span className="text-muted"><i className="fa fa-close"></i> {this.props.product.min_count}</span>) : '';
         var price = this.props.product.min_count > 1 ?
-            (<span> {this.props.product.min_count} x {this.props.product.price/this.props.product.min_count} = {this.props.product.price}</span>)
+            (<span> {this.props.product.min_count} x {(this.props.product.price/this.props.product.min_count).toFixed(1)} = {this.props.product.price}</span>)
             : (this.props.product.price);
         return (<div className="row basket-list__line">
                     <div className="col-xs-2 col-sm-1 col-md-1 col-lg-1 text-right">

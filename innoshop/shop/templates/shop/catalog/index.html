@@ -61,7 +61,7 @@
                     {% else %}
                         <span class="h4">
                             {% with numerator=product.price denominator=product.min_count %}
-                            <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span><span class="">{{ numerator|div:denominator }}</span>&nbsp;<i class="fa fa-ruble small"></i></span>
+                            <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span><span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;<i class="fa fa-ruble small"></i></span>
                             {% endwith %}
                     {% endif %}
 
