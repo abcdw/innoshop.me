@@ -248,10 +248,22 @@ var BasketLine = React.createClass({
     render: function render() {
         var sum = this.props.product.price * this.props.count;
         var min_count = this.props.product.min_count > 1 ? React.createElement(
-            'sup',
-            { className: 'text-info' },
+            'span',
+            { className: 'text-muted' },
+            React.createElement('i', { className: 'fa fa-close' }),
+            ' ',
             this.props.product.min_count
         ) : '';
+        var price = this.props.product.min_count > 1 ? React.createElement(
+            'span',
+            null,
+            ' ',
+            this.props.product.min_count,
+            ' x ',
+            this.props.product.price / this.props.product.min_count,
+            ' = ',
+            this.props.product.price
+        ) : this.props.product.price;
         return React.createElement(
             'div',
             { className: 'row basket-list__line' },
@@ -275,27 +287,27 @@ var BasketLine = React.createClass({
             ),
             React.createElement(
                 'div',
-                { className: 'h4 col-xs-2 col-sm-1 col-md-1 col-lg-1' },
+                { className: 'h4 col-xs-3 col-sm-2 col-md-2 col-lg-2' },
                 this.props.count,
                 ' ',
                 min_count
             ),
             React.createElement(
                 'div',
-                { className: 'hidden-xs visible-sm col-sm-8 visible-md col-md-8 visible-lg col-lg-8' },
+                { className: 'hidden-xs visible-sm col-sm-6 visible-md col-md-6 visible-lg col-lg-6' },
                 React.createElement('span', { dangerouslySetInnerHTML: { __html: this.props.product.name } }),
                 React.createElement(
                     'sup',
                     { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
                     ' ',
-                    this.props.product.price,
+                    price,
                     ' ',
                     React.createElement('i', { className: 'fa fa-ruble' })
                 )
             ),
             React.createElement(
                 'div',
-                { className: 'h4 col-xs-6 col-sm-1 col-md-1 col-lg-1 text-right' },
+                { className: 'h4 col-xs-5 col-sm-2 col-md-2 col-lg-2 text-right' },
                 sum,
                 ' ',
                 React.createElement('i', { className: 'fa fa-ruble' })
@@ -308,7 +320,7 @@ var BasketLine = React.createClass({
                     'sup',
                     { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
                     ' ',
-                    this.props.product.price,
+                    price,
                     ' ',
                     React.createElement('i', { className: 'fa fa-ruble' })
                 )
@@ -501,6 +513,56 @@ var Messages = React.createClass({
             'div',
             null,
             msgs
+        );
+    }
+});
+
+var Rating = React.createClass({
+    displayName: 'Rating',
+
+    inc: function inc(cnt) {
+        var self = this;
+        $.get(this.props.url + '?id=' + this.props.id + '&count=' + cnt, function (res) {
+            console.log(res);
+            res = JSON.parse(res);
+            if (res.status == 'ok') {
+                self.setProps({ rating: res.result });
+            }
+        });
+    },
+    onInc: function onInc() {
+        this.inc(1);
+    },
+    onDec: function onDec() {
+        this.inc(-1);
+    },
+    render: function render() {
+        return React.createElement(
+            'div',
+            { className: '' },
+            React.createElement(
+                'span',
+                { className: 'label label-default' },
+                React.createElement('i', { className: 'fa fa-star' }),
+                ' ',
+                this.props.rating
+            ),
+            ' ',
+            React.createElement(
+                'div',
+                { className: 'btn-group' },
+                React.createElement(
+                    'button',
+                    { onClick: this.onInc, className: 'btn btn-default btn-xs' },
+                    React.createElement('i', { className: 'fa fa-plus' })
+                ),
+                React.createElement(
+                    'button',
+                    { onClick: this.onDec, className: 'btn btn-default btn-xs' },
+                    React.createElement('i', { className: 'fa fa-minus' })
+                )
+            ),
+            React.createElement('br', null)
         );
     }
 });

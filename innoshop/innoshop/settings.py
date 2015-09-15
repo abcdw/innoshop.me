@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'shop',
     'markitup',
     'maintenancemode',
+    'mathfilters'
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'
@@ -137,3 +138,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+PRODUCT_PER_PAGE = 24
