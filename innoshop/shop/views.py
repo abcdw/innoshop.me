@@ -40,7 +40,7 @@ def index(request):
 
     q = request.GET.get('q')
     if q:
-        products = products.filter(name__icontains=q)
+        products = Product.objects.smart_filter(q)
         SearchQuery.add_query(q, products.count())
 
     paginator = Paginator(products, 12)

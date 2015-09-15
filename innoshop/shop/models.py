@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 from markitup.fields import MarkupField
-from django.db.models import F
+from django.db.models import F, Q
 
 
 class Category(models.Model):
@@ -15,6 +18,32 @@ class Category(models.Model):
 class ProductManager(models.Manager):
     def get_sallable(self):
         return self.filter(price__gt=0).order_by('-rating')
+
+    def smart_filter(self, q):
+        words = filter(None, [x.strip() for x in q.split(' ')])
+
+        import operator
+        def combine(op, words):
+            Qs = [Q(name__icontains=word) for word in words]
+            qe = reduce(op, Qs)
+            return qe
+
+        import itertools
+        perms = [' '.join(p) for p in itertools.permutations(words)]
+        qe = combine(operator.or_, perms)
+
+        products = self.get_sallable()
+        result = products.filter(qe)
+
+        if result.count() < settings.PRODUCTS_PER_PAGE:
+            qe = combine(operator.and_)
+            result |= products.filter(qe)
+
+        if result.count() < settings.PRODUCTS_PER_PAGE:
+            qe = combine(operator.or_)
+            result |= products.filter(qe)
+
+        return result
 
 
 class Product(models.Model):

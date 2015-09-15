@@ -35,6 +35,8 @@ DEGRADE = (
     #  'order',
 )
 
+PRODUCTS_PER_PAGE = 12
+
 # Application definition
 
 INSTALLED_APPS = (
