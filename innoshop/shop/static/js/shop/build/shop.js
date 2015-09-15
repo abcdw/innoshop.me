@@ -203,6 +203,7 @@ var Basket = React.createClass({
     mixins: [Reflux.listenTo(BasketStore, "onBasketChange")],
     onBasketChange: function onBasketChange(total) {
         this.setProps({ price: total });
+        $(this.getDOMNode()).parent().show();
     },
     onClick: function onClick(event) {
         event.preventDefault();
