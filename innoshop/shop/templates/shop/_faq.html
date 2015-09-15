@@ -1,0 +1,4 @@
+{% if faq.text  %}
+    {% if not without_name %}<h1>{{ faq.name }}</h1>{% endif %}
+    {{ faq.text.rendered | safe }}
+{% endif %}

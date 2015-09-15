@@ -10,3 +10,7 @@ pip install -r requirements.txt
 ```
 
 
+```
+./manage.py maintenance on
+./manage.py maintenance off
+```

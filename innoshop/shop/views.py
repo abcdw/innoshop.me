@@ -1,21 +1,47 @@
-import json
 from django.shortcuts import render
-from .models import Category
-from .models import Product
 from django.http import HttpResponse
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.urlresolvers import reverse
+from django.conf import settings
+
+from .models import Category, Faq
+from .models import Product
+from .models import Category, Faq, Message
+from .models import SearchQuery
+
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import Http404
+
+import json
+import inspect
+import datetime
 
 
+def degrades(function):
+    def wrap(request, *args, **kwargs):
+        if function.__name__ in settings.DEGRADE:
+            # better because it's not necessary to redirect
+            return HttpResponse('Yep, we know. We are working on that =)', status=503)
+            #  return HttpResponseRedirect(reverse('maintenance'))
+        else:
+            return function(request, *args, **kwargs)
+
+    wrap.__doc__ = function.__doc__
+    wrap.__name__ = function.__name__
+    return wrap
+
+
+@degrades
 def index(request):
     catalog = Category.objects.all()
     products = Product.objects.get_sallable()
 
     q = request.GET.get('q')
     if q:
-        products = products.filter(name__icontains=q)
+        products = Product.objects.smart_filter(q)
+        SearchQuery.add_query(q, products.count())
 
     paginator = Paginator(products, 12)
     page = request.GET.get('page')
@@ -41,21 +67,7 @@ def catalog(request):
     return HttpResponse('catalog')
 
 
-# def order(request):
-#     if request.method == 'POST':
-#         esoatuhsoetu
-#     request.session['products']
-#     #  request.session['products'] = ['test product', 'another product']
-#     #  request.session['products'].append(u'test')
-#     #  request.session['products'].append(u'test')
-#     #  request.session.modified = True
-
-#     print request.session['products']
-#     form = OrderForm()
-#     print form.as_p()
-#     return HttpResponse(form.as_p())
-
-
+@degrades
 def add_product(request):
     def get_int(name, default=None):
         try:
@@ -81,18 +93,20 @@ def add_product(request):
     return HttpResponse(json.dumps(result))
 
 
+@degrades
 def get_products(request):
     counts = request.session.get('products', {})
-    objs = Product.objects.filter(id__in=counts.keys()).values('id', 'name', 'price')
+    objs = Product.objects.filter(id__in=counts.keys()).values('id', 'name', 'price', 'min_count')
     products = map(lambda x: {'count': counts[str(x['id'])], 'product': x}, objs)
     return HttpResponse(json.dumps((products)))
 
 
+@degrades
 def order(request):
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order_form.create_order( request.session.setdefault('products', {}) )
+            order_form.create_order(request.session.setdefault('products', {}))
             del request.session['products']
             request.session.modified = True
             return render(request, 'shop/thanks.html')
@@ -106,14 +120,26 @@ def order(request):
     return render(request, 'shop/order.html', context)
 
 
+@degrades
 def feedback(request):
     if request.method == 'POST':
         feedback_form = FeedbackForm(request.POST)
         if feedback_form.is_valid():
             feedback_form.create_feedback()
     form = FeedbackForm()
+    try:
+        faq = Faq.objects.get(name='FAQ')
+    except Exception, e:
+        faq = False
     context = {
         'form': form,
         'title': 'feedback form',
+        'faq': faq
     }
     return render(request, 'shop/feedback.html', context)
+
+
+def get_messages(request):
+    messages = Message.objects.filter(start__lte=datetime.date.today(), end__gte=datetime.date.today()).values('name',
+                                                                                                               '_text_rendered')
+    return HttpResponse(json.dumps(list(messages)))

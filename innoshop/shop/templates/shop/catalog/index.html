@@ -2,22 +2,33 @@
 
 {% block javascript %}
     {{ block.super }}
-    <script src="/static/js/shop/build/shop.js"></script>
     <script>
-    $(document).ready(function(){
-        var products = {};
-        {% for product in products %}
-            products[{{product.id}}] = { name: '{{ product.name }}', price: {{ product.price }}, id: {{ product.id }} };
-        {% endfor %}
-        ProductStore.setInitialState(products);
-        BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
+        $(document).ready(function () {
+            var products = {};
+            {% for product in products %}
+                products[{{product.id}}] = {
+                    name: '{{ product.name }}',
+                    price: {{ product.price }},
+                    id: {{ product.id }},
+                    min_count: {{ product.min_count }}
+                };
+            {% endfor %}
+            ProductStore.setInitialState(products);
 
-        for( i in products ) {
-            React.render(React.createElement(Price, { price: products[i].price, id: i, count: BasketStore.getProductCount(i) }), document.getElementById('product-'+i));
-        }
-        React.render(React.createElement(Basket, { url: '{% url 'order' %}', price: BasketStore.totalSum() }), document.getElementById('basket'));
-        React.render(React.createElement(BasketList, { link: '{% url 'order' %}', csrf_token: '{{ csrf_token }}' }), document.getElementById('basket-list'));
-    });
+            for (var i in products) {
+                React.render(React.createElement(Price, {
+                    price: products[i].price,
+                    id: i,
+                    count: BasketStore.getProductCount(i)
+                }), document.getElementById('product-' + i));
+            }
+
+            if ($('#basket2').length)
+                React.render(React.createElement(Basket, {
+                    url: '{% url 'order' %}',
+                    price: BasketStore.totalSum()
+                }), document.getElementById('basket2'));
+        });
     </script>
 {% endblock %}
 
@@ -25,10 +36,8 @@
 <div class="container">
 
     {% include 'shop/catalog/_pager.html' %}
-    <!--<div class="block-grid-lg-4 block-grid-md-3 block-grid-sm-2">-->
     <div class="row">
         {% for product in products %}
-        <!--<div class="block-grid-item">-->
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             <div class="panel panel-info product">
                 <div class="panel-heading">
@@ -38,12 +47,21 @@
                     <img src="{{ product.img_url }}" alt="{{ product.name }}" class="">
                 </div>
                 <div class="panel-footer clearfix">
-                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i></span>
+                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble"></i>{% if product.min_count > 1 %}&nbsp;<sup class="text-info">{{ product.min_count }}</sup>{% endif %}</span>
                     <div class="pull-right" id="product-{{ product.id }}"></div>
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% if not products %}
+            <div class="jumbotron">
+                <h1>Отличная попытка!</h1>
+                <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
+                <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
+                    <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i class="text-muted fa fa-tripadvisor"></i> продолжить охоту</a>
+                </p>
+            </div>
+        {% endif %}
     </div>
     {% include 'shop/catalog/_pager.html' %}
 </div>

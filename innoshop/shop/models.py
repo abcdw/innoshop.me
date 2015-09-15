@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
+from markitup.fields import MarkupField
+from django.db.models import F, Q
 
 
 class Category(models.Model):
@@ -12,7 +17,33 @@ class Category(models.Model):
 
 class ProductManager(models.Manager):
     def get_sallable(self):
-        return self.filter(price__gt=0)
+        return self.filter(price__gt=0).order_by('-rating')
+
+    def smart_filter(self, q):
+        words = filter(None, [x.strip() for x in q.split(' ')])
+
+        import operator
+        def combine(op, words):
+            Qs = [Q(name__icontains=word) for word in words]
+            qe = reduce(op, Qs)
+            return qe
+
+        import itertools
+        perms = [' '.join(p) for p in itertools.permutations(words)]
+        qe = combine(operator.or_, perms)
+
+        products = self.get_sallable()
+        result = products.filter(qe)
+
+        if result.count() < settings.PRODUCTS_PER_PAGE:
+            qe = combine(operator.and_)
+            result |= products.filter(qe)
+
+        if result.count() < settings.PRODUCTS_PER_PAGE:
+            qe = combine(operator.or_)
+            result |= products.filter(qe)
+
+        return result
 
 
 class Product(models.Model):
@@ -31,7 +62,7 @@ class Product(models.Model):
     objects = ProductManager()
 
     def __unicode__(self):
-        return self.name
+        return self.SKU
 
 
 class Order(models.Model):
@@ -41,6 +72,8 @@ class Order(models.Model):
     #  products = models.ManyToManyField(Product)
     comment = models.TextField(blank=True)
     moderator_comment = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='orders', blank=True)
 
     def get_items(self):
         return self.productitem_set
@@ -48,13 +81,46 @@ class Order(models.Model):
 
 class ProductItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
     count = models.IntegerField(default=1)
+    name = models.CharField(max_length=255, blank=True)
+    SKU = models.CharField(max_length=100, blank=True)
+    price = models.IntegerField(default=10000000)  # price from shop
+    actual_price = models.IntegerField(default=10000000)  # actual price from shop
+    min_count = models.IntegerField(default=1)
+    source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
+    img_url = models.CharField(max_length=255, blank=True)
 
     def __unicode__(self):
-        return self.product.name
+        return self.name
 
 
 class Feedback(models.Model):
     contact = models.CharField(max_length=255, blank=True)
     feedback = models.TextField(blank=True)
+
+
+class Faq(models.Model):
+    name = models.CharField(max_length=255)
+    text = MarkupField()
+
+
+class Message(models.Model):
+    name = models.CharField(max_length=255)
+    text = MarkupField()
+    start = models.DateField()
+    end = models.DateField()
+
+
+class SearchQuery(models.Model):
+    q = models.CharField(max_length=255)
+    count = models.IntegerField(default=0)
+    product_count = models.IntegerField(default=0)
+
+    @staticmethod
+    def add_query(query, pcount):
+        sq, created = SearchQuery.objects.get_or_create(q=query)
+        SearchQuery.objects.filter(id=sq.id).update(count=F('count') + 1)
+        SearchQuery.objects.filter(id=sq.id).update(product_count=pcount)
+
+
