@@ -59,7 +59,7 @@
                     {% if product.min_count == 1 %}
                         <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
                     {% else %}
-                        <span class="h4">
+                        <span class="h3">
                             {% with numerator=product.price denominator=product.min_count %}
                             <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span><span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;<i class="fa fa-ruble small"></i></span>
                             {% endwith %}
