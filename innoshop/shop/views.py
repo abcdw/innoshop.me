@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import Http404, HttpResponseRedirect
@@ -17,6 +18,8 @@ from .forms import OrderForm, FeedbackForm
 import json
 import inspect
 import datetime
+
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 def degrades(function):
@@ -43,7 +46,7 @@ def index(request):
         products = Product.objects.smart_filter(q)
         SearchQuery.add_query(q, products.count())
 
-    paginator = Paginator(products, 24)
+    paginator = Paginator(products, settings.PRODUCT_PER_PAGE)
     page = request.GET.get('page')
     try:
         products = paginator.page(page)
@@ -58,7 +61,7 @@ def index(request):
         'catalog': catalog,
         'products': products,
         'q': q or '',
-        'admin': request.user.is_superuser
+        'admin': request.user.is_staff
     }
     # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)
@@ -142,21 +145,22 @@ def feedback(request):
 
 
 def get_messages(request):
-    messages = Message.objects.filter(start__lte=datetime.date.today(), end__gte=datetime.date.today()).values('name',
-                                                                                                               '_text_rendered')
+    messages = Message.objects.filter(start__lte=datetime.date.today(),
+                                      end__gte=datetime.date.today()).values('name', '_text_rendered')
     return HttpResponse(json.dumps(list(messages)))
 
+
+@staff_member_required
 def update_rating(request):
     result = {'status': 'error', 'result': 'use GET method'}
-    if request.method == 'GET' and request.user.is_superuser:
+    if request.method == 'GET':
         try:
             id = get_int(request, 'id')
             count = get_int(request, 'count', 0)
             if id >= 0 and count:
-                product = Product.objects.get(id=id)
-                product.rating += count
-                product.save()
-                result.update({'status': 'ok', 'result': product.rating })
+                product = Product.objects.filter(id=id)
+                product.update(rating=F('rating') + count)
+                result.update({'status': 'ok', 'result': product.first().rating})
         except Exception, e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
