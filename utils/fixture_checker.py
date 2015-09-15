@@ -1,6 +1,6 @@
-#!/usr/bin/evn python
- # -*- coding: utf-8 -*-
- """Remove duplicate from pruducts"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""Remove duplicate from pruducts"""
 import json
 
 def main():
