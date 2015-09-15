@@ -250,10 +250,20 @@ var BasketLine = React.createClass({
         var min_count = this.props.product.min_count > 1 ? React.createElement(
             'span',
             { className: 'text-muted' },
-            this.props.product.min_count,
+            React.createElement('i', { className: 'fa fa-close' }),
             ' ',
-            React.createElement('i', { className: 'fa fa-close' })
+            this.props.product.min_count
         ) : '';
+        var price = this.props.product.min_count > 1 ? React.createElement(
+            'span',
+            null,
+            ' ',
+            this.props.product.min_count,
+            ' x ',
+            this.props.product.price / this.props.product.min_count,
+            ' = ',
+            this.props.product.price
+        ) : this.props.product.price;
         return React.createElement(
             'div',
             { className: 'row basket-list__line' },
@@ -278,9 +288,9 @@ var BasketLine = React.createClass({
             React.createElement(
                 'div',
                 { className: 'h4 col-xs-3 col-sm-2 col-md-2 col-lg-2' },
-                min_count,
+                this.props.count,
                 ' ',
-                this.props.count
+                min_count
             ),
             React.createElement(
                 'div',
@@ -290,7 +300,7 @@ var BasketLine = React.createClass({
                     'sup',
                     { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
                     ' ',
-                    this.props.product.price,
+                    price,
                     ' ',
                     React.createElement('i', { className: 'fa fa-ruble' })
                 )
@@ -310,7 +320,7 @@ var BasketLine = React.createClass({
                     'sup',
                     { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
                     ' ',
-                    this.props.product.price,
+                    price,
                     ' ',
                     React.createElement('i', { className: 'fa fa-ruble' })
                 )
