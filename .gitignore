@@ -4,3 +4,4 @@ db.sqlite3
 /utils/bootstrap-builder/node_modules/
 innoshop/innoshop/static
 innoshop/innoshop/media
+\..*
