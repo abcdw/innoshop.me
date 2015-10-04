@@ -41,10 +41,15 @@ def index(request):
     catalog = Category.objects.all()
     products = Product.objects.get_sallable()
 
+    cat = get_int(request, 'c')
+    if cat:
+        products = products.filter(categories__id=cat)
+
     q = request.GET.get('q')
     if q:
         products = Product.objects.smart_filter(q)
         SearchQuery.add_query(q, products.count())
+
 
     paginator = Paginator(products, settings.PRODUCTS_PER_PAGE)
     page = request.GET.get('page')
@@ -61,6 +66,7 @@ def index(request):
         'catalog': catalog,
         'products': products,
         'q': q or '',
+        'cat': cat or '',
         'admin': request.user.is_staff
     }
     # return HttpResponse('<a href=/order>order</a>')
@@ -73,7 +79,7 @@ def catalog(request):
 
 def get_int(request, name, default=None):
     try:
-        return int(request.GET.get(name))
+        return int(request.GET.get(name) or '')
     except ValueError:
         return default
 
