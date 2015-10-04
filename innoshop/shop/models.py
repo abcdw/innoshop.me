@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from markitup.fields import MarkupField
 from django.db.models import F, Q
-
+from model_utils.fields import StatusField
+from model_utils import Choices
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -67,6 +68,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+    STATUS = Choices('new', 'active', 'done', 'partially_done', 'rejected')
     owner = models.ForeignKey(User, null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     contact = models.CharField(max_length=255)
@@ -75,6 +77,7 @@ class Order(models.Model):
     moderator_comment = models.TextField(blank=True)
     text = models.TextField(blank=True)
     photo = models.ImageField(upload_to='orders', blank=True)
+    status = StatusField()
 
     def get_items(self):
         return self.productitem_set
@@ -91,6 +94,7 @@ class ProductItem(models.Model):
     min_count = models.IntegerField(default=1)
     source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
     img_url = models.CharField(max_length=255, blank=True)
+    bought = models.BooleanField(default=False, blank=False)
 
     def __unicode__(self):
         return self.name

@@ -30,7 +30,8 @@ class Order(admin.ModelAdmin):
     inlines = [
         ProductItemInline,
     ]
-    list_display = ('owner', 'contact')
+    list_display = ('owner', 'status', 'contact')
+    list_filter = ('owner', 'status')
     readonly_fields = ('comment', )
 
 
