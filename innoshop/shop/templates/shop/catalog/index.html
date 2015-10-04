@@ -15,21 +15,24 @@
                     rating: {{ product.rating }}
                 };
             {% endfor %}
-            ProductStore.setInitialState(products);
+            if( products.length > 0 )
+            {
+                ProductStore.setInitialState(products);
 
-            for (var i in products) {
-                React.render(React.createElement(Price, {
-                    price: products[i].price,
-                    id: i,
-                    count: BasketStore.getProductCount(i)
-                }), document.getElementById('product-' + i));
-                {% if admin %}
-                    React.render(React.createElement(Rating, {
+                for (var i in products) {
+                    React.render(React.createElement(Price, {
+                        price: products[i].price,
                         id: i,
-                        rating: products[i].rating,
-                        url: '{% url 'update_rating' %}'
-                    }), document.getElementById('product-rating-' + i));
-                {% endif %}
+                        count: BasketStore.getProductCount(i)
+                    }), document.getElementById('product-' + i));
+                    {% if admin %}
+                        React.render(React.createElement(Rating, {
+                            id: i,
+                            rating: products[i].rating,
+                            url: '{% url 'update_rating' %}'
+                        }), document.getElementById('product-rating-' + i));
+                    {% endif %}
+                }
             }
 
             if ($('#basket2').length)
@@ -44,43 +47,6 @@
 {% block content %}
 
     <div class="container">
-        {#        <div class="dropdown">#}
-        {#            <span id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#">#}
-        {#                Категории <span class="caret"></span>#}
-        {#            </span>#}
-        {#            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">#}
-        {#                {% for cat in catalog %}#}
-        {#                    {% if not cat.children %}#}
-        {#                        <li><a href="?c={{ cat.item.id }}">{{ cat.item.name }}</a></li>#}
-        {#                    {% else %}#}
-        {#                        <li class="dropdown-submenu">#}
-        {#                            <a tabindex="-1" href="#">{{ cat.item.name }}</a>#}
-        {#                            <ul class="dropdown-menu">#}
-        {#                                {% for cat in cat.children %}#}
-        {#                                    {% if not cat.children %}#}
-        {#                                        <li><a href="?c={{ cat.item.id }}">{{ cat.item.name }}</a></li>#}
-        {#                                    {% else %}#}
-        {#                                        <li class="dropdown-submenu">#}
-        {#                                            <a tabindex="-1" href="#">{{ cat.item.name }}</a>#}
-        {#                                            <ul class="dropdown-menu">#}
-        {#                                                {% for cat in cat.children %}#}
-        {#                                                    {% if not cat.children %}#}
-        {#                                                        <li><a href="?c={{ cat.item.id }}">{{ cat.item.name }}</a></li>#}
-        {#                                                    {% else %}#}
-        {##}
-        {#                                                    {% endif %}#}
-        {#                                                {% endfor %}#}
-        {#                                            </ul>#}
-        {#                                        </li>#}
-        {#                                    {% endif %}#}
-        {#                                {% endfor %}#}
-        {#                            </ul>#}
-        {#                        </li>#}
-        {#                    {% endif %}#}
-        {#                {% endfor %}#}
-        {#            </ul>#}
-        {#        </div>#}
-
         {% if category or q %}
             <h1>{{ category.name }}</h1>
 
