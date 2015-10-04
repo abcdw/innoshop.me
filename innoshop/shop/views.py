@@ -39,11 +39,12 @@ def degrades(function):
 @degrades
 def index(request):
     catalog = Category.objects.all()
+    category = None
 
     def find_children(src, dst, id):
         for item in src:
             if item['parent_id'] == id:
-                out = { 'item': item, 'children': [] }
+                out = {'item': item, 'children': []}
                 dst.append(out)
                 src.remove(item)
                 find_children(src, out['children'], item['id'])
@@ -52,7 +53,7 @@ def index(request):
     catalog_list = list(catalog.values('name', 'id', 'parent_id'))
     for item in catalog_list:
         if item['parent_id'] is None:
-            out = { 'item': item, 'children': [] }
+            out = {'item': item, 'children': []}
             catalog_tree.append(out)
             catalog_list.remove(item)
             find_children(catalog_list, out['children'], item['id'])
@@ -61,7 +62,8 @@ def index(request):
 
     cat = get_int(request, 'c')
     if cat:
-        products = products.filter(categories__id=cat)
+        category = Category.objects.get(id=cat)
+        products = products.filter(categories__id__contains=cat)
 
     q = request.GET.get('q')
     if q:
@@ -84,6 +86,7 @@ def index(request):
         'products': products,
         'q': q or '',
         'cat': cat or '',
+        'category': category or '',
         'admin': request.user.is_staff
     }
     # return HttpResponse('<a href=/order>order</a>')
