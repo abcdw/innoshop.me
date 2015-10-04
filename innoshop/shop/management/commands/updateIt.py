@@ -115,7 +115,7 @@ def load_settings():
         settings = {
             "try_get_times": 7,
             "first_product": 1,
-            "update_once": count-1,
+            "update_once": count,
             "products_in_fine": count}
         with open(SETTINGS_FILE, 'w+') as settings_file:
             json.dump(settings, settings_file)
