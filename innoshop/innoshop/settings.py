@@ -35,7 +35,7 @@ DEGRADE = (
     #  'order',
 )
 
-PRODUCTS_PER_PAGE = 12
+PRODUCTS_PER_PAGE = 24
 
 # Application definition
 
@@ -50,8 +50,7 @@ INSTALLED_APPS = (
     'shop',
     'markitup',
     'maintenancemode',
-    'mathfilters',
-    'innoshop'
+    'mathfilters'
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'

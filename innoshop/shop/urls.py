@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^order$', views.order, name='order'),
     url(r'^feedback$', views.feedback, name='feedback'),
     url(r'^get_messages', views.get_messages, name='get_messages'),
-    url(r'^update_rating', views.update_rating, name='update_rating'),
-    url(r'^random', views.random_products, name='random_products')
+    url(r'^update_rating', views.update_rating, name='update_rating')
     #  url(r'^order$', views.order, name='order'),
 ]

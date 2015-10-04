@@ -95,8 +95,7 @@ class Command(BaseCommand):
         last = first+update_once
         if last >= self.settings['products_in_fine']:
             last = self.settings['products_in_fine']-1
-        result = Product.objects.all()[
-            first:last]
+        result = Product.objects.all()[first:last]
         if len(result) < update_once:
             self.settings['first_product'] = update_once-len(result)
         else:

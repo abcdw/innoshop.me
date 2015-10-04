@@ -21,6 +21,9 @@
 {% endblock %}
 
 {% block content%}
+     <div class="container">
+        {% include 'shop/_faq.html' with faq=faq %}
+    </div>
     <div class="container">
         <form action="{% url 'feedback' %}" id="feedbackForm" method="POST">
             {% csrf_token %}
@@ -36,8 +39,5 @@
                 <input type="submit" value="Отправить отзыв" class="btn btn-success btn-block">
             </div>
         </form>
-    </div>
-     <div class="container">
-        {% include 'shop/_faq.html' with faq=faq %}
     </div>
 {% endblock %}

@@ -18,7 +18,6 @@ from .forms import OrderForm, FeedbackForm
 import json
 import inspect
 import datetime
-import random
 
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -165,25 +164,3 @@ def update_rating(request):
         except Exception, e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
-
-
-
-@degrades
-def random_products(request):
-    """
-    Generate page with random products from db
-    """
-
-    catalog = Category.objects.all()
-    products = Product.objects.get_sallable()
-
-    max_id=products.order_by('-id')[0].id
-    random_ids=[random.randint(1,max_id+1) for x in range(settings.PRODUCTS_PER_PAGE)]
-    products=products.filter(pk__in=random_ids)
-
-    context = {
-        'catalog': catalog,
-        'products': products,
-        'admin': request.user.is_staff
-    }
-    return render(request, 'shop/catalog/index.html', context)
