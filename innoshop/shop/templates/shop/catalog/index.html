@@ -42,48 +42,54 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-
-    {% include 'shop/catalog/_pager.html' %}
-    <div class="row">
-        {% for product in products %}
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <div class="panel panel-info product">
-                <div class="panel-heading">
-                    <div title="{{ product.name | safe  }}">{% if admin %}<span class="badge">{{ product.id }}</span>&nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
-                </div>
-                <div class="panel-body text-center">
-                    <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="">
-                </div>
-                <div class="panel-footer clearfix">
-                    {% if product.min_count == 1 %}
-                        <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
-                    {% else %}
-                        <span class="h3">
+    <div class="container">
+        {% include 'shop/catalog/_pager.html' %}
+        <div class="row">
+            {% for product in products %}
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="panel panel-info product">
+                        <div class="panel-heading">
+                            <div title="{{ product.name | safe }}">{% if admin %}
+                                <span class="badge">{{ product.id }}</span>
+                                &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
+                        </div>
+                        <div class="panel-body text-center">
+                            <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="">
+                        </div>
+                        <div class="panel-footer clearfix">
+                            {% if product.min_count == 1 %}
+                                <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
+                            {% else %}
+                                <span class="h3">
                             {% with numerator=product.price denominator=product.min_count %}
-                            <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span><span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;<i class="fa fa-ruble small"></i></span>
+                                <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span>
+                                <span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;
+                                <i class="fa fa-ruble small"></i></span>
                             {% endwith %}
-                    {% endif %}
+                            {% endif %}
 
-                    <div class="pull-right" id="product-{{ product.id }}"></div>
-                    {% if admin %}
-                        <div id="product-rating-{{ product.id }}"></div>
-                    {% endif %}
+                            <div class="pull-right" id="product-{{ product.id }}"></div>
+                            {% if admin %}
+                                <div id="product-rating-{{ product.id }}"></div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
+            {% if not products %}
+                <div class="jumbotron">
+                    <h1>Отличная попытка!</h1>
+
+                    <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
+
+                    <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
+                        <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i
+                                class="text-muted fa fa-binoculars"></i> продолжить охоту</a>
+                    </p>
+                </div>
+            {% endif %}
         </div>
-        {% endfor %}
-        {% if not products %}
-            <div class="jumbotron">
-                <h1>Отличная попытка!</h1>
-                <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
-                <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
-                    <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i class="text-muted fa fa-binoculars"></i> продолжить охоту</a>
-                </p>
-            </div>
-        {% endif %}
+        {% include 'shop/catalog/_pager.html' %}
     </div>
-    {% include 'shop/catalog/_pager.html' %}
-</div>
 {% endblock %}
 

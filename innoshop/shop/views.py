@@ -39,6 +39,24 @@ def degrades(function):
 @degrades
 def index(request):
     catalog = Category.objects.all()
+
+    def find_children(src, dst, id):
+        for item in src:
+            if item['parent_id'] == id:
+                out = { 'item': item, 'children': [] }
+                dst.append(out)
+                src.remove(item)
+                find_children(src, out['children'], item['id'])
+
+    catalog_tree = []
+    catalog_list = list(catalog.values('name', 'id', 'parent_id'))
+    for item in catalog_list:
+        if item['parent_id'] is None:
+            out = { 'item': item, 'children': [] }
+            catalog_tree.append(out)
+            catalog_list.remove(item)
+            find_children(catalog_list, out['children'], item['id'])
+
     products = Product.objects.get_sallable()
 
     cat = get_int(request, 'c')
@@ -49,7 +67,6 @@ def index(request):
     if q:
         products = Product.objects.smart_filter(q)
         SearchQuery.add_query(q, products.count())
-
 
     paginator = Paginator(products, settings.PRODUCTS_PER_PAGE)
     page = request.GET.get('page')
@@ -63,7 +80,7 @@ def index(request):
         products = paginator.page(paginator.num_pages)
 
     context = {
-        'catalog': catalog,
+        'catalog': catalog_tree,
         'products': products,
         'q': q or '',
         'cat': cat or '',
