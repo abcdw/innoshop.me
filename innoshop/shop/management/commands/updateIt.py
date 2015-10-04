@@ -12,74 +12,95 @@ NEED_ATRIBUTES = {
     'actual_price': re.compile(u'itemprop="price">(.+)<\/span>'), 'sku':
     re.compile(u'itemprop="productID">(.+)</span>'), 'is_stock_empty':
     re.compile(
-        u'<div class="item-fullreview_in-stock"><i class="icon _no"></i>(.*)</div>')}
+        u'<i class="icon _no"></i>(.*)')}
 
 SETTINGS_FILE = 'shop/management/commands/updater_settings.json'
+LOG_FILE = 'shop/management/commands/log.txt'
 
 
 class Command(BaseCommand):
 
     args = ''
-    help = """Update existing database. Actual settings there are in shop/management/commands/updater_settings.json.
-    wait_times-how many times it will be request a page
-    check_once-number of products for updating
-    first_id-number of the forst product for checking
+    help = """Update existing database. Actual settings there are
+    in shop/management/commands/updater_settings.json.
+    try_get_times-how many times it will be request a page
+    update_once-number of products for updating
+    first_product-number of the first product for checking
     producti_count-how many products from the db will be checked by the script """
 
     def handle(self, *args, **options):
         self.settings = load_settings()
-        self.stdout.write(str(self.settings))
-        with open('log.txt', 'w+') as log:
-            try:
-                for i in self.next_products():
+        log = open(LOG_FILE, 'w')
+        log.write(str(self.settings))
+        try:
+            for i in self.next_products():
+                try:
+                    text = get_content(
+                        i.source_link,
+                        self.settings['try_get_times'])
                     try:
-                        text = get_content(
-                            i.source_link,
-                            self.settings['wait_times'])
-                        try:
-                            self.stdout.write("")
-                            self.stdout.write(str(i.actual_price))
-                            new_values = pars(text)
-                            if i.SKU == new_values['sku']:
-                                # analize price
-                                price_str = new_values['actual_price']
-                                price_fl = float(price_str.replace(' ', ''))
-                                price_int = math.ceil(price_fl)
-                                if price_int != i.actual_price():
-                                    i.actual_price = price_int
-                                    i.save()
-
+                        old_price = i.actual_price
+                        old_is_stock_empty = i.is_stock_empty
+                        new_values = pars(text)
+                        if i.SKU == new_values['sku']:
+                            # update is_stock_empty
+                            if 'is_stock_empty' in new_values:
+                                i.is_stock_empty = True
                             else:
-                                log.write(
-                                    "Not the same sku in the db and the page {0} {1}".format(
-                                        i.SKU,
-                                        new_values['sku']))
-                            self.stdout.write(str(i.actual_price))
-                            self.stdout.write("")
-                        except IndexError:
-                            i.is_stock_empty = True
+                                i.is_stock_empty = False
                             i.save()
-                    except urllib2.HTTPError:
-                        pass
-            finally:
-                save_settings(self.settings)
-            # except Exception as e:
-             #   self.stdout.write(e.message)
+                            # analize price
+                            price_str = new_values['actual_price']
+                            price_fl = float(price_str.replace(' ', ''))
+                            price_int = math.ceil(price_fl)
+                            if price_int != i.actual_price:
+                                i.actual_price = price_int
+                                i.save()
+                        else:
+                            log.write(
+                                "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
+                                    i.pk,
+                                    i.SKU,
+                                    new_values['sku']))
+                        log.write(
+                            "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
+                            format(i.pk, i.SKU, old_price,
+                                   i.actual_price, old_is_stock_empty,
+                                   i.is_stock_empty))
+                    except IndexError:
+                        i.is_stock_empty = True
+                        i.save()
+                        log.write(
+                            "[ERROR] pk={0} SKU={1} PARSING ERROR {3}\n".
+                            format(i.pk, i.SKU, i.source_link))
+                    except KeyError:
+                        log.write(
+                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n". format(
+                                i.pk,
+                                i.SKU,
+                                i.source_link))
+                except urllib2.HTTPError:
+                    log.write(
+                        "[ERROR] pk={0} SKU={1} PAGE NOT FOUND {2}\n".
+                        format(i.pk, i.SKU, i.source_link))
+        finally:
+            save_settings(self.settings)
+            log.close()
 
     def next_products(self):
         """Get list of products for checking
-        CHANGE FIRST_ID"""
-        first = self.settings['first_id']
-        check_once = self.settings['check_once']
-        last = first+check_once
-        if last >= self.settings['products_count']:
-            last = self.settings['products_count']-1
+        CHANGE first_product"""
+        first = self.settings['first_product']
+        update_once = self.settings['update_once']
+        last = first+update_once
+        if last >= self.settings['products_in_fine']:
+            last = self.settings['products_in_fine']-1
         result = Product.objects.all()[
             first:last]
-        if len(result) < check_once:
-            self.settings['first_id'] = check_once-len(result)
+        if len(result) < update_once:
+            self.settings['first_product'] = update_once-len(result)
         else:
-            self.settings['first_id'] = first+check_once
+            self.settings['first_product'] = first+update_once
         return result
 
 
@@ -89,13 +110,13 @@ def load_settings():
         with open(SETTINGS_FILE) as settings_file:
             settings = json.load(settings_file)
             return settings
-    except IOError:
+    except (IOError, ValueError) as e:
         count = len(Product.objects.all())
         settings = {
-            "wait_times": 7,
-            "first_id": 1,
-            "check_once": count-1,
-            "products_count": count}
+            "try_get_times": 7,
+            "first_product": 1,
+            "update_once": count-1,
+            "products_in_fine": count}
         with open(SETTINGS_FILE, 'w+') as settings_file:
             json.dump(settings, settings_file)
         return settings
@@ -107,11 +128,11 @@ def save_settings(settings):
         json.dump(settings, settings_file)
 
 
-def get_content(adress, wait_times):
+def get_content(adress, try_get_times):
     """Getting a page with product as a string"""
     response = urllib2.urlopen(adress)
     # try to get it for some times
-    for x in range(wait_times):
+    for x in range(try_get_times):
         if response.getcode() == 200:
             result = response.read()
             return result
@@ -127,7 +148,7 @@ def pars(text):
     result = dict()
     for atrr in NEED_ATRIBUTES:
         regx = NEED_ATRIBUTES[atrr]
-        findall = re.findall(regx, text)[0]
-        if findall is not None:
-            result[atrr] = findall
+        findall = re.findall(regx, text)
+        if len(findall) != 0:
+            result[atrr] = findall[0]
     return result
