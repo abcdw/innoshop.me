@@ -127,8 +127,7 @@ def pars(text):
     result = dict()
     for atrr in NEED_ATRIBUTES:
         regx = NEED_ATRIBUTES[atrr]
-        try:
-            result[atrr] = re.findall(regx, text)[0]
-        except IndexError:
-            pass
+        findall = re.findall(regx, text)[0]
+        if findall is not None:
+            result[atrr] = findall
     return result
