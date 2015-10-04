@@ -38,7 +38,7 @@ def degrades(function):
 
 @degrades
 def index(request):
-    catalog = Category.objects.all()
+    catalog = Category.objects.filter(product_count__gt=0)
     category = None
 
     def find_children(src, dst, id):
@@ -50,7 +50,7 @@ def index(request):
                 find_children(src, out['children'], item['id'])
 
     catalog_tree = []
-    catalog_list = list(catalog.values('name', 'id', 'parent_id'))
+    catalog_list = list(catalog.values('name', 'id', 'parent_id', 'product_count'))
     for item in catalog_list:
         if item['parent_id'] is None:
             out = {'item': item, 'children': []}

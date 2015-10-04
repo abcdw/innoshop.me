@@ -11,6 +11,7 @@ from model_utils import Choices
 class Category(models.Model):
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', null=True, blank=True)
+    product_count = models.IntegerField(default=0, blank=False)
 
     def __unicode__(self):
         return self.name
