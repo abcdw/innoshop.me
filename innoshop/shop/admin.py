@@ -17,7 +17,9 @@ class Product(admin.ModelAdmin):
     def get_categories(self, obj):
         return ", ".join([p.name for p in obj.categories.all()])
 
-    list_display = ('name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
+    list_display = ('SKU', 'name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
+    search_fields = ('SKU' , 'name')
+    list_filter = ('is_stock_empty', 'categories' )
 
 
 class ProductItemInline(admin.TabularInline):
@@ -30,7 +32,8 @@ class Order(admin.ModelAdmin):
     inlines = [
         ProductItemInline,
     ]
-    list_display = ('owner', 'contact')
+    list_display = ('owner', 'status', 'contact')
+    list_filter = ('owner', 'status')
     readonly_fields = ('comment', )
 
 

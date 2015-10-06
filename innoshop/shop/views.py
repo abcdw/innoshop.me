@@ -38,8 +38,32 @@ def degrades(function):
 
 @degrades
 def index(request):
-    catalog = Category.objects.all()
+    catalog = Category.objects.filter(product_count__gt=0)
+    category = None
+
+    def find_children(src, dst, id):
+        for item in src:
+            if item['parent_id'] == id:
+                out = {'item': item, 'children': []}
+                dst.append(out)
+                src.remove(item)
+                find_children(src, out['children'], item['id'])
+
+    catalog_tree = []
+    catalog_list = list(catalog.values('name', 'id', 'parent_id', 'product_count'))
+    for item in catalog_list:
+        if item['parent_id'] is None:
+            out = {'item': item, 'children': []}
+            catalog_tree.append(out)
+            catalog_list.remove(item)
+            find_children(catalog_list, out['children'], item['id'])
+
     products = Product.objects.get_sallable()
+
+    cat = get_int(request, 'c')
+    if cat:
+        category = Category.objects.get(id=cat)
+        products = products.filter(categories__id__contains=cat)
 
     q = request.GET.get('q')
     if q:
@@ -58,9 +82,11 @@ def index(request):
         products = paginator.page(paginator.num_pages)
 
     context = {
-        'catalog': catalog,
+        'catalog': catalog_tree,
         'products': products,
         'q': q or '',
+        'cat': cat or '',
+        'category': category or '',
         'admin': request.user.is_staff
     }
     # return HttpResponse('<a href=/order>order</a>')
@@ -73,7 +99,7 @@ def catalog(request):
 
 def get_int(request, name, default=None):
     try:
-        return int(request.GET.get(name))
+        return int(request.GET.get(name) or '')
     except ValueError:
         return default
 

@@ -10,6 +10,7 @@
 
     <!-- Bootstrap -->
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-flat.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/app.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.css">
     {% block stylesheet %}{% endblock %}
@@ -37,7 +38,7 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="//cdn.jsdelivr.net/react/0.13.3/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
-    <script src="{% static 'js/shop/build/shop.js' %}"></script>
+    <script src="{% static 'js/shop/shop.js' %}"></script>
     <script>
         $(document).ready(function(){
             BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
