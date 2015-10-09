@@ -30,62 +30,62 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.settings = load_settings()
-        log = open(LOG_FILE, 'w')
-        log.write(str(self.settings))
-        try:
-            for i in self.next_products():
-                try:
-                    text = get_content(
-                        i.source_link,
-                        self.settings['try_get_times'])
+        with open(LOG_FILE, 'w') as log:
+            log.write(str(self.settings))
+            try:
+                for i in self.next_products():
                     try:
-                        old_price = i.actual_price
-                        old_is_stock_empty = i.is_stock_empty
-                        new_values = pars(text)
-                        if i.SKU == new_values['sku']:
-                            # update is_stock_empty
-                            if 'is_stock_empty' in new_values:
-                                i.is_stock_empty = True
-                            else:
-                                i.is_stock_empty = False
-                            i.save()
-                            # analize price
-                            price_str = new_values['actual_price']
-                            price_fl = float(price_str.replace(' ', ''))
-                            price_int = math.ceil(price_fl)
-                            if price_int != i.actual_price:
-                                i.actual_price = price_int
+                        text = get_content(
+                            i.source_link,
+                            self.settings['try_get_times'])
+                        try:
+                            old_price = i.actual_price
+                            old_is_stock_empty = i.is_stock_empty
+                            new_values = pars(text)
+                            if i.SKU == new_values['sku']:
+                                # update is_stock_empty
+                                if 'is_stock_empty' in new_values:
+                                    i.is_stock_empty = True
+                                else:
+                                    i.is_stock_empty = False
                                 i.save()
-                        else:
+                                # analize price
+                                price_str = new_values['actual_price']
+                                price_fl = float(price_str.replace(' ', ''))
+                                price_int = math.ceil(price_fl)
+                                if price_int != i.actual_price:
+                                    i.actual_price = price_int
+                                    i.save()
+                            else:
+                                log.write(
+                                    "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
+                                        i.pk,
+                                        i.SKU,
+                                        new_values['sku']))
                             log.write(
-                                "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
+                                "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
+                                format(i.pk, i.SKU, old_price,
+                                    i.actual_price, old_is_stock_empty,
+                                    i.is_stock_empty))
+                        except IndexError:
+                            i.is_stock_empty = True
+                            i.save()
+                            log.write(
+                                "[ERROR] pk={0} SKU={1} is_stock_empty=True PARSING ERROR {3}\n".
+                                format(i.pk, i.SKU, i.source_link))
+                        except KeyError:
+                            log.write(
+                                "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n". format(
                                     i.pk,
                                     i.SKU,
-                                    new_values['sku']))
+                                    i.source_link))
+                    except urllib2.HTTPError:
                         log.write(
-                            "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                            format(i.pk, i.SKU, old_price,
-                                   i.actual_price, old_is_stock_empty,
-                                   i.is_stock_empty))
-                    except IndexError:
-                        i.is_stock_empty = True
-                        i.save()
-                        log.write(
-                            "[ERROR] pk={0} SKU={1} PARSING ERROR {3}\n".
+                            "[ERROR] pk={0} SKU={1} PAGE NOT FOUND {2}\n".
                             format(i.pk, i.SKU, i.source_link))
-                    except KeyError:
-                        log.write(
-                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n". format(
-                                i.pk,
-                                i.SKU,
-                                i.source_link))
-                except urllib2.HTTPError:
-                    log.write(
-                        "[ERROR] pk={0} SKU={1} PAGE NOT FOUND {2}\n".
-                        format(i.pk, i.SKU, i.source_link))
-        finally:
-            save_settings(self.settings)
-            log.close()
+            finally:
+                save_settings(self.settings)
+                log.close()
 
     def next_products(self):
         """Get list of products for checking
@@ -93,13 +93,16 @@ class Command(BaseCommand):
         first = self.settings['first_product']
         update_once = self.settings['update_once']
         last = first+update_once
+        self.stdout.write('{0} {1}\n'.format(first,last))
         if last >= self.settings['products_in_fine']:
             last = self.settings['products_in_fine']-1
+            self.settings['first_product'] = 0
         result = Product.objects.all()[first:last]
-        if len(result) < update_once:
-            self.settings['first_product'] = update_once-len(result)
-        else:
-            self.settings['first_product'] = first+update_once
+        self.stdout.write('{0}'.format(len(result)))
+#        if len(result) < update_once:
+#            self.settings['first_product'] = update_once-len(result)
+#        else:
+#            self.settings['first_product'] = first+update_once
         return result
 
 
@@ -113,13 +116,12 @@ def load_settings():
         count = len(Product.objects.all())
         settings = {
             "try_get_times": 7,
-            "first_product": 1,
-            "update_once": count,
-            "products_in_fine": count}
+            "first_product": 0,
+            "update_once": count-1,
+            "products_in_fine": count-1}
         with open(SETTINGS_FILE, 'w+') as settings_file:
             json.dump(settings, settings_file)
         return settings
-
 
 def save_settings(settings):
     """save settings"""
