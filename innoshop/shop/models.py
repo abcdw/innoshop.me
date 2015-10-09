@@ -19,7 +19,7 @@ class Category(models.Model):
 
 class ProductManager(models.Manager):
     def get_sallable(self):
-        return self.filter(price__gt=0).order_by('-rating')
+        return self.filter(price__gt=0).filter(is_stock_empty=False).order_by('-rating')
 
     def smart_filter(self, q):
         words = filter(lambda x: len(x) > 0, [x.strip() for x in q.split(' ')])
