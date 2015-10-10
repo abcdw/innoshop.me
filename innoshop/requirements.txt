@@ -6,6 +6,7 @@ django-maintenancemode==0.11.0
 django-markitup==2.2.2
 django-mathfilters==0.3.0
 django-model-utils==2.3.1
+django-extensions==1.5.7
 Markdown==2.6.2
 Pillow==2.9.0
 pysqlite==2.8.0
