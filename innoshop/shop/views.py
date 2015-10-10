@@ -89,7 +89,7 @@ def index(request):
         'category': category or '',
         'admin': request.user.is_staff
     }
-    # return HttpResponse('<a href=/order>order</a>')
+
     return render(request, 'shop/catalog/index.html', context)
 
 
@@ -143,12 +143,6 @@ def order(request):
             return render(request, 'shop/thanks.html')
 
     raise Http404
-    # form = OrderForm()
-    # context = {
-    #     'form': form,
-    #     'title': 'order form',
-    # }
-    # return render(request, 'shop/order.html', context)
 
 
 @degrades
@@ -164,7 +158,7 @@ def feedback(request):
         faq = False
     context = {
         'form': form,
-        'title': 'feedback form',
+        #  'title': 'feedback form',
         'faq': faq
     }
     return render(request, 'shop/feedback.html', context)
