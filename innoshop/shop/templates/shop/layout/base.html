@@ -6,10 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{{ title }}</title>
-
+    <title>{{ title | default:'Доставка товаров и продуктов питания в Иннополис - innoshop.me'  }}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <!-- Bootstrap -->
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-flat.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/app.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.css">
     {% block stylesheet %}{% endblock %}
@@ -37,7 +38,7 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="//cdn.jsdelivr.net/react/0.13.3/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
-    <script src="{% static 'js/shop/build/shop.js' %}"></script>
+    <script src="{% static 'js/shop/shop.js' %}"></script>
     <script>
         $(document).ready(function(){
             BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');

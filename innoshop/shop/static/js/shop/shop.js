@@ -97,8 +97,17 @@ var BasketStore = Reflux.createStore({
         this.listenTo(actions.clearBusket, this.onClearFromBasket);
         this.storage.onUpdated(function (data) {
             data = data || [];
-            self.update(data);
+            var arr = [];
+            for (var i in data) {
+                if (data.hasOwnProperty(i)) {
+                    arr[i] = data[i];
+                }
+            }
+            self.update(arr);
         });
+    },
+    store: function store() {
+        this.storage.set($.extend({}, this.data));
     },
     initialize: function initialize(url, get_url) {
         this.url = url;
@@ -110,7 +119,7 @@ var BasketStore = Reflux.createStore({
                 self.data[res[i].product.id] = res[i];
             }
             self.trigger(self.totalSum());
-            self.storage.set(self.data);
+            self.store();
         });
     },
     update: function update(data) {
@@ -127,7 +136,7 @@ var BasketStore = Reflux.createStore({
         }
         this.data = [];
         this.trigger(0);
-        this.storage.set(this.data);
+        this.store();
     },
     onDecFromBasket: function onDecFromBasket(id, remove, dontStore) {
         if (this.data[id]) {
@@ -136,7 +145,7 @@ var BasketStore = Reflux.createStore({
             if (this.data[id].count <= 0) delete this.data[id];
             $.get(this.url + '?id=' + id + '&count=-' + cnt, function (res) {});
             this.trigger(this.totalSum());
-            if (!dontStore) this.storage.set(this.data);
+            if (!dontStore) this.store();
         }
     },
     onAddToBasket: function onAddToBasket(id) {
@@ -148,7 +157,7 @@ var BasketStore = Reflux.createStore({
         }
         $.get(this.url + '?id=' + id + '&count=1', function (res) {});
         this.trigger(this.totalSum());
-        this.storage.set(this.data);
+        this.store();
     },
     totalSum: function totalSum() {
         var total = 0;
@@ -260,9 +269,9 @@ var BasketLine = React.createClass({
             null,
             ' ',
             this.props.product.min_count,
-            ' x ',
+            'x ',
             (this.props.product.price / this.props.product.min_count).toFixed(1),
-            ' = ',
+            '= ',
             this.props.product.price
         ) : this.props.product.price;
         return React.createElement(
@@ -302,8 +311,9 @@ var BasketLine = React.createClass({
                     { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
                     ' ',
                     price,
-                    ' ',
-                    React.createElement('i', { className: 'fa fa-ruble' })
+                    ' ',
+                    React.createElement('i', {
+                        className: 'fa fa-ruble' })
                 )
             ),
             React.createElement(
@@ -322,8 +332,9 @@ var BasketLine = React.createClass({
                     { className: 'text-danger', style: { whiteSpace: 'nowrap' } },
                     ' ',
                     price,
-                    ' ',
-                    React.createElement('i', { className: 'fa fa-ruble' })
+                    ' ',
+                    React.createElement('i', {
+                        className: 'fa fa-ruble' })
                 )
             )
         );
@@ -402,11 +413,13 @@ var BasketList = React.createClass({
         var self = this;
         var items = this.props.items;
         var list = items ? items.map(function (item) {
-            item.key = item.product.id;return React.createElement(BasketLine, item);
+            item.key = item.product.id;
+            return React.createElement(BasketLine, item);
         }) : '';
         var btn = this.props.link ? React.createElement(
             'button',
-            { onClick: this.onSubmit, type: 'submit', target: 'orderForm', className: 'btn btn-success', href: this.props.link, alt: 'Потратить карму' },
+            { onClick: this.onSubmit, type: 'submit', target: 'orderForm', className: 'btn btn-success',
+                href: this.props.link, alt: 'Потратить карму' },
             React.createElement('i', { className: 'fa fa-shopping-cart' }),
             '  Потратить'
         ) : '';
@@ -567,5 +580,3 @@ var Rating = React.createClass({
         );
     }
 });
-
-//# sourceMappingURL=shop.js.map
