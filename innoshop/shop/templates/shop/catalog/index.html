@@ -5,7 +5,7 @@
     {{ block.super }}
     <script>
         $(document).ready(function () {
-            var products = {};
+            var products = [];
             {% for product in products %}
                 products[{{product.id}}] = {
                     name: '{{ product.name }}',
