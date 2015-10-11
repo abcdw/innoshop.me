@@ -3,27 +3,30 @@
 """Remove duplicate from pruducts"""
 import json
 
+
 def main():
     SKU = set()
 
-    double =[]
+    double = []
 
-    fi = open("../innoshop/fixtures/products.json")
+    js = ''
+    with open("../innoshop/fixtures/products.json") as fi:
+        js = json.load(fi)
 
-    js = json.load(fi)
-    fi.close()
-    result=[]
-    for x in js:
-        SKF=x["fields"]["SKU"]
+    result = []
+    for i, x in enumerate(js):
+        SKF = x["fields"]["SKU"]
         if SKF in SKU:
             double.append(SKF)
         else:
             SKU.add(SKF)
+            if x['fields']["description"] is None:
+                x['fields']["description"] = ""
             result.append(x)
-
-    fi = open("../innoshop/fixtures/products.json","w")
-    json.dump(result,fi)
+    print(double)
+    fi = open("../innoshop/fixtures/products.json", "w")
+    json.dump(result, fi)
     fi.close()
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
