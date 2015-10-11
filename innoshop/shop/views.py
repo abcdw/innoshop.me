@@ -5,12 +5,14 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
+from django.core import serializers
 from django.conf import settings
 
 from .models import Category, Faq
 from .models import Product
 from .models import Category, Faq, Message
 from .models import SearchQuery
+from .models import Order
 
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
@@ -184,3 +186,15 @@ def update_rating(request):
         except Exception, e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
+
+
+@staff_member_required
+def get_orders(request):
+    result = Order.objects.filter(status='active')
+    return HttpResponse(serializers.serialize("json", result))
+
+
+@staff_member_required
+def get_order_products(request):
+    result = Order.objects.filter(pk=request.GET.get("pk"))[0].get_items().all()
+    return HttpResponse(serializers.serialize("json", result))
