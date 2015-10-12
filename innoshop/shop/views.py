@@ -65,7 +65,7 @@ def index(request):
     cat = get_int(request, 'c')
     if cat:
         category = Category.objects.get(id=cat)
-        products = products.filter(categories__id__contains=cat)
+        products = products.filter(categories__id=cat)
 
     q = request.GET.get('q')
     if q:
