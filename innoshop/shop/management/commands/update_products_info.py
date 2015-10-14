@@ -16,8 +16,8 @@ NEED_ATRIBUTES = {
     re.compile(
         u'<i class="icon _no"></i>(.*)')}
 
-SETTINGS_FILE = 'shop/management/commands/updater_settings.json'
-LOG_FILE = 'shop/management/commands/log.txt'
+SETTINGS_FILE = 'shop/management/commands/settings/updater_settings.json'
+LOG_FILE = 'shop/management/commands/settings/log.txt'
 
 
 class Command(BaseCommand):
@@ -157,7 +157,7 @@ def save_settings(settings):
         json.dump(settings, settings_file)
 
 
-def get_content(adress, try_get_times):
+def get_content(adress, try_get_times=1):
     """Getting a page with product as a string"""
     response = urllib2.urlopen(adress)
     # try to get it for some times
