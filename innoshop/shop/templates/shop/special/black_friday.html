@@ -77,7 +77,7 @@
                                         </div>
                                         <div class="panel-footer clearfix">
                                             {% if product.price > 0 %}
-                                                <span class="h3">7&nbsp;у.е.</span>
+                                                <span class="h3">{% if forloop.counter0 == 0 %}1{% elif forloop.counter0 == 1 %}6{% elif forloop.counter0 == 2 %}1{% elif forloop.counter0 == 3 %}0{% endif %}&nbsp;у.е.</span>
                                             {% elif product.price == -1 %}
                                                     <h5>ожидается поставка</h5>
                                             {% elif product.price == -2 %}
