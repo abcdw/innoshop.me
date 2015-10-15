@@ -6,14 +6,16 @@
     <script>
         $(document).ready(function () {
             var products = [];
-            {% for product in products %}
-                products[{{product.id}}] = {
-                    name: '{{ product.name }}',
-                    price: {{ product.price }},
-                    id: {{ product.id }},
-                    min_count: {{ product.min_count }},
-                    rating: {{ product.rating }}
-                };
+            {% for cat in categories %}
+                {% for product in cat.products %}
+                    products[{{product.id}}] = {
+                        name: '{{ product.name }}',
+                        price: {{ product.price }},
+                        id: {{ product.id }},
+                        min_count: {{ product.min_count }},
+                        rating: {{ product.rating }}
+                    };
+                {% endfor %}
             {% endfor %}
             if (products.length > 0) {
                 ProductStore.setInitialState(products);
