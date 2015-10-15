@@ -50,47 +50,50 @@
     <div class="container">
         {% for cat in categories %}
             <div class="row">
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ cat.name }}</h3>
-                    </div>
-                    <div class="panel-body">
-                        {% for product in cat.products %}
-                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                                <div class="panel panel-warning product">
-                                    <div class="panel-heading">
-                                        <div title="{{ product.name | safe }}">{% if admin %}
-                                            <span class="badge">{{ product.id }}</span>
-                                            &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
-                                    </div>
-                                    <div class="panel-body text-center">
-                                        <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="">
-                                    </div>
-                                    <div class="panel-footer clearfix">
-                                        {% if product.min_count == 1 %}
-                                            <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
-                                        {% else %}
-                                            <span class="h3">
-                                            {% with numerator=product.price denominator=product.min_count %}
-                                                <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span>
-                                                <span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;
-                                                <i class="fa fa-ruble small"></i></span>
-                                            {% endwith %}
-                                        {% endif %}
+                <div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ cat.name }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {% for product in cat.products %}
+                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                    <div class="panel panel-warning product">
+                                        <div class="panel-heading">
+                                            <div title="{{ product.name | safe }}">{% if admin %}
+                                                <span class="badge">{{ product.id }}</span>
+                                                &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
+                                        </div>
+                                        <div class="panel-body text-center">
+                                            <img src="{{ product.img_url }}" width="150" height="150" alt="{{ product.name | safe }}" class="">
+                                        </div>
+                                        <div class="panel-footer clearfix">
+                                            {% if product.min_count == 1 %}
+                                                <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
+                                            {% else %}
+                                                <span class="h3">
+                                                {% with numerator=product.price denominator=product.min_count %}
+                                                    <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span>
+                                                    <span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;
+                                                    <i class="fa fa-ruble small"></i></span>
+                                                {% endwith %}
+                                            {% endif %}
 
-                                        <div class="pull-right" id="product-{{ product.id }}"></div>
-                                        {% if admin %}
-                                            <div id="product-rating-{{ product.id }}"></div>
-                                        {% endif %}
+                                            <div class="pull-right" id="product-{{ product.id }}"></div>
+                                            {% if admin %}
+                                                <div id="product-rating-{{ product.id }}"></div>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
         {% endfor %}
         <div class="row">
+            <div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
                 <!-- Put this script tag to the <head> of your page -->
                 <script type="text/javascript" src="//vk.com/js/api/openapi.js?117"></script>
 
@@ -103,6 +106,7 @@
                 <script type="text/javascript">
                     VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*"});
                 </script>
+            </div>
         </div>
     </div>
 {% endblock %}

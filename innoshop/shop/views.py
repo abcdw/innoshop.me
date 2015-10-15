@@ -97,15 +97,10 @@ def index(request):
 
 
 def black_friday(request):
-    #p = Product()
-    #p.name=u'Вазелин \"Норка\"'
-    #p.price=180.0
-    #p.img_url='http://i.imgur.com/iP3wo4v.png'
-    #p.SKU='9929292929'
-    #p.save()
     categories = [
-        {'name': u'У меня все отлично', 'products':Product.objects.filter(SKU='9929292929')},
-        {'name': u'Упс', 'products': Product.objects.filter(id__in=[2, 3])}]
+        {'name': u'ДЕНЬ МОЕЙ ЖОПЫ', 'products':Product.objects.filter(SKU__in=['-1'])},
+        {'name': u'У МЕНЯ ВСЕ ОТЛИЧНО', 'products':Product.objects.filter(SKU__in=[])}
+    ]
 
     context = {
         'categories': categories,
