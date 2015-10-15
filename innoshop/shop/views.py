@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -96,8 +97,12 @@ def index(request):
 
 
 def black_friday(request):
+    categories = [
+        {'name': u'У меня все отлично', 'products': Product.objects.filter(id__in=[0, 1])},
+        {'name': u'Упс', 'products': Product.objects.filter(id__in=[2, 3])}]
+
     context = {
-        'products': [],
+        'categories': categories,
         'admin': request.user.is_staff
     }
     return render(request, 'shop/special/black_friday.html', context)
