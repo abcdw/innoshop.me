@@ -8,13 +8,15 @@
             var products = [];
             {% for cat in categories %}
                 {% for product in cat.products %}
-                    products[{{product.id}}] = {
-                        name: '{{ product.name }}',
-                        price: {{ product.price }},
-                        id: {{ product.id }},
-                        min_count: {{ product.min_count }},
-                        rating: {{ product.rating }}
-                    };
+                    {% if product.price > 0 %}
+                        products[{{product.id}}] = {
+                            name: '{{ product.name }}',
+                            price: {{ product.price }},
+                            id: {{ product.id }},
+                            min_count: {{ product.min_count }},
+                            rating: {{ product.rating }}
+                        };
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
             if (products.length > 0) {
@@ -69,18 +71,15 @@
                                                  alt="{{ product.name | safe }}" class="">
                                         </div>
                                         <div class="panel-footer clearfix">
-                                            {% if product.min_count == 1 %}
+                                            {% if product.price > 0 %}
                                                 <span class="h3">{{ product.price }}&nbsp;<i
                                                         class="fa fa-ruble small"></i></span>
-                                            {% else %}
-                                                <span class="h3">
-                                                    {% with numerator=product.price denominator=product.min_count %}
-                                                        <span class="small">{{ product.min_count }} <i
-                                                                class="fa fa-close"></i> </span>
-                                                        <span class="">{{ numerator|div:denominator|floatformat }}</span>
-                                                        &nbsp;
-                                                        <i class="fa fa-ruble small"></i></span>
-                                                    {% endwith %}
+                                            {% elif product.price == -1 %}
+                                                    <h5>ожидается поставка</h5>
+                                            {% elif product.price == -2 %}
+                                                    <center><h5>мы работаем над этим</h5></center>
+                                            {% elif product.price == -3 %}
+                                                    <h5>нет в наличии</h5>
                                             {% endif %}
 
                                             <div class="pull-right" id="product-{{ product.id }}"></div>

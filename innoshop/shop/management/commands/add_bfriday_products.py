@@ -20,7 +20,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Аккредитация'
-            p.price = 500.0
+            p.price = -1
             p.img_url = '/static/bfriday/2.png'
             p.SKU = '-2'
             p.save()
@@ -90,7 +90,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Учебный план'
-            p.price = 500.0
+            p.price = -2
             p.img_url = '/static/bfriday/9.png'
             p.SKU = '-9'
             p.save()
@@ -130,7 +130,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Адекватные студенты'
-            p.price = 500.0
+            p.price = -3
             p.img_url = '/static/bfriday/13.png'
             p.SKU = '-13'
             p.save()
