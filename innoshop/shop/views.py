@@ -98,7 +98,7 @@ def index(request):
 
 def black_friday(request):
     categories = [
-        {'name': u'ЭТО РАЗРЫВ', 'products': Product.objects.filter(SKU__in=['-1', '-5', '-8', '-12'])},
+        {'name': u'ЭТО РАЗРЫВ', 'products': Product.objects.filter(SKU__in=['-1', '-5', '-8', '-16'])},
         {'name': u'У МЕНЯ ВСЕ ОТЛИЧНО', 'products': Product.objects.filter(SKU__in=['-4', '-10', '-11', '-6'])},
         {'name': u'У МЕНЯ ЖЕ НЕТ ВОЕННИКА!', 'products': Product.objects.filter(SKU__in=['-3', '-12', '-14', '-7'])},
         {'name': u'Я ИЗ АДМИНИСТРАЦИИ', 'products': Product.objects.filter(SKU__in=['-2', '-9', '-13', '-15'])}

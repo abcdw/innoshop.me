@@ -156,3 +156,13 @@ class Command(BaseCommand):
             p.save()
         except Exception:
             pass
+
+        try:
+            p = Product()
+            p.name = u'Массаж'
+            p.price = 500.0
+            p.img_url = '/static/bfriday/16.png'
+            p.SKU = '-16'
+            p.save()
+        except Exception:
+            pass
