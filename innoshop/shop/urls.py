@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^get_messages', views.get_messages, name='get_messages'),
     url(r'^update_rating', views.update_rating, name='update_rating'),
     url(r'^get_orders', views.get_orders, name='get_orders'),
-    url('^get_order_products', views.get_order_products, name='get_order_products')
+    url('^get_order_products', views.get_order_products, name='get_order_products'),
+    url('^black_friday', views.black_friday, name='black_friday')
     #  url(r'^order$', views.order, name='order'),
 ]

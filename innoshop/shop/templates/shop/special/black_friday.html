@@ -1,0 +1,188 @@
+{% extends "shop/layout/base.html" %}
+{% load mathfilters %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            var products = [];
+            {% for product in products %}
+                products[{{product.id}}] = {
+                    name: '{{ product.name }}',
+                    price: {{ product.price }},
+                    id: {{ product.id }},
+                    min_count: {{ product.min_count }},
+                    rating: {{ product.rating }}
+                };
+            {% endfor %}
+            if( products.length > 0 )
+            {
+                ProductStore.setInitialState(products);
+
+                for (var i in products) {
+                    React.render(React.createElement(Price, {
+                        price: products[i].price,
+                        id: i,
+                        count: BasketStore.getProductCount(i)
+                    }), document.getElementById('product-' + i));
+                    {% if admin %}
+                        React.render(React.createElement(Rating, {
+                            id: i,
+                            rating: products[i].rating,
+                            url: '{% url 'update_rating' %}'
+                        }), document.getElementById('product-rating-' + i));
+                    {% endif %}
+                }
+            }
+
+            if ($('#basket2').length)
+                React.render(React.createElement(Basket, {
+                    url: '{% url 'order' %}',
+                    price: BasketStore.totalSum()
+                }), document.getElementById('basket2'));
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        {% if category or q %}
+            <h1>{{ category.name }}</h1>
+
+
+            {% include 'shop/catalog/_pager.html' %}
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                        <div class="panel panel-info product">
+                            <div class="panel-heading">
+                                <div title="{{ product.name | safe }}">{% if admin %}
+                                    <span class="badge">{{ product.id }}</span>
+                                    &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
+                            </div>
+                            <div class="panel-body text-center">
+                                <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="">
+                            </div>
+                            <div class="panel-footer clearfix">
+                                {% if product.min_count == 1 %}
+                                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
+                                {% else %}
+                                    <span class="h3">
+                            {% with numerator=product.price denominator=product.min_count %}
+                                <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span>
+                                <span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;
+                                <i class="fa fa-ruble small"></i></span>
+                            {% endwith %}
+                                {% endif %}
+
+                                <div class="pull-right" id="product-{{ product.id }}"></div>
+                                {% if admin %}
+                                    <div id="product-rating-{{ product.id }}"></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if not products %}
+                    <div class="jumbotron">
+                        <h1>Отличная попытка!</h1>
+
+                        <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
+
+                        <p>Можно заказать их из параллельного мира, нажав на <span id="basket2"></span>
+                            <br>либо <a class="btn btn-default" href="{% url 'catalog' %}"><i
+                                    class="text-muted fa fa-binoculars"></i> продолжить охоту</a>
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+            {% include 'shop/catalog/_pager.html' %}
+        {% else %}
+
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                {% for category in catalog %}
+                    {% if category.children %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="heading{{ category.item.id }}">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                       href="#collapse{{ category.item.id }}"
+                                       aria-expanded="false" aria-controls="collapse{{ category.item.id }}">
+                                        {{ category.item.name }}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse{{ category.item.id }}" class="panel-collapse collapse out" role="tabpanel"
+                                 aria-labelledby="heading{{ category.item.id }}">
+                                <div class="panel-body">
+                                    {# sublist start #}
+                                    <div class="panel-group" id="accordion1" role="tablist"
+                                         aria-multiselectable="false">
+                                        {% for category in category.children %}
+                                            {% if category.children %}
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading" role="tab"
+                                                         id="heading{{ category.item.id }}">
+                                                        <h4 class="panel-title">
+                                                            <a role="button" data-toggle="collapse"
+                                                               data-parent="#accordion1"
+                                                               href="#collapse{{ category.item.id }}"
+                                                               aria-expanded="false"
+                                                               aria-controls="collapse{{ category.item.id }}">
+                                                                {{ category.item.name }}
+                                                            </a>
+                                                        </h4>
+                                                    </div>
+                                                    <div id="collapse{{ category.item.id }}"
+                                                         class="panel-collapse collapse out" role="tabpanel"
+                                                         aria-labelledby="heading{{ category.item.id }}">
+                                                        <div class="panel-body">
+                                                            {# sublist start #}
+                                                            <div class="panel-group" id="accordion2" role="tablist"
+                                                                 aria-multiselectable="false">
+                                                                {% for category in category.children %}
+                                                                    {% if not category.children %}
+                                                                        <div class="panel panel-success">
+                                                                            <div class="panel-heading">
+                                                                                <h4 class="panel-title"><a
+                                                                                        href="?c={{ category.item.id }}">{{ category.item.name | safe }}</a>
+                                                                                </h4>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                            {# sublist end #}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="panel panel-success">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title"><a
+                                                                href="?c={{ category.item.id }}">{{ category.item.name | safe }}</a>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    {# sublist end #}
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"><a
+                                        href="?c={{ category.item.id }}">{{ category.item.name | safe }}</a></h4>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

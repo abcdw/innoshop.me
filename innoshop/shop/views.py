@@ -95,6 +95,14 @@ def index(request):
     return render(request, 'shop/catalog/index.html', context)
 
 
+def black_friday(request):
+    context = {
+        'products': [],
+        'admin': request.user.is_staff
+    }
+    return render(request, 'shop/special/black_friday.html', context)
+
+
 def catalog(request):
     return HttpResponse('catalog')
 
