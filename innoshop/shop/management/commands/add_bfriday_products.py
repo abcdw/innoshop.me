@@ -10,7 +10,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'\"Норка\"'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/1.png'
             p.SKU = '-1'
             p.save()
@@ -30,7 +30,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Надежные друзья'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/3.png'
             p.SKU = '-3'
             p.save()
@@ -40,7 +40,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Соса-сола'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/4.png'
             p.SKU = '-4'
             p.save()
@@ -50,7 +50,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Безопасность'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/5.png'
             p.SKU = '-5'
             p.save()
@@ -60,7 +60,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'ГоПро'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/6.png'
             p.SKU = '-6'
             p.save()
@@ -70,7 +70,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Стайлинг-тул'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/7.png'
             p.SKU = '-7'
             p.save()
@@ -80,7 +80,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'ЖизньБезБоли'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/8.png'
             p.SKU = '-8'
             p.save()
@@ -100,7 +100,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Попкорн'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/10.png'
             p.SKU = '-10'
             p.save()
@@ -110,7 +110,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Сладкая парочка'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/11.png'
             p.SKU = '-11'
             p.save()
@@ -120,7 +120,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Беленькая'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/12.png'
             p.SKU = '-12'
             p.save()
@@ -140,7 +140,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Свежее дыхание'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/14.png'
             p.SKU = '-14'
             p.save()
@@ -150,7 +150,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Тушитель'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/15.png'
             p.SKU = '-15'
             p.save()
@@ -160,7 +160,7 @@ class Command(BaseCommand):
         try:
             p = Product()
             p.name = u'Массаж'
-            p.price = 500.0
+            p.price = 100500.0
             p.img_url = '/static/bfriday/16.png'
             p.SKU = '-16'
             p.save()
