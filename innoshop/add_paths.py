@@ -3,7 +3,7 @@ from subprocess import call
 
 
 class Command(BaseCommand):
-    help = 'Download image'
+    help = 'Create a folder with images from the site. If there is no folder it will be created, else used existingthere is no folder it will be created, else used existing. Images are named [their_sku].jpg'
 
     def add_arguments(self, parser):
         parser.add_argument('path', type=str)
