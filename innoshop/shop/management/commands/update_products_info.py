@@ -87,10 +87,14 @@ class Command(BaseCommand):
                                     i.pk,
                                     i.SKU,
                                     i.source_link))
-                    except urllib2.HTTPError as xxx_todo_changeme:
+                    except (urllib2.HTTPError, urllib2.URLError) as xxx_todo_changeme:
                         httplib.IncompleteRead = xxx_todo_changeme
                         log.write(
                             "[ERROR] pk={0} SKU={1} PAGE NOT FOUND {2}\n".
+                            format(i.pk, i.SKU, i.source_link))
+                    except Exception as e:
+                        log.write(
+                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n".
                             format(i.pk, i.SKU, i.source_link))
                     self.show_status(num)
             finally:
