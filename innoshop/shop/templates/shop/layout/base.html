@@ -8,12 +8,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{{ title | default:'Доставка товаров и продуктов питания в Иннополис - innoshop.me'  }}</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <!-- Bootstrap -->
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootstrap-flat.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/app.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.css">
-    {% block stylesheet %}{% endblock %}
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,6 +27,13 @@
     {% endblock %}
 
     {% block content %}{% endblock %}
+
+    <!-- Bootstrap -->
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-flat.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/app.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.css">
+    {% block stylesheet %}{% endblock %}
 
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
     <script src="{% static 'js/bootstrap.js' %}"></script>
