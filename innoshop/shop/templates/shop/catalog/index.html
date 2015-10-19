@@ -15,8 +15,7 @@
                     rating: {{ product.rating }}
                 };
             {% endfor %}
-            if( products.length > 0 )
-            {
+            if (products.length > 0) {
                 ProductStore.setInitialState(products);
 
                 for (var i in products) {
@@ -48,8 +47,15 @@
 
     <div class="container">
         {% if category or q %}
-            <h1>{{ category.name }}</h1>
+            {% if category_breadcrumbs %}
+                <ol class="breadcrumb">
+                    {% for item in category_breadcrumbs %}
+                        <li {% if item.id == category.id %}class="active"{% endif %}>{{ item.name }}</li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
 
+            <h1>{{ category.name | default:q }}</h1>
 
             {% include 'shop/catalog/_pager.html' %}
             <div class="row">
