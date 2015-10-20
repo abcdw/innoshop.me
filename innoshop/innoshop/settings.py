@@ -134,6 +134,16 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'assets'),
+    os.path.join(PROJECT_ROOT, 'static/img/0/'),
+    os.path.join(PROJECT_ROOT, 'static/img/1/'),
+    os.path.join(PROJECT_ROOT, 'static/img/2/'),
+    os.path.join(PROJECT_ROOT, 'static/img/3/'),
+    os.path.join(PROJECT_ROOT, 'static/img/4/'),
+    os.path.join(PROJECT_ROOT, 'static/img/5/'),
+    os.path.join(PROJECT_ROOT, 'static/img/6/'),
+    os.path.join(PROJECT_ROOT, 'static/img/7/'),
+    os.path.join(PROJECT_ROOT, 'static/img/8/'),
+    os.path.join(PROJECT_ROOT, 'static/img/9/'),
 )
 
 STATICFILES_FINDERS = (
