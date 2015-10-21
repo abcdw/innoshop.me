@@ -63,7 +63,10 @@ def index(request):
         """
         full_path = os.path.join(IMAGE_ROOT, product.local_image_path)
         if not os.path.exists(full_path):
-            call("wget -O {0} {1}".format(full_path, product.img_url),shell=True)
+            call(
+                "wget --random-wait -q -b -t 15 -T 2 -O {0} {1}".
+                format(full_path, product.img_url),
+                shell=True)
 
     catalog_tree = []
     catalog_list = list(
@@ -109,7 +112,7 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         products = paginator.page(paginator.num_pages)
 
-    #download images
+    # download images
     for p in products:
         if_absent_image_download(p)
 
