@@ -63,9 +63,16 @@ def index(request):
     products = Product.objects.get_sallable()
 
     cat = get_int(request, 'c')
+    category_breadcrumbs = []
     if cat:
         category = Category.objects.get(id=cat)
         products = products.filter(categories__id=cat)
+        cat_item = category
+        category_breadcrumbs.append(cat_item)
+        while cat_item.parent_id:
+            cat_item = Category.objects.get(id=cat_item.parent_id)
+            category_breadcrumbs.append(cat_item)
+        category_breadcrumbs.reverse()
 
     q = request.GET.get('q')
     if q:
@@ -85,6 +92,7 @@ def index(request):
 
     context = {
         'catalog': catalog_tree,
+        'category_breadcrumbs': category_breadcrumbs,
         'products': products,
         'q': q or '',
         'cat': cat or '',
