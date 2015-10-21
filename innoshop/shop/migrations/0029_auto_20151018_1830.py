@@ -12,16 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='order_hash',
-            field=models.CharField(max_length=32, null=True),
-        ),
-        migrations.AddField(
-            model_name='product',
-            name='local_image_path',
-            field=models.CharField(max_length=255, blank=True),
-        ),
-        migrations.AddField(
             model_name='productitem',
             name='currentId',
             field=models.IntegerField(default=1),

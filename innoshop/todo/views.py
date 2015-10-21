@@ -40,6 +40,7 @@ def admin_todo_list(request):
             t_product.currentId = id
             id += 1
             products.append(t_product)
+    print 'ok'
     products.sort(key=lambda x: x.category)
     context = {
         'products': products
