@@ -97,7 +97,7 @@ def index(request):
         'q': q or '',
         'cat': cat or '',
         'category': category or '',
-        'admin': request.user.is_staff
+        'todo': request.user.is_staff
     }
 
     return render(request, 'shop/catalog/index.html', context)
@@ -194,15 +194,3 @@ def update_rating(request):
         except Exception, e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
-
-
-@staff_member_required
-def get_orders(request):
-    result = Order.objects.filter(status='active')
-    return HttpResponse(serializers.serialize("json", result))
-
-
-@staff_member_required
-def get_order_products(request):
-    result = Order.objects.filter(pk=request.GET.get("pk"))[0].get_items().all()
-    return HttpResponse(serializers.serialize("json", result))
