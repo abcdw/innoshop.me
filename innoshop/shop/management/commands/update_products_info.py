@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
+from django.db.utils import IntegrityError
 import math
 import httplib
 import re
@@ -15,8 +16,8 @@ NEED_ATRIBUTES = {
     re.compile(
         u'<i class="icon _no"></i>(.*)')}
 
-SETTINGS_FILE = 'shop/management/commands/updater_settings.json'
-LOG_FILE = 'shop/management/commands/log.txt'
+SETTINGS_FILE = 'shop/management/commands/settings/updater_settings.json'
+LOG_FILE = 'shop/management/commands/settings/log.txt'
 
 
 class Command(BaseCommand):
@@ -49,25 +50,29 @@ class Command(BaseCommand):
                                     i.is_stock_empty = True
                                 else:
                                     i.is_stock_empty = False
-                                i.save()
+                                i.save(update_fields=['is_stock_empty'])
                                 # analize price
                                 price_str = new_values['actual_price']
                                 price_fl = float(price_str.replace(' ', ''))
                                 price_int = math.ceil(price_fl)
                                 if price_int != i.actual_price:
                                     i.actual_price = price_int
-                                    i.save()
+                                    i.save(['actual_price'])
+                                log.write(
+                                    "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
+                                    format(i.pk, i.SKU, old_price,
+                                           i.actual_price, old_is_stock_empty,
+                                           i.is_stock_empty))
                             else:
                                 log.write(
                                     "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
                                         i.pk,
                                         i.SKU,
                                         new_values['sku']))
+                        except IntegrityError:
                             log.write(
-                                "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                                format(i.pk, i.SKU, old_price,
-                                       i.actual_price, old_is_stock_empty,
-                                       i.is_stock_empty))
+                                "[ERROR] pk={0} UNICQUE constraint failed".format(
+                                    i.pk))
                         except IndexError:
                             i.is_stock_empty = True
                             i.save()
@@ -82,10 +87,14 @@ class Command(BaseCommand):
                                     i.pk,
                                     i.SKU,
                                     i.source_link))
-                    except urllib2.HTTPError as xxx_todo_changeme:
+                    except (urllib2.HTTPError, urllib2.URLError) as xxx_todo_changeme:
                         httplib.IncompleteRead = xxx_todo_changeme
                         log.write(
                             "[ERROR] pk={0} SKU={1} PAGE NOT FOUND {2}\n".
+                            format(i.pk, i.SKU, i.source_link))
+                    except Exception as e:
+                        log.write(
+                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n".
                             format(i.pk, i.SKU, i.source_link))
                     self.show_status(num)
             finally:
@@ -152,7 +161,7 @@ def save_settings(settings):
         json.dump(settings, settings_file)
 
 
-def get_content(adress, try_get_times):
+def get_content(adress, try_get_times=1):
     """Getting a page with product as a string"""
     response = urllib2.urlopen(adress)
     # try to get it for some times

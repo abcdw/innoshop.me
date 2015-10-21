@@ -6,6 +6,8 @@ pip install -r requirements.txt
 ./manage.py migrate
 ./manage.py loaddata fixtures/*
 ./manage.py collectstatic
+./manage.py add_paths
+./manage.py update_categories
 ./manage.py runserver
 ```
 

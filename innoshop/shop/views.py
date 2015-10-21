@@ -64,9 +64,16 @@ def index(request):
     products = Product.objects.get_sallable()
 
     cat = get_int(request, 'c')
+    category_breadcrumbs = []
     if cat:
         category = Category.objects.get(id=cat)
         products = products.filter(categories__id=cat)
+        cat_item = category
+        category_breadcrumbs.append(cat_item)
+        while cat_item.parent_id:
+            cat_item = Category.objects.get(id=cat_item.parent_id)
+            category_breadcrumbs.append(cat_item)
+        category_breadcrumbs.reverse()
 
     q = request.GET.get('q')
     if q:
@@ -86,11 +93,12 @@ def index(request):
 
     context = {
         'catalog': catalog_tree,
+        'category_breadcrumbs': category_breadcrumbs,
         'products': products,
         'q': q or '',
         'cat': cat or '',
         'category': category or '',
-        'admin': request.user.is_staff
+        'todo': request.user.is_staff
     }
 
     return render(request, 'shop/catalog/index.html', context)
@@ -202,15 +210,3 @@ def update_rating(request):
         except Exception, e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
-
-
-@staff_member_required
-def get_orders(request):
-    result = Order.objects.filter(status='active')
-    return HttpResponse(serializers.serialize("json", result))
-
-
-@staff_member_required
-def get_order_products(request):
-    result = Order.objects.filter(pk=request.GET.get("pk"))[0].get_items().all()
-    return HttpResponse(serializers.serialize("json", result))
