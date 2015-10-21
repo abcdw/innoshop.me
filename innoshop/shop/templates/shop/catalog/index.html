@@ -69,7 +69,11 @@
                         </div>
                         <div class="panel-body text-center">
                             {% with image_url=product.local_image_path %}
-                            <img src="{%static image_url %}" alt="{{ product.name | safe }}" class="">
+                            {% if image_url %}
+                            <img src="{% static image_url %}" alt="{{ product.name | safe }}" class="">
+                            {% else %}
+                            <img src="{{product.image_url}}" alt="{{ product.name | safe }}" class="">
+                            {%endif%}
                             {%endwith%}
                         </div>
                         <div class="panel-footer clearfix">
