@@ -73,7 +73,7 @@
                 <tbody>
                 {% for order in orders %}
                     <tr>
-                        <td><a href="/admin_view_order?pk={{ order.pk }}">{{ order.pk }}</a></td>
+                        <td><a href="/dashboard/view_order?pk={{ order.pk }}">{{ order.pk }}</a></td>
                         <td>{{ order.create_time }}</td>
                         <td>{{ order.contact }}</td>
                         <td>{{ order.comment }}</td>

@@ -68,7 +68,7 @@ def admin_todo_list_print(request):
 
 @staff_member_required
 def admin_view_order(request):
-    t_order = Order.objects.get(pk=request.GET.get("pk"));
+    t_order = Order.objects.get(pk=request.GET.get("pk"))
     products = []
     price = 0.0
     for t_product in t_order.get_items().all():
@@ -85,7 +85,7 @@ def admin_view_order(request):
         'ship_price': price * 0.05,
         'total': price * 1.05
     }
-    return render(request, 'admin/view_order.html', context)
+    return render(request, 'todo/view_order.html', context)
 
 
 @staff_member_required
@@ -99,12 +99,29 @@ def get_order_hash(request):
         order.order_hash = md.hexdigest()
         order.save()
         result = {'error': 0,
-                  'hash': order.order_hash};
+                  'hash': order.order_hash}
         response.content = json.dumps(result)
         return response
     except Exception, e:
         return HttpResponse({'error': e.message})
 
+@staff_member_required
+def set_order_status(request):
+    try:
+        order = Order.objects.get(pk=request.GET.get("pk"))
+        response = HttpResponse()
+        response['Content-Type'] = 'application/json'
+        order.status = request.GET.get("status")
+        md = hashlib.md5()
+        md.update(str(order.pk) + "@" + order.contact + "@" + order.create_time.__str__())
+        order.order_hash = md.hexdigest()
+        order.save()
+        result={'error':0,
+                'hash': order.order_hash}
+        response.content = json.dumps(result)
+        return response
+    except Exception, e:
+        return HttpResponse(json.dumps({'error':e.message}))
 
 @degrades
 def view_order(request):
@@ -127,6 +144,6 @@ def view_order(request):
             'date': order.create_time.strftime('%m/%d/%Y'),
             'admin': request.user.is_staff
         }
-        return render(request, 'user_view_order.html', context)
+        return render(request, 'todo/user_view_order.html', context)
     except Exception, e:
         return HttpResponse(json.dumps({'error': e.message}))
