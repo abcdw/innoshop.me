@@ -2,6 +2,5 @@
 db.sqlite3
 tools/asyncparser/node_modules/
 utils/bootstrap-builder/node_modules/
-innoshop/static
 innoshop/media
 innoshop/.idea

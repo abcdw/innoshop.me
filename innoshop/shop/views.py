@@ -89,7 +89,7 @@ def index(request):
         'q': q or '',
         'cat': cat or '',
         'category': category or '',
-        'admin': request.user.is_staff
+        'todo': request.user.is_staff
     }
 
     return render(request, 'shop/catalog/index.html', context)

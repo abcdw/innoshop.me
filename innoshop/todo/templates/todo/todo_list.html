@@ -1,0 +1,76 @@
+{% extends "todo/layout/base.html" %}
+{% block content %}
+     <div class="col-md-12 col-lg-12">
+        <header class="panel-heading">
+            <div class="panel-actions">
+                 <a href="print_todo_list.html" target="_blank" class="fa fa-print" ></a>
+            </div>
+
+            <h2 class="panel-title">TODO List</h2>
+
+        </header>
+
+        <div class="panel-body">
+            <table class="table table-bordered table-striped mb-none" id="datatable-default">
+                <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Категория</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Закупочная цена</th>
+                    <th>Количество</th>
+                    <th>Изображение</th>
+                    <th>Статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td align="center">{{ product.SKU }}</td>
+                        <td align="center">{{ product.category }}</td>
+                        <td align="center">{{ product.name }}</td>
+                        <td align="center">{{ product.actual_price }}</td>
+                        <td align="center" id="boughtPrice{{ product.currentId }}" onclick="Clicked({{ product.currentId }})">{{ product.actual_price }}</td>
+                        <td align="center" >{{ product.count }} * {{ product.min_count }} в уп.</td>
+                        <td><img src="{{ product.img_url }}" width="80" height="80"/></td>
+                        <td align="center" id="{{ product.currentId }}">
+                            <button type="button" class="mb-xs mt-xs mr-xs btn-xs btn-success" onclick="MarkStatus({{ product.currentId }},1)"><i class="fa fa-check fa-lg"></i> </button>
+                            <br  />
+                            <button type="button" class="mb-xs mt-xs mr-xs btn-xs btn-danger" onclick="MarkStatus({{ product.currentId }},3)"><i class="fa fa-times fa-lg"></i> </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    function MarkStatus(id,status){
+        var cell = document.getElementById(id);
+        if(status==1){
+            cell.setAttribute("bgColor", "#47A447");
+        }
+        if(status==2){
+            cell.setAttribute("bgColor", "#ED9C28");
+        }
+        if(status==3){
+            cell.setAttribute("bgColor", "#D2322D");
+        }
+    }
+    function Clicked(id){
+        var x = document.getElementById("boughtPrice" + id);
+        x.innerHTML = "<input type=\"text\" class=\"form-control\" id=\"priceChanged" +id + "\">";
+        $("#priceChanged"+id).focus()
+        x.setAttribute('onclick','""')
+
+        x.onkeyup = function(){
+            if (event.keyCode === 13) {
+                MarkStatus(id, 2);
+                x.innerText = $("#priceChanged"+id).val();
+                x.setAttribute("onclick","Clicked(boughtPrice"+id+")");
+            }
+        }
+    }
+    </script>
+{% endblock %}
