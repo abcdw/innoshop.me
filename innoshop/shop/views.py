@@ -177,6 +177,7 @@ def feedback(request):
         feedback_form = FeedbackForm(request.POST)
         if feedback_form.is_valid():
             feedback_form.create_feedback()
+            return render(request, 'shop/feedback_thanks.html', {})
     form = FeedbackForm()
     try:
         faq = Faq.objects.get(name='FAQ')
