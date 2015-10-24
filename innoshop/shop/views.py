@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -123,10 +124,28 @@ def index(request):
         'q': q or '',
         'cat': cat or '',
         'category': category or '',
-        'admin': request.user.is_staff
+        'todo': request.user.is_staff
     }
 
     return render(request, 'shop/catalog/index.html', context)
+
+
+def black_friday(request):
+    categories = [
+        {'name': u'ЭТО РАЗРЫВ', 'products': Product.objects.filter(SKU__in=[
+            '-1', '-5', '-8', '-16'])},
+        {'name': u'У МЕНЯ ВСЕ ОТЛИЧНО', 'products': Product.objects.filter(
+            SKU__in=['-4', '-10', '-11', '-6'])},
+        {'name': u'У МЕНЯ ЖЕ НЕТ ВОЕННИКА!', 'products': Product.
+         objects.filter(SKU__in=['-3', '-12', '-14', '-7'])},
+        {'name': u'Я ИЗ АДМИНИСТРАЦИИ', 'products': Product.objects.filter(
+            SKU__in=['-2', '-9', '-13', '-15'])}]
+
+    context = {
+        'categories': categories,
+        'admin': request.user.is_staff
+    }
+    return render(request, 'shop/special/black_friday.html', context)
 
 
 def catalog(request):
@@ -193,6 +212,7 @@ def feedback(request):
         feedback_form = FeedbackForm(request.POST)
         if feedback_form.is_valid():
             feedback_form.create_feedback()
+            return render(request, 'shop/feedback_thanks.html', {})
     form = FeedbackForm()
     try:
         faq = Faq.objects.get(name='FAQ')

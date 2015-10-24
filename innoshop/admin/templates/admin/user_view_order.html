@@ -1,0 +1,108 @@
+{% extends "admin/layout/view_order_base.html" %}
+{% load static from staticfiles %}
+{% block content %}
+    <div class="invoice">
+        <header class="clearfix">
+            <div class="row">
+                <div class="col-sm-6 mt-md">
+                    <h2 class="h2 mt-none mb-sm text-dark text-bold">ЗАКАЗ</h2>
+                    <h4 class="h4 m-none text-dark text-bold">#{{ order.pk }}</h4>
+                </div>
+                <div class="col-sm-6 text-right mt-md mb-md">
+                    <div class="ib">
+                        <img src="{% static 'admin/assets/images/invoice_logo.png' %}" alt="Binnocl Group"/>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="bill-info">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="bill-to">
+                        <p class="h5 mb-xs text-dark text-semibold">Получатель:</p>
+                        <address>
+                            <a href="https://telegram.me/{{ order.contact }}">
+                                {{ order.contact }}
+                            </a>
+                        </address>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bill-data text-right">
+                        <p class="mb-none">
+                            <span class="text-dark">Дата заказа:</span>
+                            <span class="value">{{ date }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table invoice-items">
+                <thead>
+                <tr class="h4 text-dark">
+                    <th id="cell-id" class="text-semibold">#</th>
+                    <th id="cell-item" class="text-semibold">Товар</th>
+                    <th id="cell-price" class="text-center text-semibold">Цена</th>
+                    <th id="cell-qty" class="text-center text-semibold">Количество</th>
+                    <th id="cell-total" class="text-center text-semibold">Итого</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{ product.SKU }}</td>
+                        <td class="text-semibold text-dark">{{ product.name }}</td>
+                        <td class="text-center">{{ product.price }}</td>
+                        <td class="text-center">{{ product.count }} * {{ product.min_count }} в уп.</td>
+                        <td class="text-center">{{ product.total_cost }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="invoice-summary">
+            <div class="row">
+
+                <div class="col-sm-4 col-sm-offset-8">
+                    <table class="table h5 text-dark" id="invoice_data">
+                        <tbody>
+                        <tr class="b-top-none">
+                            <td colspan="2">Итого</td>
+                            <td class="text-left">{{ price }} Руб.</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Доставка</td>
+                            <td class="text-left">{{ ship_price }} Руб.</td>
+                        </tr>
+                        <tr class="h5">
+                            <td colspan="2">Итоговая сумма</td>
+                            <td class="text-left">{{ total }} Руб.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label class="col-md-6 control-label"><h4>Комментарий к заказу: {{ order.comment }}</h4>
+                </label>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        window.onload = function () {
+            document.title = "Заказ # {{ order.pk }}";
+        }
+    </script>
+    {% if admin %}
+        <script>
+            window.print();
+        </script>
+    {% endif %}
+{% endblock %}

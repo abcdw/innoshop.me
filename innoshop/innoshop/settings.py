@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'maintenancemode',
     'mathfilters',
     'django_extensions',
+    'todo'
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'

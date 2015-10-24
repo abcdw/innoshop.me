@@ -89,6 +89,7 @@ class Order(models.Model):
     text = models.TextField(blank=True)
     photo = models.ImageField(upload_to='orders', blank=True)
     status = StatusField()
+    order_hash = models.CharField(max_length=32, null=True)
 
     def get_items(self):
         return self.productitem_set
@@ -113,6 +114,10 @@ class ProductItem(models.Model):
         blank=True)  # Link to original web-page
     img_url = models.CharField(max_length=255, blank=True)
     bought = models.BooleanField(default=False, blank=False)
+    currentId = models.IntegerField(default=1)
+
+    def total_cost(self):
+        return self.count*self.price
 
     def __unicode__(self):
         return self.name
