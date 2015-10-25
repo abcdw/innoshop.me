@@ -1,6 +1,6 @@
 {% extends "shop/layout/base.html" %}
 {% load mathfilters %}
-
+{% load staticfiles %}
 {% block javascript %}
     {{ block.super }}
     <script>
@@ -60,27 +60,33 @@
             {% include 'shop/catalog/_pager.html' %}
             <div class="row">
                 {% for product in products %}
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                        <div class="panel panel-info product">
-                            <div class="panel-heading">
-                                <div title="{{ product.name | safe }}">{% if admin %}
-                                    <span class="badge">{{ product.id }}</span>
-                                    &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
-                            </div>
-                            <div class="panel-body text-center">
-                                <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="">
-                            </div>
-                            <div class="panel-footer clearfix">
-                                {% if product.min_count == 1 %}
-                                    <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
-                                {% else %}
-                                    <span class="h3">
-                            {% with numerator=product.price denominator=product.min_count %}
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <div class="panel panel-info product">
+                        <div class="panel-heading">
+                            <div title="{{ product.name | safe }}">{% if admin %}
+                                <span class="badge">{{ product.id }}</span>
+                                &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
+                        </div>
+                        <div class="panel-body text-center">
+                            {% with image_url=product.local_image_path %}
+                            {% if image_url %}
+                            <img src="{% static image_url %}" alt="{{ product.name | safe }}" class="">
+                            {% else %}
+                            <img src="{{product.image_url}}" alt="{{ product.name | safe }}" class="">
+                            {%endif%}
+                            {%endwith%}
+                        </div>
+                        <div class="panel-footer clearfix">
+                            {% if product.min_count == 1 %}
+                            <span class="h3">{{ product.price }}&nbsp;<i class="fa fa-ruble small"></i></span>
+                            {% else %}
+                            <span class="h3">
+                                {% with numerator=product.price denominator=product.min_count %}
                                 <span class="small">{{ product.min_count }} <i class="fa fa-close"></i> </span>
                                 <span class="">{{ numerator|div:denominator|floatformat }}</span>&nbsp;
                                 <i class="fa fa-ruble small"></i></span>
                             {% endwith %}
-                                {% endif %}
+                            {% endif %}
 
                                 <div class="pull-right" id="product-{{ product.id }}"></div>
                                 {% if admin %}
