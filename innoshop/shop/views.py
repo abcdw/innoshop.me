@@ -17,7 +17,7 @@ from .models import Order
 
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
-from innoshop.settings import IMAGE_ROOT
+from innoshop.settings import MEDIA_ROOT
 
 import json
 import inspect
@@ -62,7 +62,7 @@ def index(request):
         :returns: -
 
         """
-        full_path = os.path.join(IMAGE_ROOT, product.local_image_path)
+        full_path = os.path.join(MEDIA_ROOT, product.local_image.name)
         if not os.path.exists(full_path):
             call(
                 "wget --random-wait -q -b -t 15 -T 2 -O {0} {1}".
