@@ -9,6 +9,8 @@ from model_utils.fields import StatusField
 from model_utils import Choices
 from functools import reduce
 
+from innoshop.settings import MEDIA_ROOT
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -64,7 +66,7 @@ class Product(models.Model):
     actual_price = models.IntegerField(
         default=10000000)  # actual price from shop
     min_count = models.IntegerField(default=1)
-    local_image_path = models.CharField(max_length=255, blank=True)
+    local_image = models.FileField(upload_to=MEDIA_ROOT, blank=True)
     img_url = models.CharField(max_length=255, blank=True)
     is_stock_empty = models.BooleanField(default=True)
     source_link = models.CharField(
