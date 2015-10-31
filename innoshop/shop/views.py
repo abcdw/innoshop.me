@@ -114,8 +114,8 @@ def index(request):
         products = paginator.page(paginator.num_pages)
 
     # download images
-    for p in products:
-        if_absent_image_download(p)
+    #for p in products:
+    #    if_absent_image_download(p)
 
     context = {
         'catalog': catalog_tree,
