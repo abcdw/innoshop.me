@@ -68,7 +68,7 @@
                                 &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
                         </div>
                         <div class="panel-body text-center">
-                            <img src="{{  product.img_url }}" alt="{{ product.name | safe }}" class="">
+                            <img height="150" width="150" src="{{  product.img_url }}" alt="{{ product.name | safe }}" class="">
                         </div>
                         <div class="panel-footer clearfix">
                             {% if product.min_count == 1 %}
