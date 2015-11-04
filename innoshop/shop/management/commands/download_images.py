@@ -16,7 +16,7 @@ class Command(BaseCommand):
         path = options['path']
 
         product_count = Product.objects.all().count()
-        for p in Product.objects.all()[:10]:
+        for p in Product.objects.all():
             file_name = re.sub(r'.*/', '', p.img_url)
             file_path = path + '/' + file_name
             try:
