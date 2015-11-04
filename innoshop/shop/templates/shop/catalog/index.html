@@ -49,8 +49,9 @@
         {% if category or q %}
             {% if category_breadcrumbs %}
                 <ol class="breadcrumb">
+                    <li><a href="/">Все товары</a></li>
                     {% for item in category_breadcrumbs %}
-                        <li {% if item.id == category.id %}class="active"{% endif %}>{{ item.name }}</li>
+                    <li {% if item.id == category.id %}class="active">{% else %}><a href="?c={{ item.id }}">{% endif %}{{ item.name }}</a></li>
                     {% endfor %}
                 </ol>
             {% endif %}
