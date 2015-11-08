@@ -110,6 +110,14 @@
             {% include 'shop/catalog/_pager.html' %}
         {% else %}
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                <div class="list-group panel panel-default">
+                        <h4 class="panel-title">
+                            <a class="list-group-item list-group-item-success" role="button"
+                                href="https://pi.pizza" target="_blank">
+                                &pi;.pizza &mdash; пожалуй, лучшая пицца города Иннополис
+                            </a>
+                        </h4>
+                </div>
                 {% for category in catalog %}
                     {% if category.children %}
                         <div class="list-group panel panel-default">
