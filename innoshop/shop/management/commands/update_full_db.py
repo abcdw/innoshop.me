@@ -6,6 +6,7 @@ from shop.models import Product, Category
 import urllib2
 import math
 import re
+from innoshop.settings import TRY_UPDATE_TIMES
 
 
 LOG_PATH = open(

@@ -4,8 +4,8 @@ from django.db.utils import IntegrityError
 import math
 import httplib
 import re
-import json
 import urllib2
+from innoshop.settings import TRY_UPDATE_TIMES
 from shop.models import Product
 from shop.management.commands.update_full_db import product_atributes,get_content
 
@@ -96,7 +96,7 @@ class Command(BaseCommand):
                             "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} is_stock_empty=True".
                             format(i.pk, i.SKU, i.source_link))
                         i.is_stock_empty = True
-                        s.save()
+                        i.save()
                     self.show_status(num)
             finally:
                 save_settings(self.settings)
@@ -139,27 +139,30 @@ class Command(BaseCommand):
 
 
 def load_settings():
-    """Load settings or create if file not found."""
-    try:
-        with open(SETTINGS_FILE) as settings_file:
-            settings = json.load(settings_file)
-            return settings
-    except (IOError, ValueError) as e:
-        count = len(Product.objects.all())
-        settings = {
-            "try_get_times": 7,
-            "first_product": 0,
-            "update_once": count-1,
-            "products_in_fine": count-1}
-        with open(SETTINGS_FILE, 'w+') as settings_file:
-            json.dump(settings, settings_file)
-        return settings
+    count = Product.objects.count()
+    settings = {
+        "try_get_times": TRY_UPDATE_TIMES,
+        "first_product": 0,
+        "update_once": count,
+        "products_in_fine": count}
+    return settings
 
 
 def save_settings(settings):
     """save settings"""
-    with open(SETTINGS_FILE, 'w') as settings_file:
-        json.dump(settings, settings_file)
+    pass
+
+def get_content(adress, try_get_times=1):
+    """Getting a page with product as a string"""
+    response = urllib2.urlopen(adress)
+    # try to get it for some times
+    for x in range(try_get_times):
+        if response.getcode() == 200:
+            result = response.read()
+            return result
+        response = urllib2.urlopen(adress)
+    raise ValueError
+
 
 def pars(text):
     """Parsing of the text and getting attributes values as a strings.
