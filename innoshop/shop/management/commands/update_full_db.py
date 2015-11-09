@@ -63,8 +63,8 @@ def error_log(func):
             log_error(LOG_PATH, func, e)
 
 
-def log_error(log_file, func, e):
-    log_file.write('[ERROR] in {0}: {1}\n'.format(func.__name__, e.__str__()))
+def log_error(log_file, func, e,*args):
+    log_file.write('[ERROR] in {0}: {1} {2}\n'.format(func.__name__, e.__str__(),unicode(args)))
 
 def category_address_generator():
     for i in CATEGORIES_LIST:
@@ -73,7 +73,6 @@ def category_address_generator():
         yield (BASE_URL+x for x in category_pages)
 
 
-@error_log
 def product_page_urls(category_url, log_file):
     full_category_url = category_url.replace('\n', PREFIX)
     try:
@@ -89,26 +88,26 @@ def product_page_urls(category_url, log_file):
 
 def create_or_update_product(url, log):
     """Update a product if exists else create it"""
-    row_data = upi.get_content(url)
-    atrr = product_atributes(row_data, log)
-    atrr['source_link'] = url
-    log.write('{0} \n'.format(atrr))
-    product = Product.objects.filter(SKU=atrr['sku'])
-    if not any(product):  # prondct doesn't exist
-        create_product(atrr, log)
-        log.write('Create product source_link={0}\n'.format(url))
-    else:
-        update_product(product, atrr, log)
-        log.write('Udate product source_link={0}\n'.format(url))
-
-
-def product_atributes(row_data, log):
-    """Pars `row_data` and returns atributs of a product as a dict"""
     try:
+        atrr = product_atributes(url, log)
+        product,created = Product.objects.get_or_create(SKU=atrr['SKU'])
+        if created:  # product doesn't exist
+            fill_product(product,atrr, log)
+            log.write('Create product source_link={0}\n'.format(url))
+        else:
+            update_product(product, atrr, log)
+            log.write('Udate product source_link={0}\n'.format(url))
+    except Exception as e:
+        log_error(log,create_or_update_product,e)
+
+def product_atributes(url, log):
+    """Pars page with `url` and returns atributs of a product as a dict"""
+    try:
+        row_data = upi.get_content(url)
         # price
         actual_price_str = re.findall(ACTUAL_PRICE_REGX, row_data).pop()
-        actual_price = math.ceil(float(actual_price_str))
-        sku = re.findall(SKU_REGX, row_data).pop()
+        actual_price = math.ceil(float(actual_price_str.replace(" ","")))
+        SKU = re.findall(SKU_REGX, row_data).pop()
         is_stock_empty = bool(re.findall(IS_STOCK_EMPTY_REGX, row_data))
         image, name = re.findall(IMAGE_AND_NAME_REGX, row_data).pop()
         grand_category = re.findall(GRAND_CATEGORY_REGX, row_data).pop()
@@ -116,63 +115,61 @@ def product_atributes(row_data, log):
         category = re.findall(CATEGORY_REGX, row_data).pop()
         return {
             'actual_price': actual_price,
-            'sku': sku,
+            'SKU': SKU,
             'is_stock_empty': is_stock_empty,
-            'image_url': image,
-            'name': unicode(name, 'utf8'),
-            'grand_category': unicode(grand_category, 'utf8'),
-            'parent_category': unicode(parent_category.strip(), 'utf8'),
-            'category': unicode(category.strip(), 'utf8')}
+            'img_url': image,
+            'name': name.decode('utf-8'),
+            'grand_category': grand_category.decode('utf-8'),
+            'parent_category': parent_category.decode( 'utf-8'),
+            'category': category.decode( 'utf-8'),
+            'source_link':url.decode('utf-8')
+        }
     except Exception as e:
         log_error(log, product_atributes, e)
 
 
-@error_log
-def create_category(name, parent=None):
-    category = Category.objects.create(name=name, parent=parent)
-    return category
 
-
-def create_product(atrr, log):
+def set_parent(log,category, parent=None):
     try:
-        categories = Category.objects.filter(
-            name__in=[
-                atrr['category'],
-                atrr['parent_category'],
-                atrr['grand_category']])
-        category = categories.filter(name=atrr['category'])
-        if not any(category):  # category doesn't exist
-            parent_category = categories.filter(
-                name=atrr['parent_category'])
-            if not any(parent_category):  # parent_category doesn't exist
-                grand_category = categories.filter(name=atrr['grand_category'])
-                if not any(grand_category):  # grand category doesn't exist
-                    grand_category = create_category(atrr['grand_category'])
-                parent_category = create_category(
-                    atrr['parent_category'],
-                    grand_category)
-            category = create_category(atrr['category'], parent_category)
-        return Product(
-            name=atrr['name'],
-            SKU=atrr['sku'],
-            categories=category,
-            actual_price=atrr['actual_price'],
-            img_url=atrr['image_url'],
-            is_stock_empty=atrr['is_stock_empty'],
-            source_link=atrr['source_link'])
+        if parent:
+            category.parent = parent
+            category.save()
+        return category
     except Exception as e:
-        log_error(log, create_product, e)
+        log_error(log,set_parent,e)
+
+
+def fill_product(p,atrr, log):
+    assert atrr != None
+    try:
+        category,created = Category.objects.get_or_create(name=atrr['category'])
+        if created:  # category doesn't exist
+            parent_category,created = Category.objects.get_or_create(name=atrr['parent_category'])
+            if created:  # parent_category doesn't exist
+                grand_category,created = Category.objects.get_or_create(name=atrr['grand_category'])
+                parent_category = set_parent(log,parent_category,grand_category)
+            category = set_parent(log,category, parent_category)
+        p.name=atrr['name']
+        #p.actual_price=atrr['actual_price']
+        p.price = atrr['actual_price']
+        p.img_url=atrr['img_url']
+        p.is_stock_empty=atrr['is_stock_empty']
+        p.source_link=atrr['source_link']
+        p.categories=[category,parent_category,grand_category]
+        p.save()
+    except Exception as e:
+        log_error(log, fill_product, e)
 
 
 
 def update_product(product, atrr, log):
-    try:
-        for x in product.__dict__.keys():
-            if x in atrr.keys():
-                product[x] = atrr[x]
-        product.save()
-    except Exception as e:
-        log_error(log, update_product, e)
+    #try:
+    product.price = atrr['actual_price']
+    #product.actual_price = atrr['actual_price']
+    product.is_stock_empty = atrr['is_stock_empty']
+    product.save()
+    #except Exception as e:
+    #    log_error(log, update_product, e)
 
 
 class Command(BaseCommand):
@@ -182,10 +179,10 @@ class Command(BaseCommand):
         try:
             log = LOG_PATH
             for i in open(CATEGORY_FILE).readlines():
-                self.stdout.write(i+'\n')
                 for x in product_page_urls(i, log):
-                    self.stdout.write(x)
-                    create_or_update_product(x, log)
-                    return
+                    try:
+                        create_or_update_product(x, log)
+                    except Exception as e:
+                        log_error(log,self.handle,e)
         finally:
             log.close()
