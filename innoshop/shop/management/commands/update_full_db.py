@@ -6,7 +6,6 @@ from shop.models import Product, Category
 import urllib2
 import math
 import re
-from shop.management.commands import update_products_info as upi
 
 
 LOG_PATH = open(
@@ -68,7 +67,7 @@ def log_error(log_file, func, e,*args):
 
 def category_address_generator():
     for i in CATEGORIES_LIST:
-        text = upi.get_content(i, 2)
+        text = get_content(i, 2)
         category_pages = re.findall(SUBCATEGORY_PAGE_REGX, text)
         yield (BASE_URL+x for x in category_pages)
 
@@ -76,7 +75,7 @@ def category_address_generator():
 def product_page_urls(category_url, log_file):
     full_category_url = category_url.replace('\n', PREFIX)
     try:
-        row_data = upi.get_content(full_category_url)
+        row_data = get_content(full_category_url)
         result = re.findall(PRODUCT_PAGE_REGX, row_data)
         if any(result):
             return result
@@ -100,10 +99,22 @@ def create_or_update_product(url, log):
     except Exception as e:
         log_error(log,create_or_update_product,e)
 
+
+def get_content(adress, try_get_times=1):
+    """Getting a page with product as a string"""
+    response = urllib2.urlopen(adress)
+    # try to get it for some times
+    for x in range(try_get_times):
+        if response.getcode() == 200:
+            result = response.read()
+            return result
+        response = urllib2.urlopen(adress)
+    raise ValueError
+
 def product_atributes(url, log):
     """Pars page with `url` and returns atributs of a product as a dict"""
     try:
-        row_data = upi.get_content(url)
+        row_data = get_content(url)
         # price
         actual_price_str = re.findall(ACTUAL_PRICE_REGX, row_data).pop()
         actual_price = math.ceil(float(actual_price_str.replace(" ","")))
