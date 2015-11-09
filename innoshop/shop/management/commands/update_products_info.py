@@ -7,7 +7,7 @@ import re
 import json
 import urllib2
 from shop.models import Product
-
+from shop.management.commands import update_full_db as ufd
 
 # atributes that we want to get
 NEED_ATRIBUTES = {
@@ -37,14 +37,13 @@ class Command(BaseCommand):
             try:
                 for num, i in enumerate(self.next_products()):
                     try:
-                        text = get_content(
-                            i.source_link,
-                            self.settings['try_get_times'])
+                        text = ufd.product_atributes(
+                            i.source_link,log)
                         try:
                             old_price = i.actual_price
                             old_is_stock_empty = i.is_stock_empty
                             new_values = pars(text)
-                            if i.SKU == new_values['sku']:
+                            if i.SKU == new_values['SKU']:
                                 # update is_stock_empty
                                 if 'is_stock_empty' in new_values:
                                     i.is_stock_empty = True
@@ -94,8 +93,9 @@ class Command(BaseCommand):
                             format(i.pk, i.SKU, i.source_link))
                     except Exception as e:
                         log.write(
-                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n".
+                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} is_stock_empty=True".
                             format(i.pk, i.SKU, i.source_link))
+                        i.is_stock_empty = True
                     self.show_status(num)
             finally:
                 save_settings(self.settings)
