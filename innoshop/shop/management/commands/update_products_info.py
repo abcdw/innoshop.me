@@ -96,6 +96,7 @@ class Command(BaseCommand):
                             "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} is_stock_empty=True".
                             format(i.pk, i.SKU, i.source_link))
                         i.is_stock_empty = True
+                        s.save()
                     self.show_status(num)
             finally:
                 save_settings(self.settings)
