@@ -7,7 +7,7 @@ import re
 import json
 import urllib2
 from shop.models import Product
-from shop.management.commands import update_full_db as ufd
+from shop.management.commands.update_full_db import product_atributes,get_content
 
 # atributes that we want to get
 NEED_ATRIBUTES = {
@@ -37,7 +37,7 @@ class Command(BaseCommand):
             try:
                 for num, i in enumerate(self.next_products()):
                     try:
-                        text = ufd.product_atributes(
+                        text = product_atributes(
                             i.source_link,log)
                         try:
                             old_price = i.actual_price
@@ -160,19 +160,6 @@ def save_settings(settings):
     """save settings"""
     with open(SETTINGS_FILE, 'w') as settings_file:
         json.dump(settings, settings_file)
-
-
-def get_content(adress, try_get_times=1):
-    """Getting a page with product as a string"""
-    response = urllib2.urlopen(adress)
-    # try to get it for some times
-    for x in range(try_get_times):
-        if response.getcode() == 200:
-            result = response.read()
-            return result
-        response = urllib2.urlopen(adress)
-    raise ValueError
-
 
 def pars(text):
     """Parsing of the text and getting attributes values as a strings.
