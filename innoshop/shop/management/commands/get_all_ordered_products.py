@@ -23,7 +23,7 @@ class Command(BaseCommand):
         for k, v in product_count.iteritems():
             try:
                 product = Product.objects.get(SKU=k)
-                if product.SKU > 0:
+                if int(product.SKU) > 0:
                     print v, product.name.encode('utf-8')
             except:
                 pass
