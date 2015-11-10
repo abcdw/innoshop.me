@@ -21,5 +21,10 @@ class Command(BaseCommand):
                 product_count[product_item.SKU] += product_item.count
 
         for k, v in product_count.iteritems():
-            print Product.objects.get(SKU=k).name, v
+            try:
+                product = Product.objects.get(SKU=k)
+                if product.SKU > 0:
+                    print v, product.name.encode('utf-8')
+            except:
+                pass
 
