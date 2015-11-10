@@ -58,8 +58,8 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    SKU = models.CharField(max_length=100, unique=True)
+    name = models.CharField(db_index=True, max_length=255)
+    SKU = models.CharField(db_index=True, max_length=100, unique=True)
     categories = models.ManyToManyField(Category)
     description = models.TextField(blank=True)
     price = models.IntegerField(default=10000000)  # price from shop

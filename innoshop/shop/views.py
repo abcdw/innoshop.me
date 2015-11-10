@@ -114,8 +114,15 @@ def index(request):
         products = paginator.page(paginator.num_pages)
 
     # download images
-    #for p in products:
-    #    if_absent_image_download(p)
+    def update_img_urls():
+        import re
+        imgs_url = '/static/product_images'
+        pattern = re.compile('.*/')
+        get_filename = lambda x: re.sub(pattern, '', x.img_url)
+        for p in products:
+            p.img_url = imgs_url + '/' + get_filename(p)
+
+    update_img_urls()
 
     context = {
         'catalog': catalog_tree,
@@ -124,9 +131,8 @@ def index(request):
         'q': q or '',
         'cat': cat or '',
         'category': category or '',
-        'todo': request.user.is_staff
+        'admin': request.user.is_staff
     }
-
     return render(request, 'shop/catalog/index.html', context)
 
 

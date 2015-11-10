@@ -47,6 +47,6 @@ body { padding-top: 70px; }
     display: none;
 }
 
-body { padding-top: 110px; }
+body { padding-top: 110px; overflow-y: scroll;}
 
 @media (min-width:  768px) { body { padding-top: 70px; } }
