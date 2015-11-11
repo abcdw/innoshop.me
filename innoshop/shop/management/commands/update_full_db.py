@@ -6,6 +6,7 @@ from shop.models import Product, Category
 import urllib2
 import math
 import re
+from time import sleep
 from innoshop.settings import TRY_UPDATE_TIMES,BASE_DIR
 
 LOG_PATH = BASE_DIR+'/shop/management/commands/settings/update_full_db_log.txt'
@@ -84,6 +85,12 @@ def create_or_update_product(url, log):
 def get_content(adress, try_get_times=1):
     """Getting a page with product as a string"""
     response = urllib2.urlopen(adress)
+    if response.getcode()==404:
+        return ""
+    #Unavailable 
+    while response.getcode() == 503:
+        wait(30)
+        response = urllib2.urlopen(adress)
     # try to get it for some times
     for x in range(try_get_times):
         if response.getcode() == 200:
