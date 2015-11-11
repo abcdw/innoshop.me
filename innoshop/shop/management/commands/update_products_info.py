@@ -37,31 +37,31 @@ class Command(BaseCommand):
             try:
                 for num, i in enumerate(self.next_products()):
                     try:
-                        text = product_atributes(
+                        new_values = product_atributes(
                             i.source_link,log)
                         try:
-                            old_price = i.actual_price
+                            old_price = i.price
+                            old_actual_price = i.actual_price
                             old_is_stock_empty = i.is_stock_empty
-                            new_values = pars(text)
                             if i.SKU == new_values['SKU']:
                                 # update is_stock_empty
-                                if 'is_stock_empty' in new_values:
-                                    i.is_stock_empty = True
+                                i.is_stock_empty = new_values['is_stock_empty']
+                                price = new_values['actual_price']
+                                if i.price > 1.5*price:
+                                    i.actual_price = price
+                                    log.write(
+                                        "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
+                                        format(i.pk, i.SKU, old_price,
+                                            i.actual_price, old_is_stock_empty,
+                                            i.is_stock_empty))
                                 else:
-                                    i.is_stock_empty = False
-                                i.save(update_fields=['is_stock_empty'])
-                                # analize price
-                                price_str = new_values['actual_price']
-                                price_fl = float(price_str.replace(' ', ''))
-                                price_int = math.ceil(price_fl)
-                                if price_int != i.actual_price:
-                                    i.actual_price = price_int
-                                    i.save(['actual_price'])
-                                log.write(
-                                    "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                                    format(i.pk, i.SKU, old_price,
-                                           i.actual_price, old_is_stock_empty,
-                                           i.is_stock_empty))
+                                    i.price = price
+                                    log.write(
+                                        "pk={0} SKU={1} updated price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
+                                        format(i.pk, i.SKU, old_actual_price,
+                                            i.price, old_is_stock_empty,
+                                            i.is_stock_empty))
+                                i.save(update_fields=['actual_price','price','is_stock_empty'])
                             else:
                                 log.write(
                                     "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
