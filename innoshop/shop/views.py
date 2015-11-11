@@ -65,7 +65,7 @@ def index(request):
         full_path = os.path.join(MEDIA_ROOT, product.local_image.name)
         if not os.path.exists(full_path):
             call(
-                "wget --random-wait -q -b -t 15 -T 2 -O {0} {1}".
+                "wget --random-wait -q -b -t 15 -T 10 -O {0} {1}".
                 format(full_path, product.img_url),
                 shell=True)
 

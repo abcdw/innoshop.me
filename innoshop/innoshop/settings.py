@@ -143,6 +143,8 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+TRY_UPDATE_TIMES = 7 #how many times scripts try to update information about product
+
 try:
     from local_settings import *
 except ImportError:

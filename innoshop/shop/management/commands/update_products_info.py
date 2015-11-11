@@ -4,10 +4,10 @@ from django.db.utils import IntegrityError
 import math
 import httplib
 import re
-import json
 import urllib2
+from innoshop.settings import TRY_UPDATE_TIMES
 from shop.models import Product
-
+from shop.management.commands.update_full_db import product_atributes,get_content
 
 # atributes that we want to get
 NEED_ATRIBUTES = {
@@ -37,14 +37,13 @@ class Command(BaseCommand):
             try:
                 for num, i in enumerate(self.next_products()):
                     try:
-                        text = get_content(
-                            i.source_link,
-                            self.settings['try_get_times'])
+                        text = product_atributes(
+                            i.source_link,log)
                         try:
                             old_price = i.actual_price
                             old_is_stock_empty = i.is_stock_empty
                             new_values = pars(text)
-                            if i.SKU == new_values['sku']:
+                            if i.SKU == new_values['SKU']:
                                 # update is_stock_empty
                                 if 'is_stock_empty' in new_values:
                                     i.is_stock_empty = True
@@ -94,8 +93,10 @@ class Command(BaseCommand):
                             format(i.pk, i.SKU, i.source_link))
                     except Exception as e:
                         log.write(
-                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n".
+                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} is_stock_empty=True".
                             format(i.pk, i.SKU, i.source_link))
+                        i.is_stock_empty = True
+                        i.save()
                     self.show_status(num)
             finally:
                 save_settings(self.settings)
@@ -138,28 +139,18 @@ class Command(BaseCommand):
 
 
 def load_settings():
-    """Load settings or create if file not found."""
-    try:
-        with open(SETTINGS_FILE) as settings_file:
-            settings = json.load(settings_file)
-            return settings
-    except (IOError, ValueError) as e:
-        count = len(Product.objects.all())
-        settings = {
-            "try_get_times": 7,
-            "first_product": 0,
-            "update_once": count-1,
-            "products_in_fine": count-1}
-        with open(SETTINGS_FILE, 'w+') as settings_file:
-            json.dump(settings, settings_file)
-        return settings
+    count = Product.objects.count()
+    settings = {
+        "try_get_times": TRY_UPDATE_TIMES,
+        "first_product": 0,
+        "update_once": count,
+        "products_in_fine": count}
+    return settings
 
 
 def save_settings(settings):
     """save settings"""
-    with open(SETTINGS_FILE, 'w') as settings_file:
-        json.dump(settings, settings_file)
-
+    pass
 
 def get_content(adress, try_get_times=1):
     """Getting a page with product as a string"""
