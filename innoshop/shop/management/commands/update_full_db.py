@@ -138,6 +138,7 @@ def product_atributes(url, log):
         }
     except Exception as e:
         log_error(log, product_atributes, e)
+	return {'is_stock_empty':True} #do it unsaleble
 
 
 
