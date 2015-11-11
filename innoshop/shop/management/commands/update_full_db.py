@@ -6,35 +6,15 @@ from shop.models import Product, Category
 import urllib2
 import math
 import re
-from innoshop.settings import TRY_UPDATE_TIMES
+from innoshop.settings import TRY_UPDATE_TIMES,BASE_DIR
 
-
-LOG_PATH = open(
-    '/home/ivan/Programs/innoshop/innoshop/shop/management/commands/settings/update_full_db_log.txt',
-    'w')
+LOG_PATH = BASE_DIR+'/shop/management/commands/settings/update_full_db_log.txt'
 
 BASE_URL = 'https://kazan.metro-cc.ru/'
 #CATEGORY_REGX = re.compile(r'<a class="item_link" href="\/(*)"><span>')
-CATEGORY_FILE = '/home/ivan/Programs/innoshop/innoshop/shop/management/commands/settings/category_list.txt'
+CATEGORY_FILE = BASE_DIR+'/shop/management/commands/settings/category_list.txt'
 SUBCATEGORY_PAGE_REGX = re.compile(
     r'<a class="subcatalog_title" href="\/(.*)"')
-CATEGORIES_LIST = [
-    'https://kazan.metro-cc.ru/category/produkty',
-    'https://kazan.metro-cc.ru/category/bytovaya-tehnika',
-    'https://kazan.metro-cc.ru/category/avtomobilnaya-tehnika',
-    'https://kazan.metro-cc.ru/category/bumazhnaya-produkciya',
-    'https://kazan.metro-cc.ru/category/remont',
-    'https://kazan.metro-cc.ru/category/igrushki',
-    'https://kazan.metro-cc.ru/category/kanctovary',
-    'https://kazan.metro-cc.ru/category/kosmetika-bytovaya-himiya',
-    'https://kazan.metro-cc.ru/category/ofisnyj-interyer',
-    'https://kazan.metro-cc.ru/category/posuda',
-    'https://kazan.metro-cc.ru/category/professionalnoe-oborudovanie',
-    'https://kazan.metro-cc.ru/category/sadovye-tovary',
-    'https://kazan.metro-cc.ru/category/sport-otdyh',
-    'https://kazan.metro-cc.ru/category/tovary-dlya-doma',
-    'https://kazan.metro-cc.ru/category/business-podarki',
-    'https://kazan.metro-cc.ru/category/zootovary']
 
 PRODUCT_PAGE_REGX = r'<a class="catalog-i_link" href="(.*)">'
 # for getting all products in one page
@@ -189,13 +169,11 @@ class Command(BaseCommand):
     help = 'Closes the specified poll for voting'
 
     def handle(self, *args, **options):
-        try:
-            log = LOG_PATH
+        with open(LOG_PATH,'w') as log:
             for i in open(CATEGORY_FILE).readlines():
                 for x in product_page_urls(i, log):
                     try:
                         create_or_update_product(x, log)
                     except Exception as e:
                         log_error(log,self.handle,e)
-        finally:
             log.close()
