@@ -164,8 +164,10 @@ def fill_product(p,atrr, log):
 
 def update_product(product, atrr, log):
     #try:
-    product.price = atrr['actual_price']
-    #product.actual_price = atrr['actual_price']
+    if product.price > 1.5*atrr['actual_price']:
+        product.actual_price = atrr['actual_price']
+    else:
+        product.price = atrr['actual_price']
     product.is_stock_empty = atrr['is_stock_empty']
     product.save()
     #except Exception as e:
@@ -177,7 +179,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(LOG_PATH,'w') as log:
-            for i in open(CATEGORY_FILE).readlines():
+            for num,i in enumerate(open(CATEGORY_FILE).readlines()):
                 for x in product_page_urls(i, log):
                     try:
                         create_or_update_product(x, log)
