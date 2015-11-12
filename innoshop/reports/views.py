@@ -44,7 +44,7 @@ def expeditor_view(request):
 			product.SKU, product.categories, product.name, product.actual_price,
 			product.actual_price, product.count * product.min_count, product.img_url
 		]
-		page.write(row, 0, "HYPERLINK(\"%s\", %s)" % (product.source_link, product.SKU))
+		page.write_url(row, 0, product.source_link, string=product.SKU)
 		for _ in range(1, len(product_row)):
 			page.write(row, _, product_row[_])
 
