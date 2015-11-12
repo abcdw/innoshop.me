@@ -91,7 +91,6 @@ class Order(models.Model):
     text = models.TextField(blank=True)
     photo = models.ImageField(upload_to='orders', blank=True)
     status = StatusField()
-    order_hash = models.CharField(max_length=32, null=True)
 
     def get_items(self):
         return self.productitem_set
