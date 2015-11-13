@@ -1,6 +1,11 @@
-{% extends "shop/layout/base.html" %} {% load static from staticfiles %} {% block stylesheet %}
-<link href="{% static 'css/landing.css' %}" rel="stylesheet"> {% endblock %} {% block content %}
-<div class="container">
+{% extends "shop/layout/base.html" %}
+{% load static from staticfiles %}
+{% block stylesheet %}
+<link href="{% static 'css/landing.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container stores-icons">
     <div class="row">
         <div class="col-md-4">
             <a href="{% url 'catalog' %}">

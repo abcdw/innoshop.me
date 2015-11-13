@@ -205,7 +205,7 @@ body {
 
 .material-form-field-input {
     padding: 0.5em 0;
-    font-size: 1.5em;
+    font-size: 1.0em;
     color: inherit;
     font-family: inherit;
     width: 100%;
@@ -243,4 +243,8 @@ body {
 .material-form-field .btn-default:focus,
 .material-form-field .btn-default:active {
     outline: none;
+}
+
+.stores-icons {
+    margin-top: 15px;
 }
