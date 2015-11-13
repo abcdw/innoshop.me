@@ -105,8 +105,28 @@ class Order(models.Model):
         return self.productitem_set
 
 
+class SubOrder(models.Model):
+    STATUS = Choices('new', 'active', 'done', 'partially_done', 'rejected')
+    status = StatusField()
+    store = models.ForeignKey(Store, null=True, blank=True)
+    owner = models.ForeignKey(User, null=True, blank=True)
+    moderator_comment = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='orders', blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def get_items(self):
+        return self.productitem_set
+
+    def __unicode__(self):
+        if self.store:
+            return self.store.name
+        return "default"
+
+
 class ProductItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    sub_order = models.ForeignKey(SubOrder, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(
         Product,
         on_delete=models.SET_NULL,
