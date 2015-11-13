@@ -5,6 +5,8 @@ import math
 import httplib
 import re
 import urllib2
+import sys
+from time import ctime
 from innoshop.settings import TRY_UPDATE_TIMES
 from shop.models import Product
 from shop.management.commands.update_full_db import product_atributes,get_content
@@ -17,51 +19,52 @@ NEED_ATRIBUTES = {
         u'<i class="icon _no"></i>(.*)')}
 
 SETTINGS_FILE = 'shop/management/commands/settings/updater_settings.json'
-LOG_FILE = 'shop/management/commands/settings/log.txt'
+LOG_FILE = 'shop/management/commands/logs/update_products_info_log_{0}.txt'.format(ctime())
 
 
 class Command(BaseCommand):
 
     args = ''
-    help = """Update existing database. Actual settings there are
-    in shop/management/commands/updater_settings.json.
-    try_get_times-how many times it will be request a page
-    update_once-number of products for updating
-    first_product-number of the first product for checking
-    product_count-how many products from the db will be checked by the script """
+    help = """Update existing database."""
 
     def handle(self, *args, **options):
         self.settings = load_settings()
-        with open(LOG_FILE, 'w') as log:
+        #with sys.stdout as log:
+        with open(LOG_FILE,'w') as log:
             log.write(str(self.settings)+"\n")
             try:
                 for num, i in enumerate(self.next_products()):
                     try:
-                        new_values = product_atributes(
+                        new_values,code = product_atributes(
                             i.source_link,log)
+                        if code == 503:
+                            return
+                        if code == 404:
+                            Product.objects.filter(pk=i.pk).update(is_stock_empty=True)
+                            log.write("pk={0} SKU={1} page not fount is_stock_empty = True \n".format(i.pk,i.SKU))
+                            continue
                         try:
                             old_price = i.price
                             old_actual_price = i.actual_price
                             old_is_stock_empty = i.is_stock_empty
                             if i.SKU == new_values['SKU']:
-                                # update is_stock_empty
-                                i.is_stock_empty = new_values['is_stock_empty']
+                                product = Product.objects.filter(pk=i.pk)
+                                is_stock_empty = new_values['is_stock_empty']
                                 price = new_values['actual_price']
                                 if i.price > 1.5*price:
-                                    i.actual_price = price
+                                    product.update(actual_price = price,is_stock_empty=is_stock_empty)
                                     log.write(
                                         "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                                        format(i.pk, i.SKU, old_price,
+                                        format(i.pk, i.SKU, old_actual_price,
                                             i.actual_price, old_is_stock_empty,
                                             i.is_stock_empty))
                                 else:
-                                    i.price = price
+                                    product.update(price = price,is_stock_empty=is_stock_empty)
                                     log.write(
                                         "pk={0} SKU={1} updated price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                                        format(i.pk, i.SKU, old_actual_price,
+                                        format(i.pk, i.SKU, old_price,
                                             i.price, old_is_stock_empty,
                                             i.is_stock_empty))
-                                i.save(update_fields=['actual_price','price','is_stock_empty'])
                             else:
                                 log.write(
                                     "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
@@ -70,8 +73,7 @@ class Command(BaseCommand):
                                         new_values['sku']))
                         except IntegrityError:
                             log.write(
-                                "[ERROR] pk={0} UNICQUE constraint failed".format(
-                                    i.pk))
+                                "[ERROR] pk={0} UNICQUE constraint failed\n".format(i.pk))
                         except IndexError:
                             i.is_stock_empty = True
                             i.save()
@@ -93,8 +95,8 @@ class Command(BaseCommand):
                             format(i.pk, i.SKU, i.source_link))
                     except Exception as e:
                         log.write(
-                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} is_stock_empty=True".
-                            format(i.pk, i.SKU, i.source_link))
+                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} {3} is_stock_empty=True\n".
+                            format(i.pk, i.SKU, e,i.source_link))
                         i.is_stock_empty = True
                         i.save()
                     self.show_status(num)
