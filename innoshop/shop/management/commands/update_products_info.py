@@ -8,12 +8,11 @@ import urllib2
 import sys
 from time import ctime
 from innoshop.settings import TRY_UPDATE_TIMES
-from shop.models import Product
+from shop.models import Product,Store
 from shop.management.commands.update_full_db import product_atributes,get_content
 
 SETTINGS_FILE = 'shop/management/commands/settings/updater_settings.json'
 LOG_FILE = 'shop/management/commands/logs/update_products_info_log_{0}.json'.format(ctime())
-
 
 class Command(BaseCommand):
 
@@ -63,7 +62,7 @@ class Command(BaseCommand):
                         log.append({"err":"SOMETHING WRONG","pk":i.pk, "SKU":i.SKU, "source_link":i.source_link})
                 except (urllib2.HTTPError, urllib2.URLError) as xxx_todo_changeme:
                     httplib.IncompleteRead = xxx_todo_changeme
-                    log.write({"err":"PAGE NOT FOUND","pk":i.pk, "SKU":i.SKU,"source_link":i.source_link})
+                    log.append({"err":"PAGE NOT FOUND","pk":i.pk, "SKU":i.SKU,"source_link":i.source_link})
                 except Exception as e:
                     log.append({"err":"SOMETHING WRONG {0}".format(e),"pk":i.pk, "SKU":i.SKU, "source_link":i.source_link})
                     Product.objects.filter(pk=i.pk).update(is_stock_empty = True)
@@ -76,17 +75,8 @@ class Command(BaseCommand):
     def next_products(self):
         """Get list of products for checking
         CHANGE first_product"""
-        first = self.settings['first_product']
-        update_once = self.settings['update_once']
-        last = first+update_once
-        if last >= self.settings['products_in_fine']:
-            last = self.settings['products_in_fine']-1
-            self.settings['first_product'] = 0
-        result = Product.objects.all()[first:last]
-        if len(result) < update_once:
-            self.settings['first_product'] = 0
-        else:
-            self.settings['first_product'] = first+update_once
+        store = Store.objects.get(name='Metro')
+        result = Product.objects.filter(store=store)
         return result
 
     def show_status(self, n):
