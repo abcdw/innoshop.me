@@ -50,7 +50,6 @@ def index(request):
 
 @degrades
 def catalog(request):
-    print 'test'
     catalog = Category.objects.filter(product_count__gt=0)
     category = None
 
