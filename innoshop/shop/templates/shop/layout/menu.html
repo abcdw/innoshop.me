@@ -13,10 +13,9 @@
                 <a class="navbar-brand" href="/"><i class="text-success fa fa-binoculars"></i></a>
 
                 <form class="navbar-form navbar-left" role="search" action="{% url 'catalog' %}" method="get">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input name="q" type="text" class="form-control" placeholder="Поиск" value="{{ q }}">
-
+                    <div class="form-group material-form-field">
+                        <div class="input-group form-field-controls-group">
+                            <input name="q" type="text" class="form-control material-form-field-input" placeholder="Поиск" value="{{ q }}">
                             <div class="input-group-btn">
                                 <button class="btn btn-default">
                                     <i class="glyphicon glyphicon-search"></i>

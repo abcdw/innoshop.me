@@ -1,52 +1,244 @@
 .product__add {
     margin: -3px -6px;
 }
+
 .product__price {
     font-weight: bold;
 }
+
 .product .panel-heading {
     height: 60px;
     text-overflow: ellipsis;
 }
+
 .basket {
     text-transform: uppercase;
     padding: 8px 16px !important;
 }
+
 .basket-list table {
     width: 100%;
     border-collapse: collapse;
 }
-.basket-list tr, .basket-list__line {
+
+.basket-list tr,
+.basket-list__line {
     border-top: 1px dotted #aaa;
 }
-.basket-list tr:first-child, .basket-list__line:first-child {
+
+.basket-list tr:first-child,
+.basket-list__line:first-child {
     border: none;
 }
-.basket-list td, .basket-list__line {
+
+.basket-list td,
+.basket-list__line {
     padding: 5px;
 }
+
 .navbar-form {
     border: 0;
     margin: 0;
     padding: 8px 16px;
 }
+
 .navbar-toggle {
     margin-left: 16px;
 }
+
 .ffffu {
     margin: 0 -15px;
 }
-body { padding-top: 70px; }
-.pager { margin-top: 0; }
+
+body {
+    padding-top: 70px;
+}
+
+.pager {
+    margin-top: 0;
+}
 
 .navbar-fixed-top {
     max-height: 100%;
     overflow: auto;
 }
+
 #basket {
     display: none;
 }
 
+
 body { padding-top: 110px; overflow-y: scroll;}
 
-@media (min-width:  768px) { body { padding-top: 70px; } }
+@media (min-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+}
+
+
+/** Menu bar **/
+
+.navbar {
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.navbar .navbar-brand {
+    position: relative;
+    height: 60px;
+    line-height: 30px;
+    border: 0;
+    color: inherit;
+}
+
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+    color: inherit;
+    background-color: transparent;
+}
+
+.navbar .navbar-text {
+    color: inherit;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.navbar .navbar-nav > li > a {
+    color: inherit;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar .navbar-nav > li > a:hover,
+.navbar .navbar-nav > li > a:focus {
+    color: inherit;
+    background-color: #d7d7d7;
+}
+
+.navbar .navbar-nav > .active > a,
+.navbar .navbar-nav > .active > a:hover,
+.navbar .navbar-nav > .active > a:focus {
+    color: inherit;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar .navbar-nav > .disabled > a,
+.navbar .navbar-nav > .disabled > a:hover,
+.navbar .navbar-nav > .disabled > a:focus {
+    color: inherit;
+    background-color: transparent;
+    opacity: 0.9;
+}
+
+.navbar .navbar-toggle {
+    border: 0;
+}
+
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+    background-color: transparent;
+}
+
+.navbar .navbar-toggle .icon-bar {
+    background-color: inherit;
+    border: 1px solid;
+}
+
+.navbar .navbar-default .navbar-toggle,
+.navbar .navbar-inverse .navbar-toggle {
+    border-color: transparent;
+}
+
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.navbar .navbar-nav > .open > a,
+.navbar .navbar-nav > .open > a:hover,
+.navbar .navbar-nav > .open > a:focus {
+    background-color: transparent;
+    color: inherit;
+}
+
+.navbar .navbar-nav > li#basket > a:hover,
+.navbar .navbar-nav > li#basket > a:focus {
+    background: transparent;
+}
+
+.navbar li a.basket {
+    height: 60px;
+    line-height: 42px;
+}
+
+.navbar li a.basket .btn {
+    background-color: #5cb85c;
+    color: #fff;
+    border: 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar li a.basket .btn:hover,
+.navbar li a.basket .btn:focus {
+    background-color: #449d44;
+}
+
+
+/** Search form **/
+
+.material-form-field {
+    position: relative;
+    max-width: 25em;
+    margin: 0 auto;
+    padding-top: 5px;
+}
+
+.material-form-field-input {
+    padding: 0.5em 0;
+    font-size: 1.5em;
+    color: inherit;
+    font-family: inherit;
+    width: 100%;
+    background: transparent;
+    border-width: 0 0 1px 0;
+    -webkit-transition: 0.4s ease border-color;
+    transition: 0.4s ease border-color;
+}
+
+.material-form-field-input:focus:valid,
+.material-form-field-input:focus:invalid {
+    border-bottom-width: 2px;
+    border-color: #5cb85c; 
+}
+
+.material-form-field-input:focus:valid {
+    border-color: #008000;
+}
+
+.material-form-field-input:focus:invalid {
+    border-color: #f00;
+}
+
+.material-form-field-input:focus {
+    outline: none;
+}
+
+.material-form-field .btn-default {
+    background-color: transparent;
+    border: 0;
+    margin-left: -38px !important;
+}
+
+.material-form-field .btn-default:hover,
+.material-form-field .btn-default:focus,
+.material-form-field .btn-default:active {
+    outline: none;
+}
