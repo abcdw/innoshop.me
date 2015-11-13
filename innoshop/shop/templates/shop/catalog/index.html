@@ -48,7 +48,7 @@
     <div class="container">
         {% if category or q %}
             <ol class="breadcrumb">
-                <li><a href="/">Все товары</a></li>
+                <li><a href="{% url 'catalog' %}">Все товары</a></li>
             {% if category_breadcrumbs %}
                 {% for item in category_breadcrumbs %}
                     {% if item.id != category.id %}
