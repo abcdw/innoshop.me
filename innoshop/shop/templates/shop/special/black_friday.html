@@ -1,0 +1,120 @@
+{% extends "shop/layout/base_blackfriday.html" %}
+{% load mathfilters %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            var products = [];
+            {% for cat in categories %}
+                {% for product in cat.products %}
+                    {% if product.price > 0 %}
+                        products[{{product.id}}] = {
+                            name: '{{ product.name }}',
+                            price: {{ product.price }},
+                            id: {{ product.id }},
+                            min_count: {{ product.min_count }},
+                            rating: {{ product.rating }}
+                        };
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            if (products.length > 0) {
+                ProductStore.setInitialState(products);
+
+                for (var i in products) {
+                    React.render(React.createElement(Price, {
+                        price: products[i].price,
+                        id: i,
+                        count: BasketStore.getProductCount(i)
+                    }), document.getElementById('product-' + i));
+                    {% if admin %}
+                        React.render(React.createElement(Rating, {
+                            id: i,
+                            rating: products[i].rating,
+                            url: '{% url 'update_rating' %}'
+                        }), document.getElementById('product-rating-' + i));
+                    {% endif %}
+                }
+            }
+
+            if ($('#basket2').length)
+                React.render(React.createElement(Basket, {
+                    url: '{% url 'order' %}',
+                    price: BasketStore.totalSum()
+                }), document.getElementById('basket2'));
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12" style="text-align: center">
+                <img style="max-width: 100%;" src="/static/bfriday/bf_logo.png" class="text-center">
+            </div>
+        </div>
+        {% for cat in categories %}
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ cat.name }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            {% for product in cat.products %}
+                                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                    <div class="panel panel-warning product">
+                                        <div class="panel-heading">
+                                            <div title="{{ product.name | safe }}" style="color: black;">{% if admin %}
+                                                <span  class="badge">{{ product.id }}</span>
+                                                &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</div>
+                                        </div>
+                                        <div class="panel-body text-center">
+                                            <img src="{{ product.img_url }}" width="150" height="150"
+                                                 alt="{{ product.name | safe }}" class="">
+                                        </div>
+                                        <div class="panel-footer clearfix">
+                                            {% if product.price > 0 %}
+                                                <span class="h3">{% if forloop.counter0 == 0 %}1{% elif forloop.counter0 == 1 %}6{% elif forloop.counter0 == 2 %}1{% elif forloop.counter0 == 3 %}0{% endif %}&nbsp;у.е.</span>
+                                            {% elif product.price == -1 %}
+                                                    <h5>ожидается поставка</h5>
+                                            {% elif product.price == -2 %}
+                                                    <center><h5>мы работаем над этим</h5></center>
+                                            {% elif product.price == -3 %}
+                                                    <h5>нет в наличии</h5>
+                                            {% endif %}
+
+                                            <div class="pull-right" id="product-{{ product.id }}"></div>
+                                            {% if admin %}
+                                                <div id="product-rating-{{ product.id }}"></div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    <div class="row">
+        <div class="col-xs-12 col-md-12 col-sm-12 col-lg-12">
+            <!-- Put this script tag to the <head> of your page -->
+            <script type="text/javascript" src="//vk.com/js/api/openapi.js?117"></script>
+
+            <script type="text/javascript">
+                VK.init({apiId: 5108102, onlyWidgets: true});
+            </script>
+
+            <!-- Put this div tag to the place, where the Comments block will be -->
+            <div id="vk_comments"></div>
+            <script type="text/javascript">
+                VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*"});
+            </script>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+

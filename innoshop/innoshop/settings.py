@@ -52,6 +52,8 @@ INSTALLED_APPS = (
     'maintenancemode',
     'mathfilters',
     'django_extensions',
+    'todo',
+    'reports',
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'
@@ -121,9 +123,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 FIXTURE_DIRS = (
-   os.path.join(BASE_DIR,'fixtures/'),
+    os.path.join(BASE_DIR, 'fixtures/'),
 
-   )
+    )
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
@@ -135,10 +137,14 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'assets'),
 )
 
+
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+TRY_UPDATE_TIMES = 7 #how many times scripts try to update information about product
 
 try:
     from local_settings import *

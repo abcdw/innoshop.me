@@ -7,5 +7,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for category in Category.objects.all():
-            cnt = Product.objects.get_sallable().filter(categories__id__contains=category.id).count()
+            cnt = Product.objects.get_sallable().filter(categories__id=category.id).count()
             Category.objects.filter(id=category.id).update(product_count=cnt)

@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.db.models import F
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -5,19 +6,24 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
+from django.core import serializers
 from django.conf import settings
 
 from .models import Category, Faq
 from .models import Product
 from .models import Category, Faq, Message
 from .models import SearchQuery
+from .models import Order
 
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
+from innoshop.settings import MEDIA_ROOT
 
 import json
 import inspect
 import datetime
+import os
+from subprocess import call
 
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -26,7 +32,9 @@ def degrades(function):
     def wrap(request, *args, **kwargs):
         if function.__name__ in settings.DEGRADE:
             # better because it's not necessary to redirect
-            return HttpResponse('Yep, we know. We are working on that =)', status=503)
+            return HttpResponse(
+                'Yep, we know. We are working on that =)',
+                status=503)
             #  return HttpResponseRedirect(reverse('maintenance'))
         else:
             return function(request, *args, **kwargs)
@@ -49,8 +57,25 @@ def index(request):
                 src.remove(item)
                 find_children(src, out['children'], item['id'])
 
+    def if_absent_image_download(product):
+        """if there is no local copy of the image - download it.
+        :returns: -
+
+        """
+        full_path = os.path.join(MEDIA_ROOT, product.local_image.name)
+        if not os.path.exists(full_path):
+            call(
+                "wget --random-wait -q -b -t 15 -T 10 -O {0} {1}".
+                format(full_path, product.img_url),
+                shell=True)
+
     catalog_tree = []
-    catalog_list = list(catalog.values('name', 'id', 'parent_id', 'product_count'))
+    catalog_list = list(
+        catalog.values(
+            'name',
+            'id',
+            'parent_id',
+            'product_count'))
     for item in catalog_list:
         if item['parent_id'] is None:
             out = {'item': item, 'children': []}
@@ -61,9 +86,16 @@ def index(request):
     products = Product.objects.get_sallable()
 
     cat = get_int(request, 'c')
+    category_breadcrumbs = []
     if cat:
         category = Category.objects.get(id=cat)
-        products = products.filter(categories__id__contains=cat)
+        products = products.filter(categories__id=cat)
+        cat_item = category
+        category_breadcrumbs.append(cat_item)
+        while cat_item.parent_id:
+            cat_item = Category.objects.get(id=cat_item.parent_id)
+            category_breadcrumbs.append(cat_item)
+        category_breadcrumbs.reverse()
 
     q = request.GET.get('q')
     if q:
@@ -81,16 +113,45 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         products = paginator.page(paginator.num_pages)
 
+    # download images
+    def update_img_urls():
+        import re
+        imgs_url = '/static/product_images'
+        pattern = re.compile('.*/')
+        get_filename = lambda x: re.sub(pattern, '', x.img_url)
+        for p in products:
+            p.img_url = imgs_url + '/' + get_filename(p)
+
+    update_img_urls()
+
     context = {
         'catalog': catalog_tree,
+        'category_breadcrumbs': category_breadcrumbs,
         'products': products,
         'q': q or '',
         'cat': cat or '',
         'category': category or '',
         'admin': request.user.is_staff
     }
-    # return HttpResponse('<a href=/order>order</a>')
     return render(request, 'shop/catalog/index.html', context)
+
+
+def black_friday(request):
+    categories = [
+        {'name': u'ЭТО РАЗРЫВ', 'products': Product.objects.filter(SKU__in=[
+            '-1', '-5', '-8', '-16'])},
+        {'name': u'У МЕНЯ ВСЕ ОТЛИЧНО', 'products': Product.objects.filter(
+            SKU__in=['-4', '-10', '-11', '-6'])},
+        {'name': u'У МЕНЯ ЖЕ НЕТ ВОЕННИКА!', 'products': Product.
+         objects.filter(SKU__in=['-3', '-12', '-14', '-7'])},
+        {'name': u'Я ИЗ АДМИНИСТРАЦИИ', 'products': Product.objects.filter(
+            SKU__in=['-2', '-9', '-13', '-15'])}]
+
+    context = {
+        'categories': categories,
+        'admin': request.user.is_staff
+    }
+    return render(request, 'shop/special/black_friday.html', context)
 
 
 def catalog(request):
@@ -119,7 +180,7 @@ def add_product(request):
                     del s[id]
                 request.session.modified = True
                 result.update({'status': 'ok', 'result': s.get(id)})
-        except Exception, e:
+        except Exception as e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
 
@@ -127,8 +188,14 @@ def add_product(request):
 @degrades
 def get_products(request):
     counts = request.session.get('products', {})
-    objs = Product.objects.filter(id__in=counts.keys()).values('id', 'name', 'price', 'min_count')
-    products = map(lambda x: {'count': counts[str(x['id'])], 'product': x}, objs)
+    objs = Product.objects.filter(
+        id__in=counts.keys()).values(
+        'id',
+        'name',
+        'price',
+        'min_count')
+    products = map(
+        lambda x: {'count': counts[str(x['id'])], 'product': x}, objs)
     return HttpResponse(json.dumps((products)))
 
 
@@ -143,12 +210,6 @@ def order(request):
             return render(request, 'shop/thanks.html')
 
     raise Http404
-    # form = OrderForm()
-    # context = {
-    #     'form': form,
-    #     'title': 'order form',
-    # }
-    # return render(request, 'shop/order.html', context)
 
 
 @degrades
@@ -157,22 +218,26 @@ def feedback(request):
         feedback_form = FeedbackForm(request.POST)
         if feedback_form.is_valid():
             feedback_form.create_feedback()
+            return render(request, 'shop/feedback_thanks.html', {})
     form = FeedbackForm()
     try:
         faq = Faq.objects.get(name='FAQ')
-    except Exception, e:
+    except Exception as e:
         faq = False
     context = {
         'form': form,
-        'title': 'feedback form',
+        #  'title': 'feedback form',
         'faq': faq
     }
     return render(request, 'shop/feedback.html', context)
 
 
 def get_messages(request):
-    messages = Message.objects.filter(start__lte=datetime.date.today(),
-                                      end__gte=datetime.date.today()).values('name', '_text_rendered')
+    messages = Message.objects.filter(
+        start__lte=datetime.date.today(),
+        end__gte=datetime.date.today()).values(
+        'name',
+        '_text_rendered')
     return HttpResponse(json.dumps(list(messages)))
 
 
@@ -186,7 +251,21 @@ def update_rating(request):
             if id >= 0 and count:
                 product = Product.objects.filter(id=id)
                 product.update(rating=F('rating') + count)
-                result.update({'status': 'ok', 'result': product.first().rating})
-        except Exception, e:
+                result.update(
+                    {'status': 'ok', 'result': product.first().rating})
+        except Exception as e:
             result.update({'result': 'invalid id or count'})
     return HttpResponse(json.dumps(result))
+
+
+@staff_member_required
+def get_orders(request):
+    result = Order.objects.filter(status='active')
+    return HttpResponse(serializers.serialize("json", result))
+
+
+@staff_member_required
+def get_order_products(request):
+    result = Order.objects.filter(
+        pk=request.GET.get("pk"))[0].get_items().all()
+    return HttpResponse(serializers.serialize("json", result))

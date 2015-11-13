@@ -7,6 +7,10 @@ from markitup.fields import MarkupField
 from django.db.models import F, Q
 from model_utils.fields import StatusField
 from model_utils import Choices
+from functools import reduce
+
+from innoshop.settings import MEDIA_ROOT
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -18,13 +22,17 @@ class Category(models.Model):
 
 
 class ProductManager(models.Manager):
+
     def get_sallable(self):
-        return self.filter(price__gt=0).filter(is_stock_empty=False).order_by('-rating')
+        return self.filter(
+            price__gt=0).filter(
+            is_stock_empty=False).order_by('-rating')
 
     def smart_filter(self, q):
         words = filter(lambda x: len(x) > 0, [x.strip() for x in q.split(' ')])
 
         import operator
+
         def combine(op, queries):
             print queries
             Qs = [Q(name__icontains=query) for query in queries]
@@ -50,16 +58,20 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=255)
-    SKU = models.CharField(max_length=100, unique=True)
+    name = models.CharField(db_index=True, max_length=255)
+    SKU = models.CharField(db_index=True, max_length=100, unique=True)
     categories = models.ManyToManyField(Category)
     description = models.TextField(blank=True)
     price = models.IntegerField(default=10000000)  # price from shop
-    actual_price = models.IntegerField(default=10000000)  # actual price from shop
+    actual_price = models.IntegerField(
+        default=10000000)  # actual price from shop
     min_count = models.IntegerField(default=1)
+    local_image = models.FileField(upload_to=MEDIA_ROOT, blank=True)
     img_url = models.CharField(max_length=255, blank=True)
     is_stock_empty = models.BooleanField(default=True)
-    source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
+    source_link = models.CharField(
+        max_length=255,
+        blank=True)  # Link to original web-page
     rating = models.IntegerField(default=0)
 
     objects = ProductManager()
@@ -86,16 +98,27 @@ class Order(models.Model):
 
 class ProductItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True)
     count = models.IntegerField(default=1)
     name = models.CharField(max_length=255, blank=True)
     SKU = models.CharField(max_length=100, blank=True)
     price = models.IntegerField(default=10000000)  # price from shop
-    actual_price = models.IntegerField(default=10000000)  # actual price from shop
+    actual_price = models.IntegerField(
+        default=10000000)  # actual price from shop
     min_count = models.IntegerField(default=1)
-    source_link = models.CharField(max_length=255, blank=True)  # Link to original web-page
+    source_link = models.CharField(
+        max_length=255,
+        blank=True)  # Link to original web-page
     img_url = models.CharField(max_length=255, blank=True)
     bought = models.BooleanField(default=False, blank=False)
+    currentId = models.IntegerField(default=1)
+
+    def total_cost(self):
+        return self.count*self.price
 
     def __unicode__(self):
         return self.name
@@ -128,5 +151,3 @@ class SearchQuery(models.Model):
         sq, created = SearchQuery.objects.get_or_create(q=query)
         SearchQuery.objects.filter(id=sq.id).update(count=F('count') + 1)
         SearchQuery.objects.filter(id=sq.id).update(product_count=pcount)
-
-

@@ -1,27 +1,29 @@
 from django.core.management.base import BaseCommand, CommandError
-import os
-import urllib
+from subprocess import call
 from shop.models import Product
+from urllib import urlretrieve
+import re
 
 
 class Command(BaseCommand):
-    help = 'Create a folder with images from the site. If there is no folder it will be created, else used existingthere is no folder it will be created, else used existing. Images are named [their_sku].jpg'
+    help = 'Download image'
 
     def add_arguments(self, parser):
-        parser.add_argument('directory')
+        parser.add_argument('path', type=str)
+        # parser.add_argument('url', type=str)
 
     def handle(self, *args, **options):
-        directory = options['directory']
-        if not os.path.exists(directory):
-            os.mkdir(directory)
-        for sku, url in get_sku_and_url():
-            if not os.path.exists('{0}.jpg'.format(sku)):
-                try:
-                    image_path = os.path.join(directory, '{0}.jpg'.format(sku))
-                    urllib.urlretrieve(url, image_path)
-                except Exception:
-                    pass
+        path = options['path']
 
+        product_count = Product.objects.all().count()
+        for p in Product.objects.all():
+            file_name = re.sub(r'.*/', '', p.img_url)
+            file_path = path + '/' + file_name
+            try:
+                if p.id % 100 == 0:
+                    print p.id, '/', product_count
+                urlretrieve(p.img_url, file_path)
+            except Exception:
+                print p.id
+                break
 
-def get_sku_and_url():
-    return set((p.SKU, p.img_url) for p in Product.objects.all())
