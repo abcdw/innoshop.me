@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from django.core.management.base import BaseCommand, CommandError
-from shop.models import Product, Category
-from urllib2 import urlopen
+from shop.models import Product, Category, Store
+from urllib2 import urlopen,URLError
 import math
 import re
-from time import sleep
+from time import sleep,ctime
 from innoshop.settings import TRY_UPDATE_TIMES,BASE_DIR
 
-LOG_PATH = BASE_DIR+'/shop/management/commands/settings/update_full_db_log.txt'
-
+LOG_PATH = 'shop/management/commands/logs/update_full_db_log_{}.txt'.format(ctime())
+STORE = Store.objects.get(name='Metro')
 BASE_URL = 'https://kazan.metro-cc.ru/'
 #CATEGORY_REGX = re.compile(r'<a class="item_link" href="\/(*)"><span>')
-CATEGORY_FILE = BASE_DIR+'/shop/management/commands/settings/category_list.txt'
+CATEGORY_FILE = 'shop/management/commands/settings/category_list.txt'
 SUBCATEGORY_PAGE_REGX = re.compile(
     r'<a class="subcatalog_title" href="\/(.*)"')
 
@@ -58,21 +58,23 @@ def category_address_generator():
 def product_page_urls(category_url, log_file):
     full_category_url = category_url.replace('\n', PREFIX)
     try:
-        row_data = get_content(full_category_url)
+        row_data,code = get_content(full_category_url)
+        if code == 404 or code == 503:
+            return ()
         result = re.findall(PRODUCT_PAGE_REGX, row_data)
         if any(result):
             return result
         else:
             raise NoneType
-    except urllib2.URLError as e:
+    except URLError as e:
         log_error(log_file, product_page_urls, e)
 
 
 def create_or_update_product(url, log):
     """Update a product if exists else create it"""
     try:
-        atrr = product_atributes(url, log)
-        if attr['status'] == 503:
+        atrr,code = product_atributes(url, log)
+        if code == 503 or code == 404:
             return atrr['status']
         product,created = Product.objects.get_or_create(SKU=atrr['SKU'])
         if created:  # product doesn't exist
@@ -143,7 +145,7 @@ def set_parent(log,category, parent=None):
     try:
         if parent:
             category.parent = parent
-            category.save()
+            category.save(force_update=True)
         return category
     except Exception as e:
         log_error(log,set_parent,e)
@@ -152,6 +154,9 @@ def set_parent(log,category, parent=None):
 def fill_product(p,atrr, log):
     assert atrr != None
     try:
+        global category
+        global parent_category
+        global grand_category
         category,created = Category.objects.get_or_create(name=atrr['category'])
         if created:  # category doesn't exist
             parent_category,created = Category.objects.get_or_create(name=atrr['parent_category'])
@@ -159,18 +164,18 @@ def fill_product(p,atrr, log):
                 grand_category,created = Category.objects.get_or_create(name=atrr['grand_category'])
                 parent_category = set_parent(log,parent_category,grand_category)
             category = set_parent(log,category, parent_category)
-        p.name=atrr['name']
-        #p.actual_price=atrr['actual_price']
-        p.price = atrr['actual_price']
-        p.img_url=atrr['img_url']
-        p.is_stock_empty=atrr['is_stock_empty']
-        p.source_link=atrr['source_link']
-        p.categories=[category,parent_category,grand_category]
-        p.save()
+
+        Product.objects.filter(pk=p.pk).update(
+            name=atrr['name'],
+            actual_price=atrr['actual_price'],
+            price = atrr['actual_price'],
+            img_url=atrr['img_url'],
+            is_stock_empty=atrr['is_stock_empty'],
+            source_link=atrr['source_link'],
+            categories=[category,parent_category,grand_category],
+        store = STORE)
     except Exception as e:
-        log_error(log, fill_product, e)
-
-
+        log_error(log, fill_product, e.message)
 
 def update_product(product, atrr, log):
     #try:
@@ -179,7 +184,7 @@ def update_product(product, atrr, log):
     else:
         product.price = atrr['actual_price']
     product.is_stock_empty = atrr['is_stock_empty']
-    product.save()
+    product.save(force_update=True)
     #except Exception as e:
     #    log_error(log, update_product, e)
 
@@ -188,7 +193,9 @@ class Command(BaseCommand):
     help = 'Closes the specified poll for voting'
 
     def handle(self, *args, **options):
-        with open(LOG_PATH,'w') as log:
+        import sys#for debug
+        with sys.stdout as log:#for debug
+        #with open(LOG_PATH,'w') as log:
             for num,i in enumerate(open(CATEGORY_FILE).readlines()):
                 for x in product_page_urls(i, log):
                     try:
@@ -196,6 +203,8 @@ class Command(BaseCommand):
                         if status == 503: # Service Unavailable
                             log_error(log,self.handle,status)
                             return
+                        if status == 404:
+                            Product.objects.filter(source_link=x).update(is_stock_empty=True)
                     except Exception as e:
                         log_error(log,self.handle,e)
             log.close()
