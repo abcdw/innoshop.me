@@ -8,7 +8,6 @@ from django.db.models import F, Q
 from model_utils.fields import StatusField
 from model_utils import Choices
 from functools import reduce
-
 from innoshop.settings import MEDIA_ROOT
 
 
@@ -22,7 +21,6 @@ class Category(models.Model):
 
 
 class ProductManager(models.Manager):
-
     def get_sallable(self):
         return self.filter(
             price__gt=0).filter(
@@ -57,6 +55,16 @@ class ProductManager(models.Manager):
         return result
 
 
+class Store(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
+    url = models.CharField(max_length=255, blank=True)
+    icon = models.CharField(max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(db_index=True, max_length=255)
     SKU = models.CharField(db_index=True, max_length=100, unique=True)
@@ -73,6 +81,7 @@ class Product(models.Model):
         max_length=255,
         blank=True)  # Link to original web-page
     rating = models.IntegerField(default=0)
+    store = models.ForeignKey(Store, null=True, blank=True)
 
     objects = ProductManager()
 
@@ -116,9 +125,10 @@ class ProductItem(models.Model):
     img_url = models.CharField(max_length=255, blank=True)
     bought = models.BooleanField(default=False, blank=False)
     currentId = models.IntegerField(default=1)
+    store = models.ForeignKey(Store, null=True, blank=True)
 
     def total_cost(self):
-        return self.count*self.price
+        return self.count * self.price
 
     def __unicode__(self):
         return self.name

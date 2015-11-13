@@ -1,9 +1,7 @@
-from .models import Category, Product, Order, Feedback, ProductItem, Faq, Message
+from .models import Category, Product, Order, Feedback, ProductItem, Faq, Message, Store
 from .models import SearchQuery
-
 from django.contrib import admin
 from django.db.models.fields import TextField
-
 from markitup.widgets import AdminMarkItUpWidget
 
 
@@ -18,8 +16,8 @@ class Product(admin.ModelAdmin):
         return ", ".join([p.name for p in obj.categories.all()])
 
     list_display = ('SKU', 'name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
-    search_fields = ('SKU' , 'name')
-    list_filter = ('is_stock_empty', 'categories' )
+    search_fields = ('SKU', 'name')
+    list_filter = ('is_stock_empty', 'categories')
 
 
 class ProductItemInline(admin.TabularInline):
@@ -34,7 +32,7 @@ class Order(admin.ModelAdmin):
     ]
     list_display = ('create_time', 'owner', 'status', 'contact')
     list_filter = ('owner', 'status')
-    readonly_fields = ('comment', )
+    readonly_fields = ('comment',)
 
 
 @admin.register(Feedback)
@@ -55,3 +53,8 @@ class Message(admin.ModelAdmin):
 @admin.register(SearchQuery)
 class SearchQuery(admin.ModelAdmin):
     list_display = ('q', 'count', 'product_count')
+
+
+@admin.register(Store)
+class Store(admin.ModelAdmin):
+    list_display = ('name', 'url')
