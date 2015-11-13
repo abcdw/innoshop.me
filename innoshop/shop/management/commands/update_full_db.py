@@ -3,7 +3,7 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from shop.models import Product, Category
-import urllib2
+from urllib2 import urlopen
 import math
 import re
 from time import sleep
@@ -21,6 +21,7 @@ PRODUCT_PAGE_REGX = r'<a class="catalog-i_link" href="(.*)">'
 # for getting all products in one page
 PREFIX = '/?price_from=0&price_to=300000&brands=&sorting=0&limit=240000'
 
+ERROR_404_REGX = re.compile(r'<div class="b-page-error _404">')
 
 # atributes that we want to get
 ACTUAL_PRICE_REGX = re.compile(r'itemprop="price">(.+)<\/span>')
@@ -34,7 +35,7 @@ CATEGORY_REGX = re.compile(
     r'<li class=" nesting-2  active"><a href=".*">(.*)</a></li>')
 GRAND_CATEGORY_REGX = re.compile(
     '<li class="n1 nesting-0 "><a href=".*">(.*)</a></li>')
-
+DESCRIPTION_REGX = re.compile('itemprop="description">(.*)</div>')
 
 def error_log(func):
     def wrap(*args, **kargs):
@@ -71,6 +72,8 @@ def create_or_update_product(url, log):
     """Update a product if exists else create it"""
     try:
         atrr = product_atributes(url, log)
+        if attr['status'] == 503:
+            return atrr['status']
         product,created = Product.objects.get_or_create(SKU=atrr['SKU'])
         if created:  # product doesn't exist
             fill_product(product,atrr, log)
@@ -78,41 +81,47 @@ def create_or_update_product(url, log):
         else:
             update_product(product, atrr, log)
             log.write('Udate product source_link={0}\n'.format(url))
+        return atrr['status']
     except Exception as e:
         log_error(log,create_or_update_product,e)
 
 
 def get_content(adress, try_get_times=1):
     """Getting a page with product as a string"""
-    response = urllib2.urlopen(adress)
+    response = urlopen(adress)
     if response.getcode()==404:
-        return ""
+        return ("",response.getcode())
     #Unavailable 
-    while response.getcode() == 503:
-        wait(30)
-        response = urllib2.urlopen(adress)
+    if response.getcode() == 503:
+        return ("",response.getcode())
     # try to get it for some times
     for x in range(try_get_times):
         if response.getcode() == 200:
             result = response.read()
-            return result
-        response = urllib2.urlopen(adress)
+            return (result,response.getcode())
+        response = urlopen(adress)
     raise ValueError
 
 def product_atributes(url, log):
     """Pars page with `url` and returns atributs of a product as a dict"""
     try:
-        row_data = get_content(url)
+        row_data,status = get_content(url)
+        if status == 503:
+            return ({'status':status},503)
+        if any(re.findall(ERROR_404_REGX,row_data)):
+            return ({'is_stock_empty':True,'status':404},404)
         # price
         actual_price_str = re.findall(ACTUAL_PRICE_REGX, row_data).pop()
         actual_price = math.ceil(float(actual_price_str.replace(" ","")))
-        SKU = re.findall(SKU_REGX, row_data).pop()
+
+        SKU = re.findall(SKU_REGX, row_data).pop() 
         is_stock_empty = bool(re.findall(IS_STOCK_EMPTY_REGX, row_data))
         image, name = re.findall(IMAGE_AND_NAME_REGX, row_data).pop()
         grand_category = re.findall(GRAND_CATEGORY_REGX, row_data).pop()
         parent_category = re.findall(PARENT_CATEGORY_REGX, row_data).pop()
         category = re.findall(CATEGORY_REGX, row_data).pop()
-        return {
+        #raw_description = re.findall(DESCRIPTION_REGX,row_data)
+        return ({
             'actual_price': actual_price,
             'SKU': SKU,
             'is_stock_empty': is_stock_empty,
@@ -121,11 +130,12 @@ def product_atributes(url, log):
             'grand_category': grand_category.decode('utf-8'),
             'parent_category': parent_category.decode( 'utf-8'),
             'category': category.decode( 'utf-8'),
-            'source_link':url.decode('utf-8')
-        }
+            'source_link':url.decode('utf-8'),
+            #'description':raw_description,
+            'status':status,
+        },status)
     except Exception as e:
         log_error(log, product_atributes, e)
-	return {'is_stock_empty':True} #do it unsaleble
 
 
 
@@ -182,7 +192,10 @@ class Command(BaseCommand):
             for num,i in enumerate(open(CATEGORY_FILE).readlines()):
                 for x in product_page_urls(i, log):
                     try:
-                        create_or_update_product(x, log)
+                        status = create_or_update_product(x, log)
+                        if status == 503: # Service Unavailable
+                            log_error(log,self.handle,status)
+                            return
                     except Exception as e:
                         log_error(log,self.handle,e)
             log.close()
