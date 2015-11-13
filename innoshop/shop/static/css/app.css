@@ -178,7 +178,7 @@ body { padding-top: 110px; overflow-y: scroll;}
 }
 
 .navbar li a.basket .btn {
-    background-color: #5cb85c;
+    background-color: #333;
     color: #fff;
     border: 0;
     -webkit-transition: all 0.3s ease-in-out;
@@ -188,7 +188,7 @@ body { padding-top: 110px; overflow-y: scroll;}
 
 .navbar li a.basket .btn:hover,
 .navbar li a.basket .btn:focus {
-    background-color: #449d44;
+    background-color: #000;
 }
 
 
