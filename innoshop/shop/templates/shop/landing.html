@@ -1,0 +1,41 @@
+{% extends "shop/layout/base.html" %} {% load static from staticfiles %} {% block stylesheet %}
+<link href="{% static 'css/landing.css' %}" rel="stylesheet"> {% endblock %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{% url 'catalog' %}">
+                <div class="big-button">
+                    <div class="content-wrapper">
+                        <span class="image-bg" style="background-image: url({% static 'img/delivery.jpg' %})"></span>
+                        <span class="title-holder">Доставка</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <div class="big-button">
+                <div class="content-wrapper">
+                    <span class="image-bg" style="background-image: url({% static 'img/pizza.jpg' %})"></span>
+                    <span class="title-holder">Пицца</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="big-button">
+                <div class="content-wrapper">
+                    <span class="image-bg" style="background-image: url({% static 'img/hairdresser.jpg' %})"></span>
+                    <span class="title-holder">Парикмахер</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="big-button">
+                <div class="content-wrapper">
+                    <span class="image-bg" style="background-image: url({% static 'img/taxi.jpg' %})"></span>
+                    <span class="title-holder">Такси</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
