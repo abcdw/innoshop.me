@@ -1,0 +1,64 @@
+{% extends "shop/layout/base.html" %} {% load static from staticfiles %} {% block stylesheet %}
+<link href="{% static 'css/landing.css' %}" rel="stylesheet"> {% endblock %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{% url 'catalog' %}">
+                <div class="big-button">
+                    <div class="content-wrapper">
+                        <div class="overlay"></div>
+                        <span class="image-bg" style="background-image: url({% static 'img/delivery.jpg' %})"></span>
+                        <span class="title-holder">Доставка</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="https://pi.pizza/" target="_blank" onclick="ga('send','event','outbound','pi.pizza',this.href);" utm_source="innoshop.me">
+                <div class="big-button">
+                    <div class="content-wrapper front">
+                        <div class="overlay"></div>
+                        <span class="image-bg" style="background-image: url({% static 'img/pizza.jpg' %})"></span>
+                        <span class="title-holder">Пицца</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" class="soon">
+                <div class="big-button">
+                    <div class="content-wrapper front">
+                        <div class="overlay"></div>
+                        <span class="image-bg" style="background-image: url({% static 'img/hairdresser.jpg' %})"></span>
+                        <span class="title-holder">Парикмахер</span>
+                    </div>
+                    <div class="content-wrapper back" style="background: #5D4037 "> 
+                        <span class="title-holder">Coming soon</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="#" class="soon">
+                <div class="big-button">
+                    <div class="content-wrapper front">
+                        <div class="overlay"></div>
+                        <span class="image-bg" style="background-image: url({% static 'img/taxi.jpg' %})"></span>
+                        <span class="title-holder">Такси</span>
+                    </div>
+                    <div class="content-wrapper back" style="background: #FFA000 ">
+                        <span class="title-holder">Coming soon</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+ {% block javascript %}
+<script>
+        $('.soon .big-button').click(function(){
+          $(this).toggleClass('flipped');
+        });
+</script>
+{% endblock %}

@@ -46,6 +46,11 @@ def degrades(function):
 
 @degrades
 def index(request):
+    return render(request, 'shop/landing.html')
+
+@degrades
+def catalog(request):
+    print 'test'
     catalog = Category.objects.filter(product_count__gt=0)
     category = None
 
@@ -152,10 +157,6 @@ def black_friday(request):
         'admin': request.user.is_staff
     }
     return render(request, 'shop/special/black_friday.html', context)
-
-
-def catalog(request):
-    return HttpResponse('catalog')
 
 
 def get_int(request, name, default=None):
