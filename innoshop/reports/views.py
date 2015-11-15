@@ -140,9 +140,15 @@ def reports_user_view(request):
 
 	report = xlsxwriter.Workbook("tmp.xlsx")
 	bold = report.add_format({'bold': 1})
+	names = {}
 
 	for suborder in suborders:
-		generate_user_page(suborder, report.add_worksheet(suborder.order.contact), bold)
+		username = suborder.order.contact
+		# avoiding same pages name error for the same user
+		sheet_num = names.setdefault(username, 0)
+		names[username] += 1
+
+		generate_user_page(suborder, report.add_worksheet(username + str(sheet_num)), bold)
 	report.close()
 
 	# generating link to download xlsx
