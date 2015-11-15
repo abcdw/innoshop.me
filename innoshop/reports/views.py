@@ -6,7 +6,7 @@ from django.shortcuts import render
 import time
 import xlsxwriter
 import os
-from shop.models import Order
+from shop.models import Order, SubOrder
 
 __author__ = 'kittn'
 
@@ -67,7 +67,7 @@ def reports_page_view(request):
 	return render(request, "reports/reports_page.html")
 
 
-def generate_user_page(order, page, fmt):
+def generate_user_page(suborder, page, fmt):
 
 	# generating header of the page
 	page.merge_range('B1:F1', u"Бланк заявки и приема товара c магазина Метро в г.Иннополис", fmt)
@@ -79,8 +79,8 @@ def generate_user_page(order, page, fmt):
 		u"Форма оплаты"
 	]
 	values = [
-		str(order.id), order.create_time.strftime("%d.%m.%y, %H:%M"),
-		time.strftime("%d.%m.%y", time.localtime()), "_" * 5, "_" * 5, order.contact, "_" * 5
+		str(suborder.id), suborder.order.create_time.strftime("%d.%m.%y, %H:%M"),
+		time.strftime("%d.%m.%y", time.localtime()), "_" * 5, "_" * 5, suborder.order.contact, "_" * 5
 	]
 	for i in range(len(headers)):
 		page.write_string(i + 2, 1, headers[i], fmt)
@@ -95,9 +95,9 @@ def generate_user_page(order, page, fmt):
 	]
 	page.write_row(row - 1, 0, product_info, fmt)
 
-	for product in order.get_items().all():
+	for product in suborder.get_items().all():
 		product_data = [
-			row - 9, product.name, product.SKU, u"value",
+			row - 10, product.name, product.SKU, u"value",
 			product.count, product.actual_price, product.count * product.actual_price
 		]
 		total_value += product.count * product.actual_price
@@ -132,12 +132,17 @@ def generate_user_page(order, page, fmt):
 
 
 def reports_user_view(request):
-	orders = Order.objects.filter(Q(status="new") | Q(status="active"))
+	suborders = SubOrder.objects.filter(Q(status="new") | Q(status="active"))
+
+	# i can put expression above as a parameter to 'filter', but it won't be readable
+	suborders = filter(lambda x: unicode(x) in (u"Metro", u"default"), suborders)
+	print suborders
+
 	report = xlsxwriter.Workbook("tmp.xlsx")
 	bold = report.add_format({'bold': 1})
 
-	for order in orders:
-		generate_user_page(order, report.add_worksheet(order.contact), bold)
+	for suborder in suborders:
+		generate_user_page(suborder, report.add_worksheet(suborder.order.contact), bold)
 	report.close()
 
 	# generating link to download xlsx
