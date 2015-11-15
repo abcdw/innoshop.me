@@ -12,12 +12,7 @@ from shop.models import Product,Store
 from shop.management.commands.update_full_db import product_atributes,get_content
 
 SETTINGS_FILE = 'shop/management/commands/settings/updater_settings.json'
-<<<<<<< HEAD
 LOG_FILE = 'shop/management/commands/logs/update_products_info_log_{0}.json'.format(ctime())
-=======
-LOG_FILE = 'shop/management/commands/logs/update_products_info_log_{0}.txt'.format(ctime())
-
->>>>>>> 3f0d42bd8df9ca703d32839349596f0bb69110c6
 
 class Command(BaseCommand):
 
@@ -26,9 +21,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.settings = load_settings()
-<<<<<<< HEAD
-        #with sys.stdout as log:#for debug
-        #with open(LOG_FILE,'w') as log:
         log = []
         try:
             for num, i in enumerate(self.next_products()):
@@ -77,82 +69,6 @@ class Command(BaseCommand):
             import json
             with open(LOG_FILE,'w') as log_file:
                 json.dump(log,log_file,sort_keys=True,separators=(',\n',':'))
-=======
-        #with sys.stdout as log:
-        with open(LOG_FILE,'w') as log:
-            log.write(str(self.settings)+"\n")
-            try:
-                for num, i in enumerate(self.next_products()):
-                    try:
-                        new_values,code = product_atributes(
-                            i.source_link,log)
-                        if code == 503:
-                            return
-                        if code == 404:
-                            Product.objects.filter(pk=i.pk).update(is_stock_empty=True)
-                            log.write("pk={0} SKU={1} page not fount is_stock_empty = True \n".format(i.pk,i.SKU))
-                            continue
-                        try:
-                            old_price = i.price
-                            old_actual_price = i.actual_price
-                            old_is_stock_empty = i.is_stock_empty
-                            if i.SKU == new_values['SKU']:
-                                product = Product.objects.filter(pk=i.pk)
-                                is_stock_empty = new_values['is_stock_empty']
-                                price = new_values['actual_price']
-                                if i.price > 1.5*price:
-                                    product.update(actual_price = price,is_stock_empty=is_stock_empty)
-                                    log.write(
-                                        "pk={0} SKU={1} updated actual_price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                                        format(i.pk, i.SKU, old_actual_price,
-                                            i.actual_price, old_is_stock_empty,
-                                            i.is_stock_empty))
-                                else:
-                                    product.update(price = price,is_stock_empty=is_stock_empty)
-                                    log.write(
-                                        "pk={0} SKU={1} updated price ({2} -> {3}) is_stock_empty ({4} -> {5})\n".
-                                        format(i.pk, i.SKU, old_price,
-                                            i.price, old_is_stock_empty,
-                                            i.is_stock_empty))
-                            else:
-                                log.write(
-                                    "[ERROR] pk={0} Not the same SKU({1}) in the db and the page {2}\n".format(
-                                        i.pk,
-                                        i.SKU,
-                                        new_values['sku']))
-                        except IntegrityError:
-                            log.write(
-                                "[ERROR] pk={0} UNICQUE constraint failed\n".format(i.pk))
-                        except IndexError:
-                            i.is_stock_empty = True
-                            i.save()
-                            log.write(
-                                "[ERROR] pk={0} SKU={1} is_stock_empty=True PARSING ERROR {3}\n". format(
-                                    i.pk,
-                                    i.SKU,
-                                    i.source_link))
-                        except KeyError:
-                            log.write(
-                                "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2}\n". format(
-                                    i.pk,
-                                    i.SKU,
-                                    i.source_link))
-                    except (urllib2.HTTPError, urllib2.URLError) as xxx_todo_changeme:
-                        httplib.IncompleteRead = xxx_todo_changeme
-                        log.write(
-                            "[ERROR] pk={0} SKU={1} PAGE NOT FOUND {2}\n".
-                            format(i.pk, i.SKU, i.source_link))
-                    except Exception as e:
-                        log.write(
-                            "[ERROR] pk={0} SKU={1} SOMETHING WRONG {2} {3} is_stock_empty=True\n".
-                            format(i.pk, i.SKU, e,i.source_link))
-                        i.is_stock_empty = True
-                        i.save()
-                    self.show_status(num)
-            finally:
-                save_settings(self.settings)
-                log.close()
->>>>>>> 3f0d42bd8df9ca703d32839349596f0bb69110c6
 
     def next_products(self):
         """Get list of products for checking
