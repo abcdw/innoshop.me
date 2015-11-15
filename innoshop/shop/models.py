@@ -10,7 +10,6 @@ from markitup.fields import MarkupField
 from model_utils.fields import StatusField
 from model_utils import Choices
 from functools import reduce
-
 from innoshop.settings import MEDIA_ROOT
 
 
@@ -24,7 +23,6 @@ class Category(models.Model):
 
 
 class ProductManager(models.Manager):
-
     def get_sallable(self):
         return self.filter(
             price__gt=0).filter(
@@ -59,6 +57,16 @@ class ProductManager(models.Manager):
         return result
 
 
+class Store(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
+    url = models.CharField(max_length=255, blank=True)
+    icon = models.CharField(max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Product(models.Model):
     name = models.CharField(db_index=True, max_length=255)
     SKU = models.CharField(db_index=True, max_length=100, unique=True)
@@ -68,13 +76,14 @@ class Product(models.Model):
     actual_price = models.IntegerField(
         default=10000000)  # actual price from shop
     min_count = models.IntegerField(default=1)
-    local_image = models.FileField(upload_to=MEDIA_ROOT, blank=True)
+    local_image = models.FileField(blank=True)
     img_url = models.CharField(max_length=255, blank=True)
     is_stock_empty = models.BooleanField(default=True)
     source_link = models.CharField(
         max_length=255,
         blank=True)  # Link to original web-page
     rating = models.IntegerField(default=0)
+    store = models.ForeignKey(Store, null=True, blank=True)
 
     objects = ProductManager()
 
@@ -101,8 +110,28 @@ class Order(models.Model):
         return self.productitem_set
 
 
+class SubOrder(models.Model):
+    STATUS = Choices('new', 'active', 'done', 'partially_done', 'rejected')
+    status = StatusField()
+    store = models.ForeignKey(Store, null=True, blank=True)
+    owner = models.ForeignKey(User, null=True, blank=True)
+    moderator_comment = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    photo = models.ImageField(upload_to='orders', blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def get_items(self):
+        return self.productitem_set
+
+    def __unicode__(self):
+        if self.store:
+            return self.store.name
+        return "default"
+
+
 class ProductItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    sub_order = models.ForeignKey(SubOrder, on_delete=models.CASCADE, blank=True, null=True)
     product = models.ForeignKey(
         Product,
         on_delete=models.SET_NULL,
@@ -121,9 +150,10 @@ class ProductItem(models.Model):
     img_url = models.CharField(max_length=255, blank=True)
     bought = models.BooleanField(default=False, blank=False)
     currentId = models.IntegerField(default=1)
+    store = models.ForeignKey(Store, null=True, blank=True)
 
     def total_cost(self):
-        return self.count*self.price
+        return self.count * self.price
 
     def __unicode__(self):
         return self.name
