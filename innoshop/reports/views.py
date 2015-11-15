@@ -74,20 +74,20 @@ def generate_user_page(order, page, fmt):
 	page.set_column('B:C', 50)
 	page.set_column('F:F', 15)
 	headers = [
-		u"Дата заявки", u"Дата доставки", u"Адрес доставки",
+		u"Номер заказа", u"Дата заявки", u"Дата доставки", u"Адрес доставки",
 		u"Время доставки (предпочитаемое)", u"Фамилия Имя и телефон клиента",
 		u"Форма оплаты"
 	]
 	values = [
-		order.create_time.strftime("%d.%m.%y, %H:%M"), time.strftime("%d.%m.%y", time.localtime()),
-		"_" * 5, "_" * 5, order.contact, "_" * 5
+		str(order.id), order.create_time.strftime("%d.%m.%y, %H:%M"),
+		time.strftime("%d.%m.%y", time.localtime()), "_" * 5, "_" * 5, order.contact, "_" * 5
 	]
 	for i in range(len(headers)):
 		page.write_string(i + 2, 1, headers[i], fmt)
 		page.write_string(i + 2, 2, values[i])
 
 	# now generating list of items in order
-	row = 10
+	row = 4 + len(headers)
 	total_value = 0
 
 	product_info = [
