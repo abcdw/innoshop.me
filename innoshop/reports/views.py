@@ -135,7 +135,7 @@ def reports_user_view(request):
 	suborders = SubOrder.objects.filter(Q(status="new") | Q(status="active"))
 
 	# i can put expression above as a parameter to 'filter', but it won't be readable
-	suborders = filter(lambda x: unicode(x) in (u"Metro", u"default"), suborders)
+	suborders = filter(lambda x: unicode(x) == u"Metro", suborders)
 	print suborders
 
 	report = xlsxwriter.Workbook("tmp.xlsx")
