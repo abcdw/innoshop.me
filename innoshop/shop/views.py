@@ -223,7 +223,8 @@ def order(request):
             protocol = 'https' if request.is_secure() else 'http'
             domain = request.get_host()
             admin_url = protocol + '://' + domain + order.get_admin_url()
-            send_slack('New order from ' + order.contact + '\n' + admin_url)
+            send_slack('New order from ' + order.contact.encode('utf-8') + '\n'
+                       + admin_url.encode('utf-8'))
 
             return render(request, 'shop/thanks.html')
 
