@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render
@@ -11,6 +11,7 @@ from shop.models import Order, SubOrder
 __author__ = 'kittn'
 
 
+@staff_member_required
 def expeditor_view(request):
 	orders = Order.objects\
 		.filter(Q(status='new') | Q(status='active'))\
@@ -63,6 +64,7 @@ def expeditor_view(request):
 	return response
 
 
+@staff_member_required
 def reports_page_view(request):
 	return render(request, "reports/reports_page.html")
 
@@ -131,6 +133,7 @@ def generate_user_page(suborder, page, fmt):
 		row += 2
 
 
+@staff_member_required
 def reports_user_view(request):
 	suborders = SubOrder.objects.filter(Q(status="new") | Q(status="active"))
 
