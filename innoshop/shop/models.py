@@ -3,8 +3,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
-from markitup.fields import MarkupField
 from django.db.models import F, Q
+from django.core.urlresolvers import reverse
+
+from markitup.fields import MarkupField
 from model_utils.fields import StatusField
 from model_utils import Choices
 from functools import reduce
@@ -91,6 +93,9 @@ class Order(models.Model):
     text = models.TextField(blank=True)
     photo = models.ImageField(upload_to='orders', blank=True)
     status = StatusField()
+
+    def get_admin_url(self):
+        return reverse("admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), args=(self.id,))
 
     def get_items(self):
         return self.productitem_set

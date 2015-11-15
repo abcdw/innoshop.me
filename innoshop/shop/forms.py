@@ -34,6 +34,7 @@ class OrderForm(ModelForm):
             products_text = products_text + "\n" + ('-' * 40) + "\n" + txt
         order.text = order.comment + "\n\n" + products_text + "\n" + ('-' * 40) + "\n" + ( u"Итого: %.2f" % (total_price))
         order.save()
+        return order
 
 
 class FeedbackForm(ModelForm):

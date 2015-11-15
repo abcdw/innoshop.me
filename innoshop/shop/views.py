@@ -17,15 +17,27 @@ from .models import Order
 
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
-from innoshop.settings import MEDIA_ROOT
+from innoshop.settings import MEDIA_ROOT, SLACK_TOKEN
 
 import json
 import inspect
 import datetime
 import os
 from subprocess import call
+from slackclient import SlackClient
 
 from django.contrib.admin.views.decorators import staff_member_required
+
+
+def send_slack(message, **kwargs):
+    sc = SlackClient(SLACK_TOKEN)
+    if not kwargs.has_key('channel'):
+        kwargs['channel'] = '#order'
+    if not kwargs.has_key('as_user'):
+        kwargs['as_user'] = True
+
+    kwargs['text'] = message
+    sc.api_call('chat.postMessage', **kwargs)
 
 
 def degrades(function):
@@ -204,9 +216,15 @@ def order(request):
     if request.method == 'POST':
         order_form = OrderForm(request.POST)
         if order_form.is_valid():
-            order_form.create_order(request.session.setdefault('products', {}))
+            order = order_form.create_order(request.session.setdefault('products', {}))
             del request.session['products']
             request.session.modified = True
+
+            protocol = 'https' if request.is_secure() else 'http'
+            domain = request.get_host()
+            admin_url = protocol + '://' + domain + order.get_admin_url()
+            send_slack('New order from ' + order.contact + '\n' + admin_url)
+
             return render(request, 'shop/thanks.html')
 
     raise Http404
