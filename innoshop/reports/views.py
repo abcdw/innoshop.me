@@ -162,3 +162,7 @@ def reports_user_view(request):
 	os.remove("tmp.xlsx")
 
 	return response
+
+
+def report_order_id(request, order_id):
+	return HttpResponse("Page with order_id=%s in progress..." % order_id)
