@@ -1,0 +1,26 @@
+{% extends "shop/layout/base.html" %} 
+
+{% load static from staticfiles %} 
+{% block stylesheet %}
+<link href="{% static 'css/coffee.css' %}" rel="stylesheet"> 
+{% endblock %}
+{% block content %} 
+<div class="container">
+    <div class="row">
+        <div class="info-box">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus fugiat eius voluptate cum unde deleniti veritatis repellendus, numquam aperiam? Quae ullam in iure soluta labore molestiae non, quibusdam vel obcaecati.</p>
+        </div>
+    </div>
+    <ul class="row list-products">
+        <li class="col-md-3">
+            <a href="">
+                <img src="" alt="">
+            </a>
+            <div class="product-item-info">
+                <b><a href="">Coffe</a></b>
+                <em class="product-price">5$</em>
+            </div>
+        </li>
+    </ul>
+</div>
+{% endblock %}

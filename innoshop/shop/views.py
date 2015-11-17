@@ -61,6 +61,10 @@ def index(request):
     return render(request, 'shop/landing.html')
 
 @degrades
+def coffee(request):
+    return render(request, 'shop/coffee.html')
+
+@degrades
 def catalog(request):
     catalog = Category.objects.filter(product_count__gt=0)
     category = None

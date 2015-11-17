@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^update_rating', views.update_rating, name='update_rating'),
 #    url(r'^get_orders', views.get_orders, name='get_orders'),
 #    url(r'^get_order_products', views.get_order_products, name='get_order_products'),
-    url(r'^black_friday', views.black_friday, name='black_friday')
+    url(r'^black_friday', views.black_friday, name='black_friday'),
+    url(r'^coffee$', views.coffee, name='coffee'),
     #  url(r'^order$', views.order, name='order'),
 ]
