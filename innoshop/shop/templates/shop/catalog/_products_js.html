@@ -1,0 +1,38 @@
+<script>
+        $(document).ready(function () {
+            var products = [];
+            {% for product in products %}
+                products[{{product.id}}] = {
+                    name: '{{ product.name }}',
+                    price: {{ product.price }},
+                    id: {{ product.id }},
+                    min_count: {{ product.min_count }},
+                    rating: {{ product.rating }}
+                };
+            {% endfor %}
+            if (products.length > 0) {
+                ProductStore.setInitialState(products);
+
+                for (var i in products) {
+                    React.render(React.createElement(Price, {
+                        price: products[i].price,
+                        id: i,
+                        count: BasketStore.getProductCount(i)
+                    }), document.getElementById('product-' + i));
+                    {% if admin %}
+                        React.render(React.createElement(Rating, {
+                            id: i,
+                            rating: products[i].rating,
+                            url: '{% url 'update_rating' %}'
+                        }), document.getElementById('product-rating-' + i));
+                    {% endif %}
+                }
+            }
+
+            if ($('#basket2').length)
+                React.render(React.createElement(Basket, {
+                    url: '{% url 'order' %}',
+                    price: BasketStore.totalSum()
+                }), document.getElementById('basket2'));
+        });
+    </script>
