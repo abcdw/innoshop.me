@@ -61,10 +61,15 @@ def index(request):
 def coffee(request):
     store = Store.objects.get(name="Coffee")
     products = Product.objects.get_sallable().filter(store=store)
+    try:
+        faq = Faq.objects.get(name='Coffee')
+    except Exception as e:
+        faq = False
 
     context = {
         'products': products,
         'admin': request.user.is_staff,
+        'faq': faq
     }
     return render(request, 'shop/coffee.html', context)
 

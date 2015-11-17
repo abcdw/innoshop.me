@@ -14,11 +14,9 @@
     <div class="container">
         <div class="row">
             <div class="info-box">
-                <h2>Information</h2>
+                <h2>Кофе</h2>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus fugiat eius voluptate cum unde
-                    deleniti veritatis repellendus, numquam aperiam? Quae ullam in iure soluta labore molestiae non,
-                    quibusdam vel obcaecati.</p>
+                <p>Кофе от IKEA, кофеварка от DeLonghi, молоко от Казани, доставка - 20 рублей.</p>
             </div>
 
             <ul class="row list-products" id="ms-container">
@@ -40,6 +38,9 @@
                     </div>
                 {% endfor %}
             </ul>
+        </div>
+        <div class="row">
+            {% include 'shop/_faq.html' with faq=faq without_name=True %}
         </div>
     </div>
 {% endblock %}
