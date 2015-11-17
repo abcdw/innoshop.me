@@ -46,11 +46,15 @@ ul {
     display: block;
 }
 
-.product-item-info b a {
+.product-item-info .title {
     display: inline-block;
     width: 100%;
     color: #2f2933;
     font-size: 1em;
+}
+
+.product-item-info .buynow {
+    cursor: pointer;
 }
 
 .product-item-info em {

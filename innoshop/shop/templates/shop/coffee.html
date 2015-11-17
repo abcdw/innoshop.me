@@ -1,49 +1,39 @@
 {% extends "shop/layout/base.html" %}
-{% load static from staticfiles %} 
+{% load static from staticfiles %}
 {% block stylesheet %}
-    <link href="{% static 'css/coffee.css' %}" rel="stylesheet"> 
-{% endblock %} 
+    <link href="{% static 'css/coffee.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="info-box">
-            <h2>Information</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus fugiat eius voluptate cum unde deleniti veritatis repellendus, numquam aperiam? Quae ullam in iure soluta labore molestiae non, quibusdam vel obcaecati.</p>
+    <div class="container">
+        <div class="row">
+            <div class="info-box">
+                <h2>Information</h2>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus fugiat eius voluptate cum unde
+                    deleniti veritatis repellendus, numquam aperiam? Quae ullam in iure soluta labore molestiae non,
+                    quibusdam vel obcaecati.</p>
+            </div>
+
+            <ul class="row list-products" id="ms-container">
+                <div class="col-md-3 ms-item">
+                    <li class="">
+                        <img src="{% static 'img/coffee.jpg' %}" alt="">
+
+                        <div class="product-item-info">
+                            <b class="title">Эспрессо 0.1</b>
+                            <em class="product-price">5$</em>
+
+                            <div class="buynow">
+                                <i class="fa fa-cart-plus"></i>
+                            </div>
+                        </div>
+                    </li>
+                </div>
+            </ul>
         </div>
     </div>
-    <ul class="row list-products" id="ms-container">
-    <div class="col-md-3 ms-item">
-        <li class="">
-            <a href="">
-                <img src="{% static 'img/coffee.jpg' %}" alt="">
-            </a>
-            <div class="product-item-info">
-                <b><a href="">Эспрессо 0.1</a></b>
-                <em class="product-price">5$</em>
-                <div class="buynow">
-                    <i class="fa fa-cart-plus"></i>
-                </div>         
-            </div>
-        </li>
-    </div>
-    <div class="col-md-3 ms-item">
-        <li class="">
-            <a href="">
-                <img src="https://innoshop.me/static/product_images/416183-1-150x150.jpg" alt="">
-            </a>
-            <div class="product-item-info">
-                <b><a href="">Эспрессо 0.1</a></b>
-                <em class="product-price">5$</em>
-                <div class="buynow">
-                    <i class="fa fa-cart-plus"></i>
-                </div>         
-            </div>
-        </li>
-    </div>
-    </ul>
-</div>
 {% endblock %}
 {% block javascript %}
-<script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
+    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
 {% endblock %}
