@@ -3,51 +3,6 @@
 {% block stylesheet %}
     <link href="{% static 'css/coffee.css' %}" rel="stylesheet"> 
 {% endblock %} 
-{% block javascript %}
-    {{ block.super }}
-    <script>
-        $(document).ready(function () {
-            var products = [];
-            {% for cat in categories %}
-                {% for product in cat.products %}
-                    {% if product.price > 0 %}
-                        products[{{product.id}}] = {
-                            name: '{{ product.name }}',
-                            price: {{ product.price }},
-                            id: {{ product.id }},
-                            min_count: {{ product.min_count }},
-                            rating: {{ product.rating }}
-                        };
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-            if (products.length > 0) {
-                ProductStore.setInitialState(products);
-
-                for (var i in products) {
-                    React.render(React.createElement(Price, {
-                        price: products[i].price,
-                        id: i,
-                        count: BasketStore.getProductCount(i)
-                    }), document.getElementById('product-' + i));
-                    {% if admin %}
-                        React.render(React.createElement(Rating, {
-                            id: i,
-                            rating: products[i].rating,
-                            url: '{% url 'update_rating' %}'
-                        }), document.getElementById('product-rating-' + i));
-                    {% endif %}
-                }
-            }
-
-            if ($('#basket2').length)
-                React.render(React.createElement(Basket, {
-                    url: '{% url 'order' %}',
-                    price: BasketStore.totalSum()
-                }), document.getElementById('basket2'));
-        });
-    </script>
-{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -58,9 +13,10 @@
         </div>
     </div>
     <ul class="row list-products" id="ms-container">
-        <li class="col-md-3 ms-item">
+    <div class="col-md-3 ms-item">
+        <li class="">
             <a href="">
-                <img src="../../static/img/coffee.jpg" alt="">
+                <img src="{% static 'img/coffee.jpg' %}" alt="">
             </a>
             <div class="product-item-info">
                 <b><a href="">Эспрессо 0.1</a></b>
@@ -70,6 +26,21 @@
                 </div>         
             </div>
         </li>
+    </div>
+    <div class="col-md-3 ms-item">
+        <li class="">
+            <a href="">
+                <img src="https://innoshop.me/static/product_images/416183-1-150x150.jpg" alt="">
+            </a>
+            <div class="product-item-info">
+                <b><a href="">Эспрессо 0.1</a></b>
+                <em class="product-price">5$</em>
+                <div class="buynow">
+                    <i class="fa fa-cart-plus"></i>
+                </div>         
+            </div>
+        </li>
+    </div>
     </ul>
 </div>
 {% endblock %}
