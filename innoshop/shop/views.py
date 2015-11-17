@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.conf import settings
 
-from .models import Category, Faq
+from .models import Category, Faq, Store
 from .models import Product
 from .models import Category, Faq, Message
 from .models import SearchQuery
@@ -66,7 +66,8 @@ def coffee(request):
 
 @degrades
 def catalog(request):
-    catalog = Category.objects.filter(product_count__gt=0)
+    store = Store.objects.get(name="Metro")
+    catalog = Category.objects.filter(product_count__gt=0, store=store)
     category = None
 
     def find_children(src, dst, id):
@@ -103,7 +104,7 @@ def catalog(request):
             catalog_list.remove(item)
             find_children(catalog_list, out['children'], item['id'])
 
-    products = Product.objects.get_sallable()
+    products = Product.objects.get_sallable().filter(store=store)
 
     cat = get_int(request, 'c')
     category_breadcrumbs = []

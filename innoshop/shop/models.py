@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models import F, Q
 from django.core.urlresolvers import reverse
-
 from markitup.fields import MarkupField
 from model_utils.fields import StatusField
 from model_utils import Choices
@@ -13,10 +12,21 @@ from functools import reduce
 from innoshop.settings import MEDIA_ROOT
 
 
+class Store(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True)
+    url = models.CharField(max_length=255, blank=True)
+    icon = models.CharField(max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Category(models.Model):
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', null=True, blank=True)
     product_count = models.IntegerField(default=0, blank=False)
+    store = models.ForeignKey(Store, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -55,16 +65,6 @@ class ProductManager(models.Manager):
             result |= products.filter(qe)
 
         return result
-
-
-class Store(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True)
-    url = models.CharField(max_length=255, blank=True)
-    icon = models.CharField(max_length=255, blank=True)
-
-    def __unicode__(self):
-        return self.name
 
 
 class Product(models.Model):
