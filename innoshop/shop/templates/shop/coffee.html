@@ -4,6 +4,12 @@
     <link href="{% static 'css/coffee.css' %}" rel="stylesheet">
 {% endblock %}
 
+{% block javascript %}
+    {{ block.super }}
+    {% include "shop/catalog/_products_js.html" %}
+    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">
@@ -16,24 +22,24 @@
             </div>
 
             <ul class="row list-products" id="ms-container">
-                <div class="col-md-3 ms-item">
-                    <li class="">
-                        <img src="{% static 'img/coffee.jpg' %}" alt="">
+                {% for product in products %}
+                    <div class="col-md-3 ms-item">
+                        <li class="">
+                            <img src="{{ product.img_url }}" alt="{{ product.name | safe }}">
 
-                        <div class="product-item-info">
-                            <b class="title">Эспрессо 0.1</b>
-                            <em class="product-price">5$</em>
+                            <div class="product-item-info">
+                                <b class="title">{{ product.name | safe | truncatechars:52 }}</b>
+                                <em class="product-price">{{ product.price }}&nbsp;<i
+                                        class="fa fa-ruble small"></i></em>
 
-                            <div class="buynow">
-                                <i class="fa fa-cart-plus"></i>
+                                <div class="buynow">
+                                    <span id="product-{{ product.id }}"></span>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </div>
+                        </li>
+                    </div>
+                {% endfor %}
             </ul>
         </div>
     </div>
-{% endblock %}
-{% block javascript %}
-    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
 {% endblock %}

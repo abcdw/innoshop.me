@@ -8,24 +8,20 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.conf import settings
-
 from .models import Category, Faq, Store
 from .models import Product
 from .models import Category, Faq, Message
 from .models import SearchQuery
 from .models import Order
-
 from .forms import OrderForm
 from .forms import OrderForm, FeedbackForm
 from innoshop.settings import MEDIA_ROOT, SLACK_TOKEN
-
 import json
 import inspect
 import datetime
 import os
 from subprocess import call
 from slackclient import SlackClient
-
 from django.contrib.admin.views.decorators import staff_member_required
 
 
@@ -60,9 +56,18 @@ def degrades(function):
 def index(request):
     return render(request, 'shop/landing.html')
 
+
 @degrades
 def coffee(request):
-    return render(request, 'shop/coffee.html')
+    store = Store.objects.get(name="Coffee")
+    products = Product.objects.get_sallable().filter(store=store)
+
+    context = {
+        'products': products,
+        'admin': request.user.is_staff,
+    }
+    return render(request, 'shop/coffee.html', context)
+
 
 @degrades
 def catalog(request):
@@ -87,7 +92,7 @@ def catalog(request):
         if not os.path.exists(full_path):
             call(
                 "wget --random-wait -q -b -t 15 -T 10 -O {0} {1}".
-                format(full_path, product.img_url),
+                    format(full_path, product.img_url),
                 shell=True)
 
     catalog_tree = []
@@ -164,7 +169,7 @@ def black_friday(request):
         {'name': u'У МЕНЯ ВСЕ ОТЛИЧНО', 'products': Product.objects.filter(
             SKU__in=['-4', '-10', '-11', '-6'])},
         {'name': u'У МЕНЯ ЖЕ НЕТ ВОЕННИКА!', 'products': Product.
-         objects.filter(SKU__in=['-3', '-12', '-14', '-7'])},
+            objects.filter(SKU__in=['-3', '-12', '-14', '-7'])},
         {'name': u'Я ИЗ АДМИНИСТРАЦИИ', 'products': Product.objects.filter(
             SKU__in=['-2', '-9', '-13', '-15'])}]
 
