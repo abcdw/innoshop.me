@@ -2,25 +2,74 @@ body {
     background: #eaeaea;
 }
 
-a {
-    color: #a5d05e;
+a,
+a:hover,
+a:focus,
+a:active {
     text-decoration: none;
 }
 
 ul {
     margin: 0;
     padding: 0;
+    list-style: none;
 }
 
 .list-products li,
 .info-box {
     margin-bottom: 2em;
+    padding: 0;
     background: #ffffff;
     border-radius: .25em;
     overflow: hidden;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.list-products li:hover,
+.info-box:hover {
     -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.info-box h2 {
+    margin-top: 0;
+}
+
+.product-item-info {
+    padding: 1em 1.5em;
+    display: block;
+}
+
+.product-item-info b a {
+    display: inline-block;
+    width: 100%;
+    color: #2f2933;
+    font-size: 1em;
+}
+
+.product-item-info em {
+    display: inline-block;
+    width: 49%;
+    color: #2f2933;
+    position: relative;
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.product-item-info .buynow {
+    display: inline-block;
+    width: 49%;
+    color: #a5d05e;
+    position: relative;
+    font-size: 2em;
+    font-weight: 600;
+    text-align: right;
 }
 
 .list-products li img {

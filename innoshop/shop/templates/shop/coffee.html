@@ -1,26 +1,78 @@
-{% extends "shop/layout/base.html" %} 
-
+{% extends "shop/layout/base.html" %}
 {% load static from staticfiles %} 
 {% block stylesheet %}
-<link href="{% static 'css/coffee.css' %}" rel="stylesheet"> 
+    <link href="{% static 'css/coffee.css' %}" rel="stylesheet"> 
+{% endblock %} 
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function () {
+            var products = [];
+            {% for cat in categories %}
+                {% for product in cat.products %}
+                    {% if product.price > 0 %}
+                        products[{{product.id}}] = {
+                            name: '{{ product.name }}',
+                            price: {{ product.price }},
+                            id: {{ product.id }},
+                            min_count: {{ product.min_count }},
+                            rating: {{ product.rating }}
+                        };
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            if (products.length > 0) {
+                ProductStore.setInitialState(products);
+
+                for (var i in products) {
+                    React.render(React.createElement(Price, {
+                        price: products[i].price,
+                        id: i,
+                        count: BasketStore.getProductCount(i)
+                    }), document.getElementById('product-' + i));
+                    {% if admin %}
+                        React.render(React.createElement(Rating, {
+                            id: i,
+                            rating: products[i].rating,
+                            url: '{% url 'update_rating' %}'
+                        }), document.getElementById('product-rating-' + i));
+                    {% endif %}
+                }
+            }
+
+            if ($('#basket2').length)
+                React.render(React.createElement(Basket, {
+                    url: '{% url 'order' %}',
+                    price: BasketStore.totalSum()
+                }), document.getElementById('basket2'));
+        });
+    </script>
 {% endblock %}
-{% block content %} 
+
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="info-box">
+            <h2>Information</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus fugiat eius voluptate cum unde deleniti veritatis repellendus, numquam aperiam? Quae ullam in iure soluta labore molestiae non, quibusdam vel obcaecati.</p>
         </div>
     </div>
-    <ul class="row list-products">
-        <li class="col-md-3">
+    <ul class="row list-products" id="ms-container">
+        <li class="col-md-3 ms-item">
             <a href="">
-                <img src="" alt="">
+                <img src="../../static/img/coffee.jpg" alt="">
             </a>
             <div class="product-item-info">
-                <b><a href="">Coffe</a></b>
+                <b><a href="">Эспрессо 0.1</a></b>
                 <em class="product-price">5$</em>
+                <div class="buynow">
+                    <i class="fa fa-cart-plus"></i>
+                </div>         
             </div>
         </li>
     </ul>
 </div>
+{% endblock %}
+{% block javascript %}
+<script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
 {% endblock %}
