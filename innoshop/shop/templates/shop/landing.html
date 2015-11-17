@@ -8,18 +8,29 @@
 <div class="container stores-icons">
     <div class="row">
         <div class="col-md-4">
-            <a href="{% url 'catalog' %}">
+            <a href="{% url 'catalog' %}" class="relative">
                 <div class="big-button">
                     <div class="content-wrapper">
                         <div class="overlay"></div>
                         <span class="image-bg" style="background-image: url({% static 'img/delivery.jpg' %})"></span>
-                        <span class="title-holder">Доставка</span>
+                        <span class="title-holder">Продукты</span>
                     </div>
                 </div>
             </a>
         </div>
         <div class="col-md-4">
-            <a href="https://pi.pizza/" target="_blank" onclick="ga('send','event','outbound','pi.pizza',this.href);" utm_source="innoshop.me">
+            <a href="{% url 'coffee' %}" class="relative">
+                <div class="big-button">
+                    <div class="content-wrapper front">
+                        <div class="overlay"></div>
+                        <span class="image-bg" style="background-image: url({% static 'img/coffee.jpg' %})"></span>
+                        <span class="title-holder">Кофе</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="https://pi.pizza/" class="relative" target="_blank" onclick="ga('send','event','outbound','pi.pizza',this.href);" utm_source="innoshop.me">
                 <div class="big-button">
                     <div class="content-wrapper front">
                         <div class="overlay"></div>
@@ -30,7 +41,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="#" class="soon">
+            <a href="#" class="soon relative">
                 <div class="big-button">
                     <div class="content-wrapper front">
                         <div class="overlay"></div>
@@ -44,7 +55,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="#" class="soon">
+            <a href="#" class="soon relative">
                 <div class="big-button">
                     <div class="content-wrapper front">
                         <div class="overlay"></div>
