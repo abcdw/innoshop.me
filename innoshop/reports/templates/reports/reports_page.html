@@ -3,5 +3,28 @@
 <div class="container">
     <a href="/reports/expeditor">Expeditor-friendly orders</a> </br>
     <a href="/reports/user">All orders, by users</a>
+
+    <div class="panel-body">
+        <table class="table table-bordered table-striped mb-none" id="orders_table">
+            <thead>
+            <tr>
+                <th>Order id</th>
+                <th>Contact</th>
+                <th>Admin URL</th>
+                <th>Report</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders_info %}
+            <tr>
+                <td align="center">{{ order.id }}</td>
+                <td align="center">{{ order.contact }}</td>
+                <td align="center"><a href="{{ order.admin_url }}">Link</a></td>
+                <td align="center"><a href="{{ order.report_url }}">Download</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

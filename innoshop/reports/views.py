@@ -66,7 +66,16 @@ def expeditor_view(request):
 
 @staff_member_required
 def reports_page_view(request):
-	return render(request, "reports/reports_page.html")
+	# gathering new orders from Metro
+	suborders = SubOrder.objects.filter(Q(status="new") | Q(status="active"))
+	suborders = filter(lambda x: unicode(x) == u"Metro", suborders)
+
+	for suborder in suborders:
+		suborder.admin_url = "/admin/shop/order/%d" % suborder.order.id
+		suborder.report_url = "/report/id/%d" % suborder.id
+		suborder.contact = suborder.order.contact
+
+	return render(request, "reports/reports_page.html", {"orders_info": suborders})
 
 
 def generate_user_page(suborder, page, fmt):
@@ -133,6 +142,14 @@ def generate_user_page(suborder, page, fmt):
 		row += 2
 
 
+def generate_file_response(filename, output_name):
+	date = time.strftime("%d.%m.%y", time.localtime())
+	response = FileResponse(open(filename, "rb"))
+	response['Content-Disposition'] = 'attachment; filename=%s_%s.xlsx' % (output_name, date)
+
+	return response
+
+
 @staff_member_required
 def reports_user_view(request):
 	suborders = SubOrder.objects.filter(Q(status="new") | Q(status="active"))
@@ -155,9 +172,7 @@ def reports_user_view(request):
 	report.close()
 
 	# generating link to download xlsx
-	date = time.strftime("%d.%m.%y", time.localtime())
-	response = FileResponse(open('tmp.xlsx', "rb"))
-	response['Content-Disposition'] = 'attachment; filename=users_%s.xlsx' % date
+	response = generate_file_response('tmp.xlsx', "users")
 
 	os.remove("tmp.xlsx")
 
@@ -165,4 +180,14 @@ def reports_user_view(request):
 
 
 def report_order_id(request, order_id):
-	return HttpResponse("Page with order_id=%s in progress..." % order_id)
+	excel = xlsxwriter.Workbook("tmp.xlsx")
+	bold = excel.add_format({'bold': 1})
+	suborder = filter(lambda x: x.id == int(order_id), SubOrder.objects.all())[0]
+
+	generate_user_page(suborder, excel.add_worksheet(str(order_id)), bold)
+	excel.close()
+
+	response = generate_file_response("tmp.xlsx", str(order_id))
+	os.remove("tmp.xlsx")
+
+	return response
