@@ -14,7 +14,15 @@ ul {
     padding: 0;
     list-style: none;
 }
-
+.breadcrumb,
+.jumbotron{
+    background: #ffffff;
+    border-radius: .25em;
+    overflow: hidden;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
 .list-products li,
 .info-box {
     margin-bottom: 2em;
@@ -59,7 +67,6 @@ ul {
 
 .product-item-info em {
     display: inline-block;
-    width: 49%;
     color: #2f2933;
     position: relative;
     font-size: 2em;
@@ -68,12 +75,12 @@ ul {
 
 .product-item-info .buynow {
     display: inline-block;
-    width: 49%;
     color: #a5d05e;
     position: relative;
     font-size: 2em;
     font-weight: 600;
     text-align: right;
+    float: right;
 }
 
 .list-products li img {
@@ -82,7 +89,9 @@ ul {
     text-align: center;
     margin: 0 auto;
 }
-
+.list-products li img.small-img{
+    margin-top: 20px; 
+}
 .info-box {
     padding: 2em;
 }
