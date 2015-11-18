@@ -1,13 +1,8 @@
 {% extends "shop/layout/base.html" %}
 {% load static from staticfiles %}
-{% block stylesheet %}
-    <link href="{% static 'css/coffee.css' %}" rel="stylesheet">
-{% endblock %}
-
 {% block javascript %}
     {{ block.super }}
     {% include "shop/catalog/_products_js.html" %}
-    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
 {% endblock %}
 
 {% block content %}

@@ -164,7 +164,7 @@ def catalog(request):
         'category': category or '',
         'admin': request.user.is_staff
     }
-    return render(request, 'shop/catalog/index.html', context)
+    return render(request, 'shop/catalog/products.html', context)
 
 
 def black_friday(request):
