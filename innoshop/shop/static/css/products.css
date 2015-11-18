@@ -14,8 +14,13 @@ ul {
     padding: 0;
     list-style: none;
 }
+
+#ms-container {
+    margin-bottom: 30px;
+}
+
 .breadcrumb,
-.jumbotron{
+.jumbotron {
     background: #ffffff;
     border-radius: .25em;
     overflow: hidden;
@@ -23,6 +28,7 @@ ul {
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
+
 .list-products li,
 .info-box {
     margin-bottom: 2em;
@@ -89,13 +95,36 @@ ul {
     text-align: center;
     margin: 0 auto;
 }
-.list-products li img.small-img{
-    margin-top: 20px; 
+
+.list-products li img.small-img {
+    margin-top: 20px;
 }
+
 .info-box {
     padding: 2em;
 }
 
 .list-products > li > a {
     display: block;
+}
+
+.product-rating .label {
+    font-size: 0.5em;
+    padding: 0.2em 0.5em .2em;
+}
+
+.product-rating .btn-group {
+    margin-top: 5px;
+}
+
+.separator {
+    display: block;
+    border-bottom: 1px solid #333;
+}
+
+.separator h2 {
+    color: #333;
+    display: table-cell;
+    border-bottom: 1px solid #333;
+    padding: 0 15px 5px 10px;
 }

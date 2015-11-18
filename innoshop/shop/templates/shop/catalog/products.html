@@ -23,7 +23,7 @@
             </ol>
 
             <!-- <h1>{{ category.name | default:q }}</h1> -->
-
+    
             {% include 'shop/catalog/_pager.html' %}
             <div class="row">
             <ul class="row list-products" id="ms-container">
@@ -32,15 +32,20 @@
                         <li>
                             <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="small-img">
                             <div class="product-item-info">
-                                <b class="title" title="{{ product.name | safe }}" >{% if admin %}
-                                <span class="badge">{{ product.SKU }}</span>
-                                &nbsp;{% endif %}{{ product.name | safe | truncatechars:52 }}</b>
+                                <b class="title" title="{{ product.name | safe }}" >
+                                {% if admin %}
+                                <span class="badge">{{ product.SKU }}</span>&nbsp;
+                                {% endif %}
+                                {{ product.name | safe | truncatechars:52 }}</b>
 
                                 <em class="product-price">{{ product.price }}&nbsp;<i
                                             class="fa fa-ruble small"></i></em>
 
                                 <div class="buynow">
                                     <span id="product-{{ product.id }}"></span>
+                                    {% if admin %}
+                                    <div class="product-rating" id="product-rating-{{ product.id }}"></div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </li>

@@ -67,6 +67,10 @@
                 }), document.getElementById('messages'));
             }
         });
+        $('#ms-container').masonry({
+            itemSelector: '.ms-item',
+        });
+
     </script>
     {% block javascript %}{% endblock %}
     <script>

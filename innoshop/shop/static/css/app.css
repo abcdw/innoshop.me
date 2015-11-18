@@ -179,7 +179,7 @@ body {
     line-height: 42px;
 }
 
-.navbar li a.basket .btn {
+.navbar li a.basket .btn-default {
     background-color: #333;
     color: #fff;
     border: 0;
