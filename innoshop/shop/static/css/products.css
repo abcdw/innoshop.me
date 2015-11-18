@@ -116,3 +116,15 @@ ul {
 .product-rating .btn-group {
     margin-top: 5px;
 }
+
+.separator {
+    display: block;
+    border-bottom: 1px solid #333;
+}
+
+.separator h2 {
+    color: #333;
+    display: table-cell;
+    border-bottom: 1px solid #333;
+    padding: 0 15px 5px 10px;
+}
