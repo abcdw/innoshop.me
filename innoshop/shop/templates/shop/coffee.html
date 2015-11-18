@@ -1,49 +1,46 @@
 {% extends "shop/layout/base.html" %}
-{% load static from staticfiles %} 
+{% load static from staticfiles %}
 {% block stylesheet %}
-    <link href="{% static 'css/coffee.css' %}" rel="stylesheet"> 
-{% endblock %} 
+    <link href="{% static 'css/coffee.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% include "shop/catalog/_products_js.html" %}
+    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="info-box">
-            <h2>Information</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus fugiat eius voluptate cum unde deleniti veritatis repellendus, numquam aperiam? Quae ullam in iure soluta labore molestiae non, quibusdam vel obcaecati.</p>
+    <div class="container">
+        <div class="row">
+            <div class="info-box">
+                <h2>Кофе</h2>
+
+                <p>Кофе от IKEA, кофеварка от DeLonghi, молоко от Казани, доставка - 20 рублей.</p>
+            </div>
+
+            <ul class="row list-products" id="ms-container">
+                {% for product in products %}
+                    <div class="col-md-3 ms-item">
+                        <li class="">
+                            <img src="{{ product.img_url }}" alt="{{ product.name | safe }}">
+
+                            <div class="product-item-info">
+                                <b class="title">{{ product.name | safe | truncatechars:52 }}</b>
+                                <em class="product-price">{{ product.price }}&nbsp;<i
+                                        class="fa fa-ruble small"></i></em>
+
+                                <div class="buynow">
+                                    <span id="product-{{ product.id }}"></span>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="row">
+            {% include 'shop/_faq.html' with faq=faq without_name=True %}
         </div>
     </div>
-    <ul class="row list-products" id="ms-container">
-    <div class="col-md-3 ms-item">
-        <li class="">
-            <a href="">
-                <img src="{% static 'img/coffee.jpg' %}" alt="">
-            </a>
-            <div class="product-item-info">
-                <b><a href="">Эспрессо 0.1</a></b>
-                <em class="product-price">5$</em>
-                <div class="buynow">
-                    <i class="fa fa-cart-plus"></i>
-                </div>         
-            </div>
-        </li>
-    </div>
-    <div class="col-md-3 ms-item">
-        <li class="">
-            <a href="">
-                <img src="https://innoshop.me/static/product_images/416183-1-150x150.jpg" alt="">
-            </a>
-            <div class="product-item-info">
-                <b><a href="">Эспрессо 0.1</a></b>
-                <em class="product-price">5$</em>
-                <div class="buynow">
-                    <i class="fa fa-cart-plus"></i>
-                </div>         
-            </div>
-        </li>
-    </div>
-    </ul>
-</div>
-{% endblock %}
-{% block javascript %}
-<script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
 {% endblock %}

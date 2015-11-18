@@ -10,6 +10,7 @@ from markitup.widgets import AdminMarkItUpWidget
 @admin.register(Category)
 class Category(admin.ModelAdmin):
     list_display = ('name', 'parent')
+    list_filter = ('store',)
 
 
 @admin.register(Product)
@@ -19,7 +20,7 @@ class Product(admin.ModelAdmin):
 
     list_display = ('SKU', 'name', 'price', 'is_stock_empty', 'source_link', 'get_categories')
     search_fields = ('SKU', 'name')
-    list_filter = ('is_stock_empty', 'categories')
+    list_filter = ('is_stock_empty', 'store')
 
 
 class ProductItemInline(admin.TabularInline):
