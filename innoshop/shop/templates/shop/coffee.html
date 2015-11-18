@@ -29,6 +29,9 @@
 
                                 <div class="buynow">
                                     <span id="product-{{ product.id }}"></span>
+                                    {% if admin %}
+                                    <div class="product-rating" id="product-rating-{{ product.id }}"></div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </li>
