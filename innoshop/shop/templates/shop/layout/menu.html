@@ -34,6 +34,9 @@
                 <li><a href="{% url 'feedback' %}"><i class="fa fa-question"></i> Отзывы</a></li>
                 <li><a href="https://telegram.me/joinchat/BVB_jQGqqKuL2ZHNVRfwSA" target="_blank"><b>TG</b> Телеграм</a></li>
                 <li><a href="https://vk.com/innoshop" target="_blank"><i class="fa fa-vk"></i> Вконтакте</a></li>
+                {% if request.user.is_staff %}
+                <li><a href="/admin" target="_blank"><i class="fa fa-lock"></i> Админка</a></li>
+                {% endif %}
             </ul>
         </div>
 
