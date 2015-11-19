@@ -9,15 +9,14 @@
     <div class="container">
         <div class="row">
             <div class="info-box">
-                <h2>Кофе</h2>
-
-                <p>Кофе от IKEA, кофеварка от DeLonghi, молоко от Казани, доставка - 20 рублей.</p>
+                <center><h2>Coffee quiz</h2></center>
             </div>
+            {% for cat in categories %}
             <div class="separator">
-                <h2>Test</h2>
+                <h3>{{ cat }}</h3>
             </div>
             <ul class="row list-products" id="ms-container">
-                {% for product in products %}
+                {% for product in cat.products %}
                     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ms-item">
                         <li class="">
                             <img src="{{ product.img_url }}" alt="{{ product.name | safe }}">
@@ -38,9 +37,13 @@
                     </div>
                 {% endfor %}
             </ul>
+            {% endfor %}
         </div>
         <div class="row">
+            <div class="info-box">
             {% include 'shop/_faq.html' with faq=faq without_name=True %}
+            </div>
         </div>
     </div>
 {% endblock %}
+
