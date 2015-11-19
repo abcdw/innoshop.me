@@ -9,11 +9,9 @@ def up(apps, schema_editor):
     store.save()
 
     Category = apps.get_model("shop", "Category")
-    Category(name="Кофе", store=store).save()
-    Category(name="Чай", store=store).save()
-    Category(name="Какао", store=store).save()
-    Category(name="Шоколадки", store=store).save()
-    Category(name="Сиропы", store=store).save()
+    Category(name="Кофе, чай, какао", store=store).save()
+    Category(name="Шоколад, печенье", store=store).save()
+    Category(name="Сиропы, дополнительные вкусности", store=store).save()
 
 
 def down():
