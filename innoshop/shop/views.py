@@ -61,6 +61,12 @@ def index(request):
 def coffee(request):
     store = Store.objects.get(name="Coffee")
     products = Product.objects.get_sallable().filter(store=store)
+    categories = Category.objects.filter(store=store)
+
+    for cat in categories:
+        cat.products = Product.objects.get_sallable().\
+                       filter(categories__id=cat.id)
+
     try:
         faq = Faq.objects.get(name='Coffee')
     except Exception as e:
@@ -68,6 +74,7 @@ def coffee(request):
 
     context = {
         'products': products,
+        'categories': categories,
         'admin': request.user.is_staff,
         'faq': faq
     }
