@@ -301,7 +301,6 @@ var BasketForm = React.createClass({
         var login = this.state.login;
         var comment = this.state.comment;
         return (<div><br></br>
-
             <div className="form-group">
                 <input ref="telegram" value={ login } onChange={this.handleChangeLogin}
                        type="text" id="contact" name="contact" className="form-control"
@@ -311,6 +310,9 @@ var BasketForm = React.createClass({
                     <textarea name="comment" value={ comment } onChange={this.handleChangeComment}
                               id="comment" cols="30" rows="3" placeholder="Комментарий"
                               className="form-control"></textarea>
+            </div>
+            <div className="form-group">
+                <label><input type="checkbox" name="agree_for_analogue" defaultChecked={1} /> Разрешить замену товаров на аналогичные</label>
             </div>
         </div>);
     },

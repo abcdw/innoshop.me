@@ -6,7 +6,7 @@ from .models import Order, Feedback, Product, SubOrder
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['contact', 'comment']
+        fields = ['contact', 'comment', 'agree_for_analogue']
 
     def create_order(self, product_counts=None):
         if not product_counts:
@@ -14,6 +14,7 @@ class OrderForm(ModelForm):
         order = Order()
         order.contact = self.cleaned_data['contact']
         order.comment = self.cleaned_data['comment']
+        order.agree_for_analogue = self.cleaned_data['agree_for_analogue']
         order.save()
 
         products = Product.objects.filter(id__in=product_counts.keys()).all() \

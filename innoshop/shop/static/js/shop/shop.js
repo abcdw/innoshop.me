@@ -377,6 +377,16 @@ var BasketForm = React.createClass({
                 React.createElement('textarea', { name: 'comment', value: comment, onChange: this.handleChangeComment,
                     id: 'comment', cols: '30', rows: '3', placeholder: 'Комментарий',
                     className: 'form-control' })
+            ),
+            React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement(
+                    'label',
+                    null,
+                    React.createElement('input', { type: 'checkbox', name: 'agree_for_analogue', defaultChecked: 1 }),
+                    ' Разрешить замену товаров на аналогичные'
+                )
             )
         );
     },
