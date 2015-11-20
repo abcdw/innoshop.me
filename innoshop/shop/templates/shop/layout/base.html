@@ -37,14 +37,15 @@
     {% block content %}{% endblock %}
 
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
     <!--     <script src="{% static 'js/bootstrap.js' %}"></script> -->
     <script src="//cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/react/0.13.3/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
-    <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
     <script src="{% static 'js/shop/shop.js' %}"></script>
     <script>
         $(document).ready(function(){
+
             BasketStore.initialize('{% url 'add_product' %}', '{% url 'get_products' %}');
 
             if( document.getElementById('basket') )
@@ -70,7 +71,6 @@
         $('#ms-container').masonry({
             itemSelector: '.ms-item',
         });
-
     </script>
     {% block javascript %}{% endblock %}
     <script>

@@ -6,8 +6,7 @@
                     name: '{{ product.name }}',
                     price: {{ product.price }},
                     id: {{ product.id }},
-                    min_count: {{ product.min_count }},
-                    rating: {{ product.rating }}
+                    min_count: {{ product.min_count }}
                 };
             {% endfor %}
             if (products.length > 0) {
@@ -19,13 +18,6 @@
                         id: i,
                         count: BasketStore.getProductCount(i)
                     }), document.getElementById('product-' + i));
-                    {% if admin %}
-                        React.render(React.createElement(Rating, {
-                            id: i,
-                            rating: products[i].rating,
-                            url: '{% url 'update_rating' %}'
-                        }), document.getElementById('product-rating-' + i));
-                    {% endif %}
                 }
             }
 

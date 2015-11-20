@@ -5,7 +5,13 @@
     {{ block.super }}
     {% include "shop/catalog/_products_js.html" %}
 {% endblock %}
-
+{% block stylesheet %}
+<style>
+body {
+    background: #F7f7f7;
+}
+</style>
+{% endblock%}
 {% block content %}
 
     <div class="container">
@@ -43,9 +49,6 @@
 
                                 <div class="buynow">
                                     <span id="product-{{ product.id }}"></span>
-                                    {% if admin %}
-                                    <div class="product-rating" id="product-rating-{{ product.id }}"></div>
-                                    {% endif %}
                                 </div>
                             </div>
                         </li>
