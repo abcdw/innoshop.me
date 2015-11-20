@@ -1,7 +1,3 @@
-body {
-    background: #eaeaea;
-}
-
 a,
 a:hover,
 a:focus,
@@ -18,7 +14,6 @@ ul.list-products{
 #ms-container {
     margin-bottom: 30px;
 }
-
 .breadcrumb,
 .jumbotron {
     background: #ffffff;
@@ -94,6 +89,8 @@ ul.list-products{
     max-width: 100%;
     text-align: center;
     margin: 0 auto;
+    width: 150px;
+    height: 150px;
 }
 
 .list-products li img.small-img {
