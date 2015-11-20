@@ -102,6 +102,7 @@ class Order(models.Model):
     text = models.TextField(blank=True)
     photo = models.ImageField(upload_to='orders', blank=True)
     status = StatusField()
+    agree_for_analogue = models.BooleanField(default=True)
 
     def get_admin_url(self):
         return reverse("admin:%s_%s_change" % (self._meta.app_label, self._meta.model_name), args=(self.id,))
