@@ -30,7 +30,7 @@ class Command(BaseCommand):
             is_stock_empty = int(row_tuple[-1])==0
             if not options['stats']:
                 Product.objects.filter(
-                    SKU=SKU).update(price=price,
+                    SKU=SKU).update(price=price,actual_price=price
                                     is_stock_empty=is_stock_empty)
             else:
                 p = Product.objects.filter(SKU=SKU)
