@@ -57,7 +57,7 @@ INSTALLED_APPS = (
 )
 
 MARKITUP_SET = 'markitup/sets/markdown'
-MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+MARKITUP_FILTER = ('markdown.markdown', {})
 MARKITUP_AUTO_PREVIEW = True
 
 MIDDLEWARE_CLASSES = (
