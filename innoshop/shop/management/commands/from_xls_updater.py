@@ -20,20 +20,24 @@ class Command(BaseCommand):
         row = 4
         row_tuple = read_sheet.row_values(3, start_colx=4, end_colx=10)
         no_in_base = 0
+        if not options['stats']:
+            Product.objects.all().update(is_stock_empty=True)
+        else:
+            self.stdout.write("SKU p.actual_price p.price price p.is_stock_empty is_stock_empty")
         while (any(row_tuple)):
             SKU = str(int(row_tuple[0]))
             price = math.ceil(row_tuple[-2])
-            is_stock_empty = row_tuple[-1]
+            is_stock_empty = int(row_tuple[-1])==0
             if not options['stats']:
                 Product.objects.filter(
-                    SKU=SKU).update(price=price,
+                    SKU=SKU).update(price=price,actual_price=price
                                     is_stock_empty=is_stock_empty)
             else:
                 p = Product.objects.filter(SKU=SKU)
                 if any(p):
                     p = p[0]
-                    self.stdout.write("{0} {1} {2} {3}".format(
-                        SKU, p.actual_price, p.price, price))
+                    self.stdout.write("{0} {1} {2} {3} {4} {5}".format(
+                        SKU, p.actual_price, p.price, price,p.is_stock_empty,is_stock_empty))
                 else:
                     no_in_base = no_in_base + 1
             try:
