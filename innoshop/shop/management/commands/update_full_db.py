@@ -40,6 +40,7 @@ DESCRIPTION_REGX = re.compile('itemprop="description">(.*)</div>')
 
 STORE = Store.objects.get(name='Metro')
 
+
 def error_log(func):
     def wrap(*args, **kargs):
         try:
@@ -139,6 +140,7 @@ def product_atributes(url, log):
             'source_link': url.decode('utf-8'),
             #'description':raw_description,
             'status': status,
+            'store': STORE,
         },
                 status)
     except Exception as e:
@@ -161,7 +163,8 @@ def fill_product(p, atrr, log):
         if any(grand_category):
             grand_category = grand_category[0]
         else:
-            grand_category = grand_category.create(name=atrr['grand_category'])
+            grand_category = grand_category.create(name=atrr['grand_category'],
+                                                   store=STORE)
         parent_category = Category.objects.filter(name=atrr['parent_category'])
         if any(parent_category):
             parent_category = parent_category[0]
@@ -180,7 +183,7 @@ def fill_product(p, atrr, log):
                                    actual_price=atrr['actual_price'],
                                    price=atrr['actual_price'],
                                    img_url=atrr['img_url'],
-                                   store = STORE
+                                   store=STORE,
                                    is_stock_empty=atrr['is_stock_empty'],
                                    source_link=atrr['source_link'])
         for c in [category, parent_category, grand_category]:
