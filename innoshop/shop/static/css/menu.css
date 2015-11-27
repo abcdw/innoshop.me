@@ -1,3 +1,8 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
 /* -------------------------------- 
 
 Main Page Content
@@ -26,7 +31,7 @@ Main Page Content
 
 @media only screen and (min-width: 1170px) {
     .main-content .content-wrapper {
-        margin-left: 200px;
+        margin-left: 250px;
     }
     .main-content::before {
         content: 'desktop';
@@ -290,9 +295,11 @@ Top Navigation
         height: 100%;
     }
     .top-nav a {
-        display: block;
+        display: table-cell;
         font-size: 1.4rem;
         color: #515f66;
+        height: 55px;
+        vertical-align: middle;
     }
     .top-nav > li {
         display: inline-block;
@@ -338,6 +345,8 @@ Sidebar
     -webkit-transition: opacity 0.2s 0s, visibility 0s 0.2s;
     -moz-transition: opacity 0.2s 0s, visibility 0s 0.2s;
     transition: opacity 0.2s 0s, visibility 0s 0.2s;
+    font-size: 13px;
+    font-weight: 300;
 }
 
 .side-nav.nav-is-visible {
@@ -360,13 +369,9 @@ Sidebar
     padding-bottom: 0;
 }
 
-.side-nav .label,
 .side-nav a {
     display: block;
     padding: 1em 5%;
-}
-
-.side-nav a {
     position: relative;
     color: #515f66;
     font-size: 1.4rem;
@@ -406,12 +411,12 @@ Sidebar
         padding: 0;
     }
     .side-nav a {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         text-align: center;
     }
     .side-nav > ul > li > a {
         padding: calc(2.2em + 24px) 0 2.4em;
-        font-weight: 600;
+        font-weight: 300;
     }
     .side-nav > ul > li > a::before {
         left: 50%;
@@ -436,8 +441,12 @@ Sidebar
     .side-nav > ul {
         padding: 0.6em 0;
     }
-    .side-nav > ul > li:hover > a {
+    .side-nav > ul > li:not(.active):hover > a {
         background-color: #f7f7f7;
+        color: #515f66;
+    }
+    .side-nav > ul > ul > li:hover > a {
+        background-color: #d7d7d7;
         color: #515f66;
     }
     .side-nav > ul > li > a {
@@ -552,4 +561,56 @@ Sidebar
         opacity: 1;
         visibility: visible;
     }
+}
+
+.btn-default,
+.pager li>a,
+.pager li>span,
+.btn-success,
+.btn-danger,
+.btn-info {
+    font-size: 13px;
+    box-sizing: border-box;
+    position: relative;
+    padding: .5em 1em;
+    cursor: pointer;
+    border-radius: 0.2em;
+    background: #f1f1f1;
+    border: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    text-transform: uppercase;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-success {
+    background: #5cb85c;
+}
+
+.btn-danger{
+    background: #d9534f;
+}
+
+.btn-info{
+    background: #31b0d5;
+}
+.pager li>a,
+.pager li>span {
+    background-color: #fff;
+    color: #515f66;
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pager li>a:hover,
+.pager li>span:hover {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }

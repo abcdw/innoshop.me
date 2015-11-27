@@ -14,10 +14,7 @@
             {% if request.user.is_staff %}
             <li><a href="/admin" target="_blank"><i class="fa fa-lock"></i> Админка</a></li>
             {% endif %}
-
-        <ul class="nav navbar-nav navbar-right ffffu">
-            <li> <a href="" id="basket" ></a></li>
-        </ul>
+            <li id="basket" ></li>
 
         {% include 'shop/catalog/_basket.html' with style='display:none' %}
 
