@@ -1,7 +1,7 @@
 <header class="main-header">
     <div class="search is-hidden">
         <form role="search" action="{% url 'catalog' %}" method="get">
-            <input type="search" placeholder="Поиск" value="{{ q }}">
+            <input type="search" placeholder="Поиск"  name="q" value="{{ q }}">
         </form>
     </div>
     <!-- search -->
