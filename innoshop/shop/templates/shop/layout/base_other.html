@@ -1,4 +1,4 @@
-orders<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     {% load static from staticfiles %}
@@ -29,8 +29,13 @@ orders<!DOCTYPE html>
     {% include "shop/layout/menu.html" %}
     
     <main class="main-content">
-    {% block sidemenu %}{% endblock %}
-    {% block content %}{% endblock %}
+        {% block messages %}
+            <div class="content-wrapper"><div class="row"><div class="col-xs-12">
+                <div id="messages"></div>
+            </div></div></div>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
     </main>
 
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>

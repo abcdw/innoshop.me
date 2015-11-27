@@ -1,53 +1,26 @@
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <div>
-                <button type="button" class="navbar-toggle collapsed navbar-left" data-toggle="collapse"
-                        data-target="#nav-menu" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/"><i class="text-success fa fa-binoculars"></i></a>
-
-                <form class="navbar-form navbar-left" role="search" action="{% url 'catalog' %}" method="get">
-                    <div class="form-group material-form-field">
-                        <div class="input-group form-field-controls-group">
-                            <input name="q" type="text" class="form-control material-form-field-input" placeholder="Поиск" value="{{ q }}">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default">
-                                    <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-left" id="nav-menu">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'feedback' %}"><i class="fa fa-question"></i> Отзывы</a></li>
-                <li><a href="https://telegram.me/joinchat/BVB_jQGqqKuL2ZHNVRfwSA" target="_blank"><b>TG</b> Телеграм</a></li>
-                <li><a href="https://vk.com/innoshop" target="_blank"><i class="fa fa-vk"></i> Вконтакте</a></li>
-                {% if request.user.is_staff %}
-                <li><a href="/admin" target="_blank"><i class="fa fa-lock"></i> Админка</a></li>
-                {% endif %}
-            </ul>
-        </div>
-
+<header class="main-header">
+    <div class="search is-hidden">
+        <form role="search" action="{% url 'catalog' %}" method="get">
+            <input type="search" placeholder="Поиск" value="{{ q }}">
+        </form>
+    </div>
+    <!-- search -->
+    <a href="#0" class="nav-trigger"><span></span></a>
+    <nav class="nav">
+        <ul class="top-nav">
+            <li><a href="{% url 'feedback' %}"><i class="fa fa-question"></i> Отзывы</a></li>
+            <li><a href="https://telegram.me/joinchat/BVB_jQGqqKuL2ZHNVRfwSA" target="_blank"><b>TG</b> Телеграм</a></li>
+            <li><a href="https://vk.com/innoshop" target="_blank"><i class="fa fa-vk"></i> Вконтакте</a></li>
+            {% if request.user.is_staff %}
+            <li><a href="/admin" target="_blank"><i class="fa fa-lock"></i> Админка</a></li>
+            {% endif %}
 
         <ul class="nav navbar-nav navbar-right ffffu">
-            <li id="basket"></li>
+            <li> <a href="" id="basket" ></a></li>
         </ul>
 
         {% include 'shop/catalog/_basket.html' with style='display:none' %}
 
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container-fluid -->
-</nav>
+        </ul>
+    </nav>
+</header>
