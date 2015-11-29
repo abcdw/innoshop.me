@@ -3,6 +3,7 @@ body {
     background: #f2f5f7;
 }
 
+
 /* -------------------------------- 
 
 Main Page Content
@@ -10,7 +11,7 @@ Main Page Content
 -------------------------------- */
 
 .main-content .content-wrapper {
-    padding: 45px 5% 3em;
+    padding: 55px 5% 3em;
 }
 
 .main-content::before {
@@ -19,10 +20,16 @@ Main Page Content
     content: 'mobile';
 }
 
+@media only screen and (max-width: 768px) {
+    #basket {
+        line-height: 40px;
+    }
+}
+
 @media only screen and (min-width: 768px) {
     .main-content .content-wrapper {
-        margin-left: 110px;
-        padding-top: 55px;
+        margin-left: 200px;
+        padding-top: 70px;
     }
     .main-content::before {
         content: 'tablet';
@@ -222,7 +229,7 @@ Header
     .search {
         float: left;
         display: inline-block;
-        width: 250px;
+        width: 200px;
         height: 100%;
         margin: 0;
     }
@@ -258,6 +265,12 @@ Header
     }
     .search input:-ms-input-placeholder {
         color: #515f66;
+    }
+}
+
+@media only screen and (min-width: 1170px) {
+    .search {
+        width: 250px;
     }
 }
 
@@ -333,7 +346,7 @@ Sidebar
     left: 0;
     top: 0;
     width: 100%;
-    padding: 45px 0 0;
+    padding: 55px 0 0;
     background-color: #ffffff;
     visibility: hidden;
     opacity: 0;
@@ -391,7 +404,7 @@ Sidebar
         position: relative;
         float: left;
         top: auto;
-        width: 110px;
+        width: 200px;
         min-height: 100vh;
         /* reset style */
         visibility: visible;
@@ -405,7 +418,7 @@ Sidebar
     .side-nav.is-fixed {
         position: fixed;
     }
-    .side-nav.is-absolute{
+    .side-nav.is-absolute {
         position: absolute;
     }
     .side-nav > ul {
@@ -417,8 +430,10 @@ Sidebar
         text-align: center;
     }
     .side-nav > ul > li > a {
-        padding: calc(2.2em + 24px) 0 2.4em;
+        padding: 1em 2.5em 1em 1.5em;
+        text-align: left;
         font-weight: 300;
+        border-bottom: none;
     }
     .side-nav > ul > li > a::before {
         left: 50%;
@@ -434,6 +449,9 @@ Sidebar
         /* current page */
         background-color: #d7d7d7;
     }
+}
+
+@media only screen and (min-width: 1170px) {
     .side-nav {
         width: 250px;
     }
@@ -447,11 +465,6 @@ Sidebar
     .side-nav > ul > ul > li:hover > a {
         background-color: #d7d7d7;
         color: #515f66;
-    }
-    .side-nav > ul > li > a {
-        padding: 1em 2.5em 1em 1.5em;
-        text-align: left;
-        border-bottom: none;
     }
     .side-nav > ul > li > a::before {
         top: 50%;
@@ -509,7 +522,7 @@ Sidebar
     }
     .side-nav .has-children.selected > a {
         /* focus state -> show sub pages */
-        background-color: #33383e;
+        background-color: #d7d7d7;
     }
     .top-nav .has-children {
         position: relative;
@@ -591,13 +604,14 @@ Sidebar
     background: #5cb85c;
 }
 
-.btn-danger{
+.btn-danger {
     background: #d9534f;
 }
 
-.btn-info{
+.btn-info {
     background: #31b0d5;
 }
+
 .pager li>a,
 .pager li>span {
     background-color: #fff;
