@@ -21,7 +21,8 @@ class Command(BaseCommand):
         row_tuple = read_sheet.row_values(3, start_colx=4, end_colx=10)
         no_in_base = 0
         if not options['stats']:
-            Product.objects.all().update(is_stock_empty=True)
+            # Product.objects.all().update(is_stock_empty=True)
+            pass
         else:
             self.stdout.write("SKU p.actual_price p.price price p.is_stock_empty is_stock_empty")
         while (any(row_tuple)):
@@ -30,7 +31,7 @@ class Command(BaseCommand):
             is_stock_empty = int(row_tuple[-1])==0
             if not options['stats']:
                 Product.objects.filter(
-                    SKU=SKU).update(price=price,actual_price=price
+                    SKU=SKU).update(price=price,actual_price=price,
                                     is_stock_empty=is_stock_empty)
             else:
                 p = Product.objects.filter(SKU=SKU)
