@@ -393,7 +393,6 @@ Sidebar
         top: auto;
         width: 110px;
         min-height: 100vh;
-        padding-top: 55px;
         /* reset style */
         visibility: visible;
         opacity: 1;
@@ -405,6 +404,9 @@ Sidebar
     }
     .side-nav.is-fixed {
         position: fixed;
+    }
+    .side-nav.is-absolute{
+        position: absolute;
     }
     .side-nav > ul {
         /* reset style */
@@ -432,9 +434,6 @@ Sidebar
         /* current page */
         background-color: #d7d7d7;
     }
-}
-
-@media only screen and (min-width: 1170px) {
     .side-nav {
         width: 250px;
     }
