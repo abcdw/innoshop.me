@@ -7,14 +7,15 @@
 {% endblock %}
 {% block stylesheet %}
 <style>
-body {
-    background: #F7f7f7;
-}
+
 </style>
 {% endblock%}
-{% block content %}
+{% block sidemenu %}
+    {% include "shop/catalog/_categories.html" %}
+{% endblock %}
 
-    <div class="container">
+{% block content %}
+<div class="content-wrapper">
         {% if category or q %}
             <ol class="breadcrumb">
                 <li><a href="{% url 'catalog' %}">Все товары</a></li>
@@ -34,7 +35,7 @@ body {
             <div class="row">
             <ul class="row list-products" id="ms-container">
                 {% for product in products %}
-                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ms-item">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 ms-item">
                         <li>
                             <img src="{{ product.img_url }}" alt="{{ product.name | safe }}" class="small-img">
                             <div class="product-item-info">
@@ -57,7 +58,7 @@ body {
             </ul>
 
             {% if not products %}
-                <div class="jumbotron">
+                <div class="jumbotron no-match">
                     <h1>Отличная попытка!</h1>
 
                     <p>Но, товары, похожие на <strong>"{{ q }}"</strong> не существуют в этой реальности.</p>
@@ -70,85 +71,6 @@ body {
             {% endif %}
             </div>
             {% include 'shop/catalog/_pager.html' %}
-        {% else %}
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-
-                {% for category in catalog %}
-                    {% if category.children %}
-                        <div class="list-group panel panel-default">
-                                <h4 class="panel-title">
-                                    <a class="list-group-item" role="button" data-toggle="collapse" data-parent="#accordion"
-                                       href="#collapse{{ category.item.id }}"
-                                       aria-expanded="false" aria-controls="collapse{{ category.item.id }}">
-                                        {{ category.item.name }}
-                                    </a>
-                                </h4>
-                            <div id="collapse{{ category.item.id }}" class="panel-collapse collapse out" role="tabpanel"
-                                 aria-labelledby="heading{{ category.item.id }}">
-                                <div class="panel-body">
-                                    {# sublist start #}
-                                    {% with lc=forloop.counter %}
-                                    <div class="panel-group" id="accordion{{ lc }}" role="tablist"
-                                         aria-multiselectable="false">
-                                        {% for category in category.children %}
-                                            {% if category.children %}
-                                                <div class="list-group panel panel-default">
-                                                        <h4 class="panel-title">
-                                                            <a class="list-group-item" role="button" data-toggle="collapse"
-                                                               data-parent="#accordion{{ lc }}"
-                                                               href="#collapse{{ category.item.id }}"
-                                                               aria-expanded="false"
-                                                               aria-controls="collapse{{ category.item.id }}">
-                                                                {{ category.item.name }}
-                                                            </a>
-                                                        </h4>
-                                                    <div id="collapse{{ category.item.id }}"
-                                                         class="panel-collapse collapse out" role="tabpanel"
-                                                         aria-labelledby="heading{{ category.item.id }}">
-                                                        <div class="panel-body">
-                                                            {# sublist start #}
-                                                            <div class="panel-group" id="accordiont" role="tablist"
-                                                                 aria-multiselectable="false">
-                                                                {% for category in category.children %}
-                                                                    {% if not category.children %}
-                                                                        <div class="list-group panel">
-                                                                                <h4 class="panel-title">
-                                                                                    <a class="list-group-item list-group-item-success" href="?c={{ category.item.id }}">{{ category.item.name | safe }}</a>
-                                                                                </h4>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            </div>
-                                                            {# sublist end #}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            {% else %}
-                                                <div class="panel panel-success">
-                                                    <div class="panel-heading">
-                                                        <h4 class="panel-title">
-                                                            <a href="?c={{ category.item.id }}">{{ category.item.name | safe }}</a>
-                                                        </h4>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                    {% endwith %}
-                                    {# sublist end #}
-                                </div>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="panel panel-success">
-                            <div class="panel-heading">
-                                <h4 class="panel-title"><a
-                                        href="?c={{ category.item.id }}">{{ category.item.name | safe }}</a></h4>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
         {% endif %}
     </div>
 {% endblock %}

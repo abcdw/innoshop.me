@@ -5,7 +5,7 @@ a:active {
     text-decoration: none;
 }
 
-ul.list-products{ 
+ul.list-products {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -14,6 +14,7 @@ ul.list-products{
 #ms-container {
     margin-bottom: 30px;
 }
+
 .breadcrumb,
 .jumbotron {
     background: #ffffff;
@@ -70,7 +71,7 @@ ul.list-products{
     display: inline-block;
     color: #2f2933;
     position: relative;
-    font-size: 2em;
+    font-size: 1.7em;
     font-weight: 600;
 }
 
@@ -124,4 +125,8 @@ ul.list-products{
     display: table-cell;
     border-bottom: 1px solid #333;
     padding: 0 15px 5px 10px;
+}
+
+.no-match {
+    padding: 1em 3em;
 }

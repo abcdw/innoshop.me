@@ -16,7 +16,6 @@
     <link href="{% static 'css/products.css' %}" rel="stylesheet">
     <link href="{% static 'css/menu.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.css">
-    <script src="//cdn.jsdelivr.net/modernizr/2.8.3/modernizr.min.js"></script>
     {% block stylesheet %}{% endblock %}
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -30,19 +29,23 @@
     {% include "shop/layout/menu.html" %}
     
     <main class="main-content">
-    {% block sidemenu %}{% endblock %}
-    {% block content %}{% endblock %}
+        {% block messages %}
+            <div class="content-wrapper"><div class="row"><div class="col-xs-12">
+                <div id="messages"></div>
+            </div></div></div>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
     </main>
 
     <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/masonry/3.3.2/masonry.pkgd.min.js"></script>
-    <script src="//cdn.jsdelivr.net/jquery.menu-aim/0.1/jquery.menu-aim.min.js"></script>
     <!--     <script src="{% static 'js/bootstrap.js' %}"></script> -->
     <script src="//cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/react/0.13.3/react.min.js"></script>
     <script src="//cdn.jsdelivr.net/refluxjs/0.2.11/reflux.min.js"></script>
     <script src="{% static 'js/shop/shop.js' %}"></script>
-    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/jquery.menu-aim.js' %}"></script>
     <script>
         $(document).ready(function(){
 

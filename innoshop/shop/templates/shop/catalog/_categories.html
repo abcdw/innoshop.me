@@ -1,0 +1,24 @@
+<nav class="side-nav">
+    <ul>
+        {% for category in catalog %} 
+        {% if category.children %}
+        <li class="has-children {{ category.item.id }} ">
+            <a href="#0"> {{ category.item.name }}</a>
+            <ul>
+                {# sublist start #}
+                {% with lc=forloop.counter %}
+                    {% for category in category.children %}
+                    {% if category.children %}
+                    <li>
+                        <a href="?c={{ category.item.id }}">{{ category.item.name }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                {% endwith %}
+                {# sublist end #}
+            </ul>
+        </li>
+        {% endif %} 
+        {% endfor %}
+    </ul>
+</nav>
